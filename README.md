@@ -42,3 +42,4 @@ Follow pull request instructions in terminal, make sure "branch has no conflicts
 ## 🌟 Contributors
 1. **Yi-An Chu** (Kimi)
 2. **Sataphon Obra** (PF )
+3. **Lapatrada Jaroonjetjumnong (Claire)**
