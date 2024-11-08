@@ -1,2 +1,13 @@
 # 207-project-soulsync
-207 Final Project
+(CSC207 Course Final Project)
+
+
+### TODOs
+1. Make sure MainWithDB still runs as expected (Lab 5). 
+2. Reclone and rerun if needed. 
+
+
+### Database Diagram
+
+
+### File Structure
