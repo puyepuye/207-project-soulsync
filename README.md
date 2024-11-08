@@ -19,7 +19,7 @@
 ### Database Diagram
 
 ### File Structure
-- Coming
+- Coming soon
 
 ### Contributors
 1. Yi-An Chu (Kimi)
