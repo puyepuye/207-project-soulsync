@@ -25,10 +25,10 @@ public class SwipeInteractor implements SwipeInputBoundary {
         final String password = swipeInputData.getPassword();
         final String profileUsername = swipeInputData.getProfileUsername();
         final boolean liked = swipeInputData.getLiked();
-        final User user = userFactory.create(username, password);
-        userDataAccessObject.updateLike(user, profileUsername, liked);
-
-        final SwipeOutputData SwipeOutputData = new SwipeOutputData();
+        // Todo: Update user's liked and profile user's profile list
+        // final User user = userFactory.create(username, password);
+        // userDataAccessObject.updateLike(user, profileUsername, liked);
+        // final SwipeOutputData SwipeOutputData = new SwipeOutputData(liked, profileUsername, );
         userPresenter.prepareSuccessView(swipeOutputData);
     }
 }
