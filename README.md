@@ -43,3 +43,4 @@ Follow pull request instructions in terminal, make sure "branch has no conflicts
 1. **Yi-An Chu** (Kimi)
 2. **Sataphon Obra** (PF )
 3. **Lapatrada Jaroonjetjumnong (Claire)**
+4. **Kay Zin Thant** (Yolanda)
