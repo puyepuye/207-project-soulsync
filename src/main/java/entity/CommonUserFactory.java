@@ -2,6 +2,7 @@ package entity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Factory for creating CommonUser objects.
@@ -9,7 +10,7 @@ import java.util.List;
 public class CommonUserFactory implements UserFactory {
 
     @Override
-    public User create(String email, String password, String fullName, String location, String gender, Date dateOfBirth, String bio, List<String> preferences, List<String> tags, List<String> matched, List<String> saved) {
-        return new CommonUser(email, password, fullName, location, gender, dateOfBirth, bio, preferences, tags, matched, saved);
+    public User create(String userName, String password, String image, String fullName, String location, String gender, List<String> preferredGender, Date dateOfBirth, Map<String, Integer> preferredAge, String bio, Map<String, Boolean> preferences, List<String> tags, List<String> matched) {
+        return new CommonUser(userName, password, image, fullName, location, gender, preferredGender, dateOfBirth, preferredAge, bio, preferences, tags, matched);
     }
 }

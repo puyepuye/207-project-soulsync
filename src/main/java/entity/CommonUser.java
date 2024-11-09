@@ -2,47 +2,55 @@ package entity;
 
 import java.util.List;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * A simple implementation of the User interface.
  */
 public class CommonUser implements User {
 
-    private final String email;
+    private final String userName;
     private final String password;
+    private final String image;
     private final String fullName;
     private final String location;
     private final String gender;
+    private final List<String> preferredGender;
     private final Date dateOfBirth;
+    private final Map<String, Integer> preferredAge;
     private final String bio;
-    private final List<String> preferences;
+    private final Map<String, Boolean> preferences;
     private final List<String> tags;
     private final List<String> matched;
-    private final List<String> saved;
 
-    public CommonUser(String email, String password, String fullName, String location, String gender, Date dateOfBirth, String bio, List<String> preferences, List<String> tags, List<String> matched, List<String> saved) {
-        this.email = email;
+    public CommonUser(String userName, String password, String image, String fullName, String location, String gender, List<String> preferredGender, Date dateOfBirth, Map<String, Integer> preferredAge, String bio, Map<String, Boolean> preferences, List<String> tags, List<String> matched) {
+        this.userName = userName;
         this.password = password;
+        this.image = image;
         this.fullName = fullName;
         this.location = location;
         this.gender = gender;
+        this.preferredGender = preferredGender;
         this.dateOfBirth = dateOfBirth;
+        this.preferredAge = preferredAge;
         this.bio = bio;
         this.preferences = preferences;
         this.tags = tags;
         this.matched = matched;
-        this.saved = saved;
     }
 
     @Override
-    public String getEmail() {
-        return email;
+    public String getUserName() {
+        return userName;
     }
 
     @Override
     public String getPassword() {
         return password;
     }
+
+    @Override
+    public String getImage() { return image; }
 
     @Override
     public String getFullName() {
@@ -60,6 +68,12 @@ public class CommonUser implements User {
     }
 
     @Override
+    public Map<String, Integer> getPreferredAge() { return preferredAge; }
+
+    @Override
+    public List<String> getPreferredGender() { return preferredGender; }
+
+    @Override
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
@@ -70,7 +84,7 @@ public class CommonUser implements User {
     }
 
     @Override
-    public List<String> getPreferences() {
+    public Map<String, Boolean> getPreferences() {
         return preferences;
     }
 
@@ -82,10 +96,5 @@ public class CommonUser implements User {
     @Override
     public List<String> getMatched() {
         return matched;
-    }
-
-    @Override
-    public List<String> getSaved() {
-        return saved;
     }
 }
