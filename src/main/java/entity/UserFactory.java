@@ -30,4 +30,9 @@ public interface UserFactory {
                 Map<String, Integer> preferredAge, String bio, Map<String, Boolean> preferences, List<String> tags,
                 List<String> matched);
 
+    // Overloaded create method with only username and password
+    default User create(String userName, String password) {
+        return create(userName, password, null, null, null, null, null, null, null, null, null, null, null);
+    }
+
 }
