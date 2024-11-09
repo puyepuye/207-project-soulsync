@@ -33,20 +33,7 @@ public class MongoDB {
         col.insertOne(sampleDoc3);
         col.insertOne(sampleDoc4);
 
-
-//        String uri = "mongodb+srv://testUser:testUser123@yoli.y9zus.mongodb.net/?retryWrites=true&w=majority&appName=Yoli";
-//        try (MongoClient mongoClient = MongoClients.create(uri)) {
-//            MongoDatabase database = mongoClient.getDatabase("sampleDB");
-//            MongoCollection<Document> collection = database.getCollection("sampleCollection");
-//            Document doc = collection.find(eq("title", "Back to the Future")).first();
-//            if (doc != null) {
-//                System.out.println(doc.toJson());
-//            } else {
-//                System.out.println("No matching documents found.");
-//            }
-//        }
     }
-
 
 
 }
