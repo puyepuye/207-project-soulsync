@@ -32,7 +32,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
 
     private final JButton logIn;
     private final JButton toSignUp;
-    private final JButton cancel;
     private final LoginController loginController;
 
     private final Color topColor = Color.decode("#FFEFF1");
@@ -49,7 +48,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         // Set padding around the JPanel components
         this.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        JLabel logoLabel = new JLabel("<3"); // This is the heart emoji
+        JLabel logoLabel = new JLabel("♡"); // This is the heart emoji
         logoLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Set font size
         logoLabel.setForeground(logoColor); // Set the font color
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -74,8 +73,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         buttons.setBackground(new Color(255, 251, 251)); // Light pink background
         logIn = new JButton("log in");
         buttons.add(logIn);
-        cancel = new JButton("cancel");
-        buttons.add(cancel);
 
         // Adding the new "Sign Up" button
         toSignUp = new JButton("Don't have an account? Sign up");
@@ -103,8 +100,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                     }
                 }
         );
-
-        cancel.addActionListener(this);
 
         usernameInputField.getDocument().addDocumentListener(new DocumentListener() {
 
