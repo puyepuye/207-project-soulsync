@@ -44,3 +44,4 @@ Follow pull request instructions in terminal, make sure "branch has no conflicts
 2. **Sataphon Obra** (PF)
 3. **Lapatrada Jaroonjetjumnong (Claire)**
 4. **Kay Zin Thant** (Yolanda)
+5. **Thitiwut Pattanasuttinont** (Mac)
