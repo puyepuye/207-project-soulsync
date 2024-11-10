@@ -13,7 +13,7 @@ public interface User {
      * Returns the userName of the user.
      * @return the userName of the user.
      */
-    String getUserName();
+    String getUsername();
 
     /**
      * Returns the password of the user.
@@ -31,7 +31,7 @@ public interface User {
      * Returns the fullName of the user.
      * @return the fullName of the user.
      */
-    String getFullName();
+    String getFullname();
 
     /**
      * Returns the location of the user.

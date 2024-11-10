@@ -3,6 +3,8 @@ package interface_adapter.signup;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInputData;
 
+import java.util.Date;
+
 /**
  * Controller for the Signup Use Case.
  */
@@ -16,21 +18,28 @@ public class SignupController {
 
     /**
      * Executes the Signup Use Case.
+     * @param fullname the full name of the user
      * @param username the username to sign up
      * @param password1 the password
      * @param password2 the password repeated
+     * @param image the profile image of the user
+     * @param location the location of the user
+     * @param gender the gender of the user
+     * @param dateOfBirth the date of birth of the user
      */
-    public void execute(String username, String password1, String password2) {
+    public void execute(String fullname, String username, String password1, String password2,
+                        String image, String location, String gender, Date dateOfBirth) {
         final SignupInputData signupInputData = new SignupInputData(
-                username, password1, password2);
+                fullname, username, password1, image, password2, location, gender, dateOfBirth);
 
         userSignupUseCaseInteractor.execute(signupInputData);
     }
 
     /**
-     * Executes the "switch to LoginView" Use Case.
+     * Executes the "switch to Preference View" Use Case.
      */
-    public void switchToLoginView() {
-        userSignupUseCaseInteractor.switchToLoginView();
+    public void switchToPreferenceView() {
+        userSignupUseCaseInteractor.switchToPreferenceView();
     }
+
 }

@@ -11,6 +11,7 @@ import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.signup.SignupViewModel;
 import view.LoggedInView;
 import view.LoginView;
@@ -49,14 +50,14 @@ public class MainWithDB {
         // results from the use case. The ViewModels are "observable", and will
         // be "observed" by the Views.
         final LoginViewModel loginViewModel = new LoginViewModel();
+        final PreferencesViewModel preferencesViewModel = new PreferencesViewModel();
         final LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         final SignupViewModel signupViewModel = new SignupViewModel();
 
-        // TODO Task 1.1 in a copy of this file, change this line to use the in-memory DAO.
         final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
 
         final SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel,
-                                                                  signupViewModel, userDataAccessObject);
+                                                                  signupViewModel, preferencesViewModel, userDataAccessObject);
         views.add(signupView, signupView.getViewName());
 
         final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,
@@ -67,6 +68,8 @@ public class MainWithDB {
                                                                               loggedInViewModel, userDataAccessObject);
         views.add(loggedInView, loggedInView.getViewName());
 
+        final PreferenceView preferenceView = C();
+        views.add(preferenceView, preferenceView.getViewName());
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();
 

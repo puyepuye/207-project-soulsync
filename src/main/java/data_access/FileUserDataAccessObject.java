@@ -36,7 +36,8 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
         headers.put("password", 1);
 
         if (csvFile.length() == 0) {
-            save();
+//            save();
+            System.out.println("CSV file is empty");
         }
         else {
 
@@ -52,39 +53,40 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
                     final String[] col = row.split(",");
                     final String username = String.valueOf(col[headers.get("username")]);
                     final String password = String.valueOf(col[headers.get("password")]);
-                    final User user = userFactory.create(username, password);
-                    accounts.put(username, user);
+//                    final User user = userFactory.create(username, password);
+//                    accounts.put(username, user);
                 }
             }
         }
     }
 
-    private void save() {
-        final BufferedWriter writer;
-        try {
-            writer = new BufferedWriter(new FileWriter(csvFile));
-            writer.write(String.join(",", headers.keySet()));
-            writer.newLine();
-
-            for (User user : accounts.values()) {
-                final String line = String.format("%s,%s",
-                        user.getName(), user.getPassword());
-                writer.write(line);
-                writer.newLine();
-            }
-
-            writer.close();
-
-        }
-        catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+//    private void save() {
+//        final BufferedWriter writer;
+//        try {
+//            writer = new BufferedWriter(new FileWriter(csvFile));
+//            writer.write(String.join(",", headers.keySet()));
+//            writer.newLine();
+//
+//            for (User user : accounts.values()) {
+//                final String line = String.format("%s,%s",
+//                        user.getName(), user.getPassword());
+//                writer.write(line);
+//                writer.newLine();
+//            }
+//
+//            writer.close();
+//
+//        }
+//        catch (IOException ex) {
+//            throw new RuntimeException(ex);
+//        }
+//    }
 
     @Override
     public void save(User user) {
-        accounts.put(user.getName(), user);
-        this.save();
+//        accounts.put(user.getName(), user);
+//        this.save();
+        System.out.println("saving user " + user.getUsername());
     }
 
     @Override
@@ -110,7 +112,8 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
     @Override
     public void changePassword(User user) {
         // Replace the User object in the map
-        accounts.put(user.getName(), user);
-        save();
+//        accounts.put(user.getName(), user);
+//        save();
+        System.out.println("changing password for user " + user.getUsername());
     }
 }

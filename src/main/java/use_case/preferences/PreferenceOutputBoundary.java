@@ -1,15 +1,15 @@
-package use_case.signup;
+package use_case.preferences;
 
 /**
  * The output boundary for the Signup Use Case.
  */
-public interface SignupOutputBoundary {
+public interface PreferenceOutputBoundary {
 
     /**
      * Prepares the success view for the Signup Use Case.
      * @param outputData the output data
      */
-    void prepareSuccessView(SignupOutputData outputData);
+    void prepareSuccessView(PreferenceOutputData outputData);
 
     /**
      * Prepares the failure view for the Signup Use Case.
@@ -17,10 +17,4 @@ public interface SignupOutputBoundary {
      */
     void prepareFailView(String errorMessage);
 
-    /**
-     * Switches to the Login View.
-     */
-    void switchToPreferenceView();
-
-//    void switchToLoginView();
 }
