@@ -36,7 +36,8 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
         headers.put("password", 1);
 
         if (csvFile.length() == 0) {
-            save();
+//            save();
+            System.out.println("CSV file is empty");
         }
         else {
 
@@ -52,8 +53,8 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
                     final String[] col = row.split(",");
                     final String username = String.valueOf(col[headers.get("username")]);
                     final String password = String.valueOf(col[headers.get("password")]);
-                    final User user = userFactory.create(username, password);
-                    accounts.put(username, user);
+//                    final User user = userFactory.create(username, password);
+//                    accounts.put(username, user);
                 }
             }
         }
@@ -112,5 +113,6 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
         // Replace the User object in the map
         accounts.put(user.getFullName(), user);
         save();
+
     }
 }

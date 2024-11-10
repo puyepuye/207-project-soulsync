@@ -3,6 +3,10 @@ package use_case.signup;
 import entity.User;
 import entity.UserFactory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The Signup Interactor.
  */
@@ -28,16 +32,21 @@ public class SignupInteractor implements SignupInputBoundary {
             userPresenter.prepareFailView("Passwords don't match.");
         }
         else {
-            final User user = userFactory.create(signupInputData.getUsername(), signupInputData.getPassword());
+            final User user = userFactory.create(signupInputData.getUsername(), signupInputData.getPassword(), signupInputData.getImage() , signupInputData.getFullname(), signupInputData.getLocation(),
+                    signupInputData.getGender(), new ArrayList<>() {{}}, signupInputData.getDateOfBirth(), new HashMap<>() {{put("min", 18); put("max", 99);}}, "", new HashMap<>() {{}}, new ArrayList<>() {{}}, new ArrayList<>() {{}});
             userDataAccessObject.save(user);
 
-            final SignupOutputData signupOutputData = new SignupOutputData(user.getFullName(), false);
+            final SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), user.getUsername(), user.getImage(),
+                    user.getLocation(), user.getGender(), user.getDateOfBirth(), false);
+
+            //final SignupOutputData signupOutputData = new SignupOutputData(user.getFullName(), false);
+
             userPresenter.prepareSuccessView(signupOutputData);
         }
     }
 
     @Override
-    public void switchToLoginView() {
-        userPresenter.switchToLoginView();
+    public void switchToPreferenceView() {
+        userPresenter.switchToPreferenceView();
     }
 }

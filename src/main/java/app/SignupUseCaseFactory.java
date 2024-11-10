@@ -4,6 +4,7 @@ import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
@@ -33,10 +34,10 @@ public final class SignupUseCaseFactory {
      */
     public static SignupView create(
             ViewManagerModel viewManagerModel, LoginViewModel loginViewModel,
-            SignupViewModel signupViewModel, SignupUserDataAccessInterface userDataAccessObject) {
+            SignupViewModel signupViewModel,  PreferencesViewModel preferencesViewModel, SignupUserDataAccessInterface userDataAccessObject) {
 
         final SignupController signupController = createUserSignupUseCase(viewManagerModel, signupViewModel,
-                                                                          loginViewModel, userDataAccessObject);
+                                                                          loginViewModel, preferencesViewModel, userDataAccessObject);
         return new SignupView(signupController, signupViewModel);
 
     }
@@ -44,11 +45,12 @@ public final class SignupUseCaseFactory {
     private static SignupController createUserSignupUseCase(ViewManagerModel viewManagerModel,
                                                             SignupViewModel signupViewModel,
                                                             LoginViewModel loginViewModel,
+                                                            PreferencesViewModel preferencesViewModel,
                                                             SignupUserDataAccessInterface userDataAccessObject) {
 
         // Notice how we pass this method's parameters to the Presenter.
         final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel,
-                                                                              signupViewModel, loginViewModel);
+                                                                              signupViewModel, preferencesViewModel);
 
         final UserFactory userFactory = new CommonUserFactory();
 

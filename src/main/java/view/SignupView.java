@@ -34,7 +34,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
     private final JButton signUp;
     private final JButton cancel;
-    private final JButton toLogin;
+    private final JButton toPreference;
 
     public SignupView(SignupController controller, SignupViewModel signupViewModel) {
 
@@ -53,8 +53,8 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 new JLabel(SignupViewModel.REPEAT_PASSWORD_LABEL), repeatPasswordInputField);
 
         final JPanel buttons = new JPanel();
-        toLogin = new JButton(SignupViewModel.TO_LOGIN_BUTTON_LABEL);
-        buttons.add(toLogin);
+        toPreference = new JButton(SignupViewModel.TO_PREFERENCE_BUTTON_LABEL);
+        buttons.add(toPreference);
         signUp = new JButton(SignupViewModel.SIGNUP_BUTTON_LABEL);
         buttons.add(signUp);
         cancel = new JButton(SignupViewModel.CANCEL_BUTTON_LABEL);
@@ -68,24 +68,49 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                             final SignupState currentState = signupViewModel.getState();
 
                             signupController.execute(
+                                    currentState.getFullname(),
                                     currentState.getUsername(),
                                     currentState.getPassword(),
-                                    currentState.getRepeatPassword()
+                                    currentState.getRepeatPassword(),
+                                    currentState.getImage(),
+                                    currentState.getLocation(),
+                                    currentState.getGender(),
+                                    currentState.getDateOfBirth()
                             );
+
+
                         }
                     }
                 }
         );
 
-        toLogin.addActionListener(
+        toPreference.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        signupController.switchToLoginView();
+                        System.out.println("help>>");
+//                        signupController.switchToPreferenceView();
+                        if (evt.getSource().equals(toPreference)) {
+                            final SignupState currentState = signupViewModel.getState();
+
+                            signupController.execute(
+                                    currentState.getFullname(),
+                                    currentState.getUsername(),
+                                    currentState.getPassword(),
+                                    currentState.getRepeatPassword(),
+                                    currentState.getImage(),
+                                    currentState.getLocation(),
+                                    currentState.getGender(),
+                                    currentState.getDateOfBirth()
+                            );
+
+
+                        }
                     }
                 }
+
         );
 
-        cancel.addActionListener(this);
+//        cancel.addActionListener(this);
 
         addUsernameListener();
         addPasswordListener();

@@ -12,7 +12,7 @@ public class CommonUser implements User {
     private final String userName;
     private final String password;
     private final String image;
-    private final String fullName;
+    private final String fullname;
     private final String location;
     private final String gender;
     private final List<String> preferredGender;
@@ -23,11 +23,11 @@ public class CommonUser implements User {
     private final List<String> tags;
     private final List<String> matched;
 
-    public CommonUser(String userName, String password, String image, String fullName, String location, String gender, List<String> preferredGender, Date dateOfBirth, Map<String, Integer> preferredAge, String bio, Map<String, Boolean> preferences, List<String> tags, List<String> matched) {
+    public CommonUser(String userName, String password, String image, String fullname, String location, String gender, List<String> preferredGender, Date dateOfBirth, Map<String, Integer> preferredAge, String bio, Map<String, Boolean> preferences, List<String> tags, List<String> matched) {
         this.userName = userName;
         this.password = password;
         this.image = image;
-        this.fullName = fullName;
+        this.fullname = fullname;
         this.location = location;
         this.gender = gender;
         this.preferredGender = preferredGender;
@@ -40,7 +40,7 @@ public class CommonUser implements User {
     }
 
     @Override
-    public String getUserName() {
+    public String getUsername() {
         return userName;
     }
 
@@ -53,8 +53,8 @@ public class CommonUser implements User {
     public String getImage() { return image; }
 
     @Override
-    public String getFullName() {
-        return fullName;
+    public String getFullname() {
+        return fullname;
     }
 
     @Override
