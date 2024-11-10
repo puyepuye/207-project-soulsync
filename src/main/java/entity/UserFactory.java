@@ -10,7 +10,7 @@ import java.util.Map;
 public interface UserFactory {
     /**
      * Creates a new User.
-     * @param userName the name of the new user
+     * @param username the name of the new user
      * @param password the password of the new user
      * @param image the image of the new user
      * @param fullName the fullName of the new user
@@ -25,7 +25,7 @@ public interface UserFactory {
      * @param matched the matched person of the new user
      * @return the new user
      */
-    User create(String userName, String password, String image, String fullName,
+    User create(String username, String password, String image, String fullName,
                 String location, String gender, List<String> preferredGender, Date dateOfBirth,
                 Map<String, Integer> preferredAge, String bio, Map<String, Boolean> preferences, List<String> tags,
                 List<String> matched);

@@ -1,6 +1,9 @@
 package data_access;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.io.IOException;
+import java.util.*;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +11,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import io.github.cdimascio.dotenv.Dotenv;
+
 import org.bson.Document;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,13 +26,14 @@ import okhttp3.Response;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
-
+import use_case.preferences.PreferenceUserDataAccessInterface;
 /**
  * The DAO for user data.
  */
 public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                                                LoginUserDataAccessInterface,
-                                               ChangePasswordUserDataAccessInterface {
+                                               ChangePasswordUserDataAccessInterface, PreferenceUserDataAccessInterface
+{
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
@@ -171,6 +175,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 .append("tags", user.getTags())
                 .append("matched", user.getMatched());
         userCollection.insertOne(userDoc);
+
     }
 
     @Override
@@ -207,5 +212,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         Document query = new Document("username", user.getFullName());
         Document update = new Document("$set", new Document("password", user.getPassword()));
         userCollection.updateOne(query, update);
+
     }
 }
