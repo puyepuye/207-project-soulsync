@@ -28,6 +28,7 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     @Override
     public void save(User user) {
         users.put(user.getUsername(), user);
+        //users.put(user.getFullName(), user);
     }
 
     @Override
@@ -49,6 +50,7 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     public void changePassword(User user) {
         // Replace the old entry with the new password
         users.put(user.getUsername(), user);
+        //users.put(user.getFullName(), user);
     }
 
 }

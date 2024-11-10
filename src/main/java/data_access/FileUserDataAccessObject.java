@@ -60,33 +60,32 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
-//    private void save() {
-//        final BufferedWriter writer;
-//        try {
-//            writer = new BufferedWriter(new FileWriter(csvFile));
-//            writer.write(String.join(",", headers.keySet()));
-//            writer.newLine();
-//
-//            for (User user : accounts.values()) {
-//                final String line = String.format("%s,%s",
-//                        user.getName(), user.getPassword());
-//                writer.write(line);
-//                writer.newLine();
-//            }
-//
-//            writer.close();
-//
-//        }
-//        catch (IOException ex) {
-//            throw new RuntimeException(ex);
-//        }
-//    }
+    private void save() {
+        final BufferedWriter writer;
+        try {
+            writer = new BufferedWriter(new FileWriter(csvFile));
+            writer.write(String.join(",", headers.keySet()));
+            writer.newLine();
+
+            for (User user : accounts.values()) {
+                final String line = String.format("%s,%s",
+                        user.getFullName(), user.getPassword());
+                writer.write(line);
+                writer.newLine();
+            }
+
+            writer.close();
+
+        }
+        catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
     @Override
     public void save(User user) {
-//        accounts.put(user.getName(), user);
-//        this.save();
-        System.out.println("saving user " + user.getUsername());
+        accounts.put(user.getFullName(), user);
+        this.save();
     }
 
     @Override
@@ -112,8 +111,8 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
     @Override
     public void changePassword(User user) {
         // Replace the User object in the map
-//        accounts.put(user.getName(), user);
-//        save();
-        System.out.println("changing password for user " + user.getUsername());
+        accounts.put(user.getFullName(), user);
+        save();
+
     }
 }

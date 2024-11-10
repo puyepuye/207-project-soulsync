@@ -1,6 +1,7 @@
 package use_case.login;
 
 import entity.User;
+import use_case.signup.SignupOutputBoundary;
 
 /**
  * The Login Interactor.
@@ -33,8 +34,16 @@ public class LoginInteractor implements LoginInputBoundary {
                 userDataAccessObject.setCurrentUser(user.getUsername());
 
                 final LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), false);
+//                 userDataAccessObject.setCurrentUser(user.getFullName());
+
+//                 final LoginOutputData loginOutputData = new LoginOutputData(user.getFullName(), false);
                 loginPresenter.prepareSuccessView(loginOutputData);
             }
         }
+    }
+
+    @Override
+    public void switchToSignupView() {
+        loginPresenter.switchToSignupView();
     }
 }

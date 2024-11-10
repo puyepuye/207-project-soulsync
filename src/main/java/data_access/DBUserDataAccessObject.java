@@ -1,8 +1,18 @@
 package data_access;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
+import java.util.Map;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+import org.bson.Document;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,42 +43,58 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String MESSAGE = "message";
     private final UserFactory userFactory;
 
+    private final MongoCollection<Document> userCollection;
+
     public DBUserDataAccessObject(UserFactory userFactory) {
         this.userFactory = userFactory;
         // No need to do anything to reinitialize a user list! The data is the cloud that may be miles away.
+        Dotenv dotenv = Dotenv.load();
+        String mongoUri = dotenv.get("MONGODB_URI");
+        MongoClient client = MongoClients.create(mongoUri);
+        MongoDatabase db = client.getDatabase("sampleDB");
+        this.userCollection = db.getCollection("sampleCollection");
     }
 
     @Override
     public User get(String username) {
         // Make an API call to get the user object.
-        final OkHttpClient client = new OkHttpClient().newBuilder().build();
-        final Request request = new Request.Builder()
-                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/user?username=%s", username))
-                .addHeader("Content-Type", CONTENT_TYPE_JSON)
-                .build();
-        try {
-            final Response response = client.newCall(request).execute();
+//        final OkHttpClient client = new OkHttpClient().newBuilder().build();
+//        final Request request = new Request.Builder()
+//                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/user?username=%s", username))
+//                .addHeader("Content-Type", CONTENT_TYPE_JSON)
+//                .build();
+//        try {
+//            final Response response = client.newCall(request).execute();
+//
+//            final JSONObject responseBody = new JSONObject(response.body().string());
+//
+//            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
+//                final JSONObject userJSONObject = responseBody.getJSONObject("user");
+//                final String name = userJSONObject.getString(USERNAME);
+//                final String password = userJSONObject.getString(PASSWORD);
+//
+//                return userFactory.create(name, password);
+//            }
+//            else {
+//                throw new RuntimeException(responseBody.getString(MESSAGE));
+//            }
+//        }
+//        catch (IOException | JSONException ex) {
+//            throw new RuntimeException(ex);
+//        }
+        Document query = new Document("username", username);
+        Document userDoc = userCollection.find(query).first();
 
-            final JSONObject responseBody = new JSONObject(response.body().string());
+        if (userDoc != null) {
+            String userName = userDoc.getString(USERNAME);
+            String password = userDoc.getString(PASSWORD);
 
-            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-                final JSONObject userJSONObject = responseBody.getJSONObject("user");
-                final String name = userJSONObject.getString(USERNAME);
-                final String password = userJSONObject.getString(PASSWORD);
-
-                Date sampleDate = new GregorianCalendar(2000, Calendar.JANUARY, 1).getTime();
-
-                return  userFactory.create(name, password, "imageLink", "Fullname", "Location",
-                        "gender", new ArrayList<>() {{}}, sampleDate, new HashMap<>() {{put("min", 18); put("max", 99);}}, "", new HashMap<>() {{}}, new ArrayList<>() {{}}, new ArrayList<>() {{}});
-
-            }
-            else {
-                throw new RuntimeException(responseBody.getString(MESSAGE));
-            }
+            return userFactory.create(userName, password, userDoc.getString("image"), userDoc.getString("fullName"),
+                    userDoc.getString("location"), userDoc.getString("gender"), (List<String>) userDoc.get("preferredGender"),
+                    userDoc.getDate("dateOfBirth"), (Map<String, Integer>) userDoc.get("preferredAge"), userDoc.getString("bio"),
+                    (Map<String, Boolean>) userDoc.get("preferences"), (List<String>) userDoc.get("tags"), (List<String>) userDoc.get("matched"));
         }
-        catch (IOException | JSONException ex) {
-            throw new RuntimeException(ex);
-        }
+        return null;  // User is NOT found
     }
 
     @Override
@@ -83,88 +109,109 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
     @Override
     public boolean existsByName(String username) {
-        final OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        final Request request = new Request.Builder()
-                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/checkIfUserExists?username=%s", username))
-                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
-                .build();
-        try {
-            final Response response = client.newCall(request).execute();
-
-            final JSONObject responseBody = new JSONObject(response.body().string());
-
-            //                throw new RuntimeException(responseBody.getString("message"));
-            return responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE;
-        }
-        catch (IOException | JSONException ex) {
-            throw new RuntimeException(ex);
-        }
+//        final OkHttpClient client = new OkHttpClient().newBuilder()
+//                .build();
+//        final Request request = new Request.Builder()
+//                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/checkIfUserExists?username=%s", username))
+//                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
+//                .build();
+//        try {
+//            final Response response = client.newCall(request).execute();
+//
+//            final JSONObject responseBody = new JSONObject(response.body().string());
+//
+//            //                throw new RuntimeException(responseBody.getString("message"));
+//            return responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE;
+//        }
+//        catch (IOException | JSONException ex) {
+//            throw new RuntimeException(ex);
+//        }
+        Document query = new Document("username", username);
+        return userCollection.find(query).first() != null;
     }
 
     @Override
     public void save(User user) {
-        final OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
+//        final OkHttpClient client = new OkHttpClient().newBuilder()
+//                .build();
+//
+//        // POST METHOD
+//        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
+//        final JSONObject requestBody = new JSONObject();
+//        requestBody.put(USERNAME, user.getFullName());
+//        requestBody.put(PASSWORD, user.getPassword());
+//        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
+//        final Request request = new Request.Builder()
+//                .url("http://vm003.teach.cs.toronto.edu:20112/user")
+//                .method("POST", body)
+//                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
+//                .build();
+//        try {
+//            final Response response = client.newCall(request).execute();
+//
+//            final JSONObject responseBody = new JSONObject(response.body().string());
+//
+//            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
+//                // success!
+//            }
+//            else {
+//                throw new RuntimeException(responseBody.getString(MESSAGE));
+//            }
+//        }
+//        catch (IOException | JSONException ex) {
+//            throw new RuntimeException(ex);
+//        }
+        Document userDoc = new Document("username", user.getFullName())
+                .append(PASSWORD, user.getPassword())
+                .append("image", user.getImage())
+                .append("fullName", user.getFullName())
+                .append("location", user.getLocation())
+                .append("gender", user.getGender())
+                .append("preferredGender", user.getPreferredGender())
+                .append("dateOfBirth", user.getDateOfBirth())
+                .append("preferredAge", user.getPreferredAge())
+                .append("bio", user.getBio())
+                .append("preferences", user.getPreferences())
+                .append("tags", user.getTags())
+                .append("matched", user.getMatched());
+        userCollection.insertOne(userDoc);
 
-        // POST METHOD
-        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
-        final JSONObject requestBody = new JSONObject();
-        requestBody.put(USERNAME, user.getUsername());
-        requestBody.put(PASSWORD, user.getPassword());
-        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
-        final Request request = new Request.Builder()
-                .url("http://vm003.teach.cs.toronto.edu:20112/user")
-                .method("POST", body)
-                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
-                .build();
-        try {
-            final Response response = client.newCall(request).execute();
-
-            final JSONObject responseBody = new JSONObject(response.body().string());
-
-            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-                // success!
-            }
-            else {
-                throw new RuntimeException(responseBody.getString(MESSAGE));
-            }
-        }
-        catch (IOException | JSONException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 
     @Override
     public void changePassword(User user) {
-        final OkHttpClient client = new OkHttpClient().newBuilder()
-                                        .build();
+//        final OkHttpClient client = new OkHttpClient().newBuilder()
+//                                        .build();
+//
+//        // POST METHOD
+//        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
+//        final JSONObject requestBody = new JSONObject();
+//        requestBody.put(USERNAME, user.getFullName());
+//        requestBody.put(PASSWORD, user.getPassword());
+//        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
+//        final Request request = new Request.Builder()
+//                                    .url("http://vm003.teach.cs.toronto.edu:20112/user")
+//                                    .method("PUT", body)
+//                                    .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
+//                                    .build();
+//        try {
+//            final Response response = client.newCall(request).execute();
+//
+//            final JSONObject responseBody = new JSONObject(response.body().string());
+//
+//            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
+//                // success!
+//            }
+//            else {
+//                throw new RuntimeException(responseBody.getString(MESSAGE));
+//            }
+//        }
+//        catch (IOException | JSONException ex) {
+//            throw new RuntimeException(ex);
+//        }
+        Document query = new Document("username", user.getFullName());
+        Document update = new Document("$set", new Document("password", user.getPassword()));
+        userCollection.updateOne(query, update);
 
-        // POST METHOD
-        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
-        final JSONObject requestBody = new JSONObject();
-        requestBody.put(USERNAME, user.getUsername());
-        requestBody.put(PASSWORD, user.getPassword());
-        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
-        final Request request = new Request.Builder()
-                                    .url("http://vm003.teach.cs.toronto.edu:20112/user")
-                                    .method("PUT", body)
-                                    .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
-                                    .build();
-        try {
-            final Response response = client.newCall(request).execute();
-
-            final JSONObject responseBody = new JSONObject(response.body().string());
-
-            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-                // success!
-            }
-            else {
-                throw new RuntimeException(responseBody.getString(MESSAGE));
-            }
-        }
-        catch (IOException | JSONException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 }
