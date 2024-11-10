@@ -1,6 +1,5 @@
 package data_access;
 
-import entity.User;
 import entity.UserFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,9 +13,8 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 public class SendBirdChatObject {
     private final UserFactory userFactory;
@@ -25,7 +23,8 @@ public class SendBirdChatObject {
 
     public SendBirdChatObject(UserFactory userFactory, String newID) {
         this.userFactory = userFactory;
-        apiKey =  System.getenv("SendBird_API_KEY");
+        // apiKey =  System.getenv("SendBird_API_KEY");
+        apiKey = "93889ba89ee5d24de7c1f73b924c54fafc3e75be";
         appID = "CE20803F-158E-4B7E-A270-2FD7B78C5F4F"; //TODO: un-hardcode this.
     }
 
@@ -111,7 +110,7 @@ public class SendBirdChatObject {
 
     }
 
-    public void SendMessage(String channelURL, String senderID, String recipientID, String message){
+    public void SendMessage(String channelURL, String senderID, String message){
         JSONObject requestBody = new JSONObject();
         requestBody.put("message_type", "MESG");
         requestBody.put("user_id", senderID);
@@ -193,7 +192,7 @@ public class SendBirdChatObject {
         return result;
 }
 
-    public static void main(String[] args) {
+    public static void test() {
         SendBirdChatObject so = new SendBirdChatObject();
         //so.CreateSendBirdUser("1234567", "Yollie", "");
         String sampleObject = "{\n" +
@@ -238,12 +237,17 @@ public class SendBirdChatObject {
         JSONObject sample_response = new JSONObject(sampleObject);
         List<JSONObject> jo = so.ExtractMessagesFromJSON(sample_response);
         // System.out.println(jo.toString());
-        // so.CreateSendBirdUser("42069", "Yollie", "https://cdn.britannica.com/96/1296-050-4A65097D/gelding-bay-coat.jpg");
-        // so.CreateSendBirdChat("42069", "69");
-        so.SendMessage("42069_69_chat", "42069", "69",
+        //so.CreateSendBirdUser("42069", "Yollie", "https://cdn.britannica.com/96/1296-050-4A65097D/gelding-bay-coat.jpg");
+        //so.CreateSendBirdChat("42069", "69");
+        so.SendMessage("42069_69_chat", "42069",
                 "Hello, this is mac sending a test message via Java");
-        so.SendMessage("42069_69_chat", "69", "42069",
+        so.SendMessage("42069_69_chat", "69",
                 "Hello Yole");
         System.out.println(so.GetChatMessages("42069_69_chat"));
+    }
+
+
+    public static void main(String[] args) {
+        SendBirdChatObject.test();
     }
 }
