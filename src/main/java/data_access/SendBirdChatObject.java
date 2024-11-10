@@ -238,8 +238,8 @@ public class SendBirdChatObject {
         JSONObject sample_response = new JSONObject(sampleObject);
         List<JSONObject> jo = so.ExtractMessagesFromJSON(sample_response);
         // System.out.println(jo.toString());
-        so.CreateSendBirdUser("42069", "Yollie", "https://cdn.britannica.com/96/1296-050-4A65097D/gelding-bay-coat.jpg");
-        so.CreateSendBirdChat("42069", "69");
+        // so.CreateSendBirdUser("42069", "Yollie", "https://cdn.britannica.com/96/1296-050-4A65097D/gelding-bay-coat.jpg");
+        // so.CreateSendBirdChat("42069", "69");
         so.SendMessage("42069_69_chat", "42069", "69",
                 "Hello, this is mac sending a test message via Java");
         so.SendMessage("42069_69_chat", "69", "42069",
