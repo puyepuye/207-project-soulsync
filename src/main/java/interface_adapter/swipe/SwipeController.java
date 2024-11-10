@@ -15,7 +15,7 @@ public class SwipeController {
      * @param like whether the person like the profile on the screen or not
      */
     public void execute(boolean like, String username, String profileUsername) {
-        final SwipeInputData swipeInputData = new SwipeInputData(like, username, profileUsername);
+        final SwipeInputData swipeInputData = new SwipeInputData(like, username, "", profileUsername);
 
         userSwipeUseCaseInteractor.execute(swipeInputData);
     }
