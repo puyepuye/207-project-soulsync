@@ -25,7 +25,7 @@ public class SendBirdChatObject {
 
     public SendBirdChatObject(UserFactory userFactory, String newID) {
         this.userFactory = userFactory;
-        // apiKey =  System.getenv("SendBird_API_KEY");
+        apiKey =  System.getenv("SendBird_API_KEY");
         appID = "CE20803F-158E-4B7E-A270-2FD7B78C5F4F"; //TODO: un-hardcode this.
     }
 
