@@ -20,30 +20,31 @@ import interface_adapter.preferences.PreferencesViewModel;
 
 import javax.swing.*;
 
-public class PreferenceView extends JFrame {
+/**
+ * The View for when the user signs up and moves to choosing dating preferences within the program.
+ */
+public class PreferenceView extends JPanel  {
+    private final String viewName = "preferences";
+    private PreferencesViewModel preferencesViewModel;
+    private PreferencesController preferencesController;
 
-    public PreferenceView(String message) {
-        // Set the title of the window
-        super("Preference View");
+    public PreferenceView(PreferencesViewModel preferencesViewModel, PreferencesController controller) {
+        this.preferencesController = controller;
+        this.preferencesViewModel = preferencesViewModel;
 
-        // Create a label with the provided message
-        JLabel label = new JLabel("Hello, " + message, SwingConstants.CENTER);
+        // Create a label with the provided text
+        JLabel label = new JLabel("Hello, kimi", SwingConstants.CENTER);
 
-        // Add the label to the frame
-        add(label);
-
-        // Set the frame properties
-        setSize(300, 200); // Width and height of the frame
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit the application when closed
-        setLocationRelativeTo(null); // Center the frame on the screen
-        setVisible(true); // Make the frame visible
+        // Set layout and add the label to the panel
+        setLayout(new BorderLayout());
+        add(label, BorderLayout.CENTER);
     }
 
-    public PreferenceView(PreferencesController preferencesController, PreferencesViewModel preferencesViewModel) {
+    public String getViewName() {
+        return viewName;
     }
-
     public static void main(String[] args) {
         // Create an instance of PreferenceView to display the frame
-        new PreferenceView("something");
+        System.out.println("Preference View");
     }
 }

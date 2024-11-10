@@ -11,8 +11,10 @@ import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.preferences.PreferencesPresenter;
 import interface_adapter.preferences.PreferencesViewModel;
+import use_case.preferences.PreferenceInputBoundary;
 import use_case.preferences.PreferenceOutputBoundary;
 import use_case.preferences.PreferenceUserDataAccessInterface;
+import use_case.preferences.PreferenceInteractor;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
@@ -29,37 +31,29 @@ public final class PreferenceUseCaseFactory {
 
     }
 
-    /**
-     * Factory function for creating the SignupView.
-     * @param viewManagerModel the ViewManagerModel to inject into the SignupView
-     * @param loginViewModel the LoginViewModel to inject into the SignupView
-     * @param signupViewModel the SignupViewModel to inject into the SignupView
-     * @param userDataAccessObject the SignupUserDataAccessInterface to inject into the SignupView
-     * @return the LoginView created for the provided input classes
-     */
+
     public static PreferenceView create(
-            ViewManagerModel viewManagerModel, LoginViewModel loginViewModel,
-            SignupViewModel signupViewModel,  PreferencesViewModel preferencesViewModel, PreferenceUserDataAccessInterface userDataAccessObject) {
+            ViewManagerModel viewManagerModel,
+            PreferencesViewModel preferencesViewModel,
+            PreferenceUserDataAccessInterface userDataAccessObject) {
 
-        final PreferencesController preferencesController = createPreferenceUseCase(viewManagerModel, signupViewModel,  preferencesViewModel, userDataAccessObject);
-        return new PreferenceView(preferencesController, preferencesViewModel);
-
+        final PreferencesController preferencesController = createPreferenceUseCase(viewManagerModel,  preferencesViewModel, userDataAccessObject);
+        return new PreferenceView(preferencesViewModel, preferencesController);
     }
 
-    private static PreferencesController createPreferenceUseCase(ViewManagerModel viewManagerModel,
-                                                            SignupViewModel signupViewModel,
-                                                            PreferencesViewModel preferencesViewModel,
-                                                            PreferenceUserDataAccessInterface userDataAccessObject) {
+    private static PreferencesController createPreferenceUseCase(
+            ViewManagerModel viewManagerModel,
+            PreferencesViewModel preferencesViewModel,
+            PreferenceUserDataAccessInterface userDataAccessObject) {
 
         // Notice how we pass this method's parameters to the Presenter.
-        final PreferenceOutputBoundary preferenceOutputBoundary = new PreferencesPresenter(viewManagerModel,
-                                                                              signupViewModel, preferencesViewModel);
+        final PreferenceOutputBoundary preferenceOutputBoundary = new PreferencesPresenter(viewManagerModel,  preferencesViewModel);
 
         final UserFactory userFactory = new CommonUserFactory();
 
-        final SignupInputBoundary userSignupInteractor = new SignupInteractor(
-                userDataAccessObject, signupOutputBoundary, userFactory);
+        final PreferenceInputBoundary preferenceInteractor = new PreferenceInteractor(
+                userDataAccessObject, preferenceOutputBoundary, userFactory);
 
-        return new SignupController(userSignupInteractor);
+        return new PreferencesController(preferenceInteractor);
     }
 }

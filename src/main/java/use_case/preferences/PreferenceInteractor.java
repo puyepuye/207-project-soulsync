@@ -12,8 +12,8 @@ public class PreferenceInteractor implements PreferenceInputBoundary {
     private final PreferenceOutputBoundary userPresenter;
     private final UserFactory userFactory;
 
-    public PreferenceInteractor(PreferenceUserDataAccessInterface userDataAccessObject, PreferenceOutputBoundary userPresenter, UserFactory userFactory) {
-        this.userDataAccessObject = userDataAccessObject;
+    public PreferenceInteractor(PreferenceUserDataAccessInterface userDataAccessInterface, PreferenceOutputBoundary userPresenter, UserFactory userFactory) {
+        this.userDataAccessObject = userDataAccessInterface;
         this.userPresenter = userPresenter;
         this.userFactory = userFactory;
     }

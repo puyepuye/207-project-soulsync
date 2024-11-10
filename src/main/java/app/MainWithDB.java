@@ -12,10 +12,12 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
+import use_case.preferences.PreferenceUserDataAccessInterface;
 import interface_adapter.signup.SignupViewModel;
 import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
+import view.PreferenceView;
 import view.ViewManager;
 
 /**
@@ -50,9 +52,9 @@ public class MainWithDB {
         // results from the use case. The ViewModels are "observable", and will
         // be "observed" by the Views.
         final LoginViewModel loginViewModel = new LoginViewModel();
-        final PreferencesViewModel preferencesViewModel = new PreferencesViewModel();
         final LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         final SignupViewModel signupViewModel = new SignupViewModel();
+        final PreferencesViewModel preferencesViewModel = new PreferencesViewModel();
 
         final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
 
@@ -68,12 +70,16 @@ public class MainWithDB {
                                                                               loggedInViewModel, userDataAccessObject);
         views.add(loggedInView, loggedInView.getViewName());
 
-        final PreferenceView preferenceView = C();
+        final PreferenceView preferenceView = PreferenceUseCaseFactory.create(viewManagerModel,
+                preferencesViewModel, userDataAccessObject);
+
         views.add(preferenceView, preferenceView.getViewName());
+
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();
 
         application.pack();
         application.setVisible(true);
+
     }
 }

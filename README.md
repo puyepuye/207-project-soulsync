@@ -45,3 +45,17 @@ Follow pull request instructions in terminal, make sure "branch has no conflicts
 3. **Lapatrada Jaroonjetjumnong (Claire)**
 4. **Kay Zin Thant** (Yolanda)
 5. **Thitiwut Pattanasuttinont** (Mac)
+
+
+## Notes
+1. After implementing view must add to MainWithDB set up with UseCaseFactory which follows flow:      
+   - loginInteractor (execute which calles loginPresenter.prepareSuccessView
+   - login interactor executi is inplementation of logininputBoundary.java
+   - loginController calls loginUseCaseInteractor.exe
+   - LoginView.java
+   ```bash
+          loginController.execute(
+                    currentState.getUsername()
+                    currentState.getPassword()
+                   );
+   ```

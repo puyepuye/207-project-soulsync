@@ -16,13 +16,14 @@ import okhttp3.Response;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
-
+import use_case.preferences.PreferenceUserDataAccessInterface;
 /**
  * The DAO for user data.
  */
 public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                                                LoginUserDataAccessInterface,
-                                               ChangePasswordUserDataAccessInterface {
+                                               ChangePasswordUserDataAccessInterface, PreferenceUserDataAccessInterface
+{
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
