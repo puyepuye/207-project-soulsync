@@ -29,7 +29,8 @@ public class SendBirdChatObject {
     }
 
     public SendBirdChatObject() {
-        apiKey =  System.getenv("SENDBIRD_API_KEY");
+        //apiKey =  System.getenv("SENDBIRD_API_KEY");
+        apiKey = "93889ba89ee5d24de7c1f73b924c54fafc3e75be";
         appID = "CE20803F-158E-4B7E-A270-2FD7B78C5F4F"; //TODO: un-hardcode this.
         this.userFactory = null;
     }
