@@ -26,7 +26,6 @@ public class SendBirdChatObject {
     public SendBirdChatObject(UserFactory userFactory, String newID) {
         this.userFactory = userFactory;
         // apiKey =  System.getenv("SendBird_API_KEY");
-        apiKey = "93889ba89ee5d24de7c1f73b924c54fafc3e75be";
         appID = "CE20803F-158E-4B7E-A270-2FD7B78C5F4F"; //TODO: un-hardcode this.
     }
 
@@ -239,8 +238,8 @@ public class SendBirdChatObject {
         JSONObject sample_response = new JSONObject(sampleObject);
         //List<JSONObject> jo = so.ExtractMessagesFromJSON(sample_response);
         // System.out.println(jo.toString());
-        so.CreateSendBirdUser("42069", "Yollie", "https://cdn.britannica.com/96/1296-050-4A65097D/gelding-bay-coat.jpg");
-        so.CreateSendBirdChat("42069", "69");
+        // so.CreateSendBirdUser("42069", "Yollie", "https://cdn.britannica.com/96/1296-050-4A65097D/gelding-bay-coat.jpg");
+        // so.CreateSendBirdChat("42069", "69");
         so.SendMessage("42069_69_chat", "42069", "69",
                 "Hello, this is mac sending a test message via Java");
         so.SendMessage("42069_69_chat", "69", "42069",
