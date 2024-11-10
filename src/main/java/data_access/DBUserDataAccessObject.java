@@ -161,10 +161,10 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 //        catch (IOException | JSONException ex) {
 //            throw new RuntimeException(ex);
 //        }
-        Document userDoc = new Document("username", user.getFullName())
+        Document userDoc = new Document("username", user.getUsername())
                 .append(PASSWORD, user.getPassword())
                 .append("image", user.getImage())
-                .append("fullName", user.getFullName())
+                .append("fullName", user.getUsername())
                 .append("location", user.getLocation())
                 .append("gender", user.getGender())
                 .append("preferredGender", user.getPreferredGender())
@@ -209,7 +209,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 //        catch (IOException | JSONException ex) {
 //            throw new RuntimeException(ex);
 //        }
-        Document query = new Document("username", user.getFullName());
+        Document query = new Document("username", user.getUsername());
         Document update = new Document("$set", new Document("password", user.getPassword()));
         userCollection.updateOne(query, update);
 

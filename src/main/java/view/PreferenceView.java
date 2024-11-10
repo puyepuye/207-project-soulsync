@@ -33,7 +33,7 @@ public class PreferenceView extends JPanel  {
         this.preferencesViewModel = preferencesViewModel;
 
         // Create a label with the provided text
-        JLabel label = new JLabel("Hello, kimi", SwingConstants.CENTER);
+        JLabel label = new JLabel("Hello, Username", SwingConstants.CENTER);
 
         // Set layout and add the label to the panel
         setLayout(new BorderLayout());
