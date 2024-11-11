@@ -31,6 +31,7 @@
 - checkstyle
 #### 6. Test cases?
 - implement test cases
+
 ### Starter TODOs
 #### 1. Verify `MainWithDB` Functionality
 - Ensure that `MainWithDB` still runs as expected (from Lab 5).
