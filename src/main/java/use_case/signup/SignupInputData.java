@@ -14,10 +14,10 @@ public class SignupInputData {
     private final String repeatPassword;
     private final String location;
     private final String gender;
-    private final Date dateOfBirth;
+    private final String dateOfBirth;
 
     public SignupInputData(String fullname, String username, String password, String image, String repeatPassword,
-                           String location, String gender, Date dateOfBirth) {
+                           String location, String gender, String dateOfBirth) {
         this.fullname = fullname;
         this.username = username;
         this.password = password;
@@ -55,7 +55,7 @@ public class SignupInputData {
         return gender;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 }
