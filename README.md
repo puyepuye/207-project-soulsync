@@ -44,9 +44,6 @@ erDiagram
     Matches ||--|| User : "involves"
 
 ```
-## Tasks
-
-
 
 ## 🌟 Contributors
 1. **Yi-An Chu** (Kimi)
@@ -56,7 +53,7 @@ erDiagram
 5. **Thitiwut Pattanasuttinont** (Mac)
 
 
-## Notes
+## Notes for connecting pages
 1. After implementing view must add to MainWithDB set up with UseCaseFactory which follows flow:      
    - loginInteractor (execute which calles loginPresenter.prepareSuccessView
    - login interactor executi is inplementation of logininputBoundary.java
