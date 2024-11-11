@@ -60,7 +60,7 @@ public class SignupInteractor implements SignupInputBoundary {
     }
 
     @Override
-    public void switchToPreferenceView() {
-        userPresenter.switchToPreferenceView();
+    public void switchToLoginView() {
+        userPresenter.switchToLoginView();
     }
 }

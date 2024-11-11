@@ -36,10 +36,10 @@ public class SignupController {
     }
 
     /**
-     * Executes the "switch to Preference View" Use Case.
+     * Executes the "switch to Login View" Use Case.
      */
-    public void switchToPreferenceView() {
-        userSignupUseCaseInteractor.switchToPreferenceView();
+    public void switchToLoginView() {
+        userSignupUseCaseInteractor.switchToLoginView();
     }
 
 }

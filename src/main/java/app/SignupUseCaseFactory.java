@@ -50,7 +50,8 @@ public final class SignupUseCaseFactory {
 
         // Notice how we pass this method's parameters to the Presenter.
         final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel,
-                                                                              signupViewModel, preferencesViewModel);
+                                                                              signupViewModel,
+                                                                              loginViewModel, preferencesViewModel);
 
         final UserFactory userFactory = new CommonUserFactory();
 

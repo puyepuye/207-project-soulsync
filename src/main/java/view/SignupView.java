@@ -34,7 +34,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
     private final JButton signUp;
     private final JButton cancel;
-    private final JButton toPreference;
+    private final JButton toLogin;
 
     public SignupView(SignupController controller, SignupViewModel signupViewModel) {
 
@@ -53,8 +53,8 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 new JLabel(SignupViewModel.REPEAT_PASSWORD_LABEL), repeatPasswordInputField);
 
         final JPanel buttons = new JPanel();
-        toPreference = new JButton(SignupViewModel.TO_PREFERENCE_BUTTON_LABEL);
-        buttons.add(toPreference);
+        toLogin = new JButton(SignupViewModel.TO_LOGIN_BUTTON_LABEL);
+        buttons.add(toLogin);
         signUp = new JButton(SignupViewModel.SIGNUP_BUTTON_LABEL);
         buttons.add(signUp);
         cancel = new JButton(SignupViewModel.CANCEL_BUTTON_LABEL);
@@ -84,27 +84,11 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 }
         );
 
-        toPreference.addActionListener(
+        toLogin.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        System.out.println("help>>");
-//                        signupController.switchToPreferenceView();
-                        if (evt.getSource().equals(toPreference)) {
-                            final SignupState currentState = signupViewModel.getState();
+                        signupController.switchToLoginView();
 
-                            signupController.execute(
-                                    currentState.getFullname(),
-                                    currentState.getUsername(),
-                                    currentState.getPassword(),
-                                    currentState.getRepeatPassword(),
-                                    currentState.getImage(),
-                                    currentState.getLocation(),
-                                    currentState.getGender(),
-                                    currentState.getDateOfBirth()
-                            );
-
-
-                        }
                     }
                 }
 
