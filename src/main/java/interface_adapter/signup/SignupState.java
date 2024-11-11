@@ -22,7 +22,7 @@ public class SignupState {
     private String locationError;
     private String gender = "";
     private String genderError;
-    private String dateOfBirth = "";
+    private Date dateOfBirth;
     private String dateOfBirthError;
 
     public String getUsername() {
@@ -81,7 +81,7 @@ public class SignupState {
         return genderError;
     }
 
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
@@ -145,7 +145,7 @@ public class SignupState {
         this.genderError = genderError;
     }
 
-    public void setDateOfBirth(String dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public void setDateOfBirth(Date dateOfBirth) { this.dateOfBirth = dateOfBirth; }
 
     public void setDateOfBirthError(String dateOfBirthError) { this.dateOfBirthError = dateOfBirthError; }
 

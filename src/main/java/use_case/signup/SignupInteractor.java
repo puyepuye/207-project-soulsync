@@ -37,11 +37,8 @@ public class SignupInteractor implements SignupInputBoundary {
         else if (!signupInputData.getFullname().matches("[\\p{IsAlphabetic} ]+")) {
             userPresenter.prepareFailView("Please Enter your full name.");
         }
-        else if (!isValidDateFormat(signupInputData.getDateOfBirth())) {
-            userPresenter.prepareFailView("Invalid date format.");
-        }
-        else if (!isValidDate(signupInputData.getDateOfBirth())) {
-            userPresenter.prepareFailView("Invalid date.");
+        else if (signupInputData.getDateOfBirth() == null) {
+            userPresenter.prepareFailView("Date of birth is required.");
         }
         else if (signupInputData.getGender().isEmpty() || signupInputData.getGender().equals("Select Gender")) {
             userPresenter.prepareFailView("Please choose your gender.");
@@ -50,7 +47,6 @@ public class SignupInteractor implements SignupInputBoundary {
             userPresenter.prepareFailView("Please choose your country and city.");
         }
         else {
-            Date dateOfBirth = parseDate(signupInputData.getDateOfBirth());
 
             final User user =  userFactory.create(signupInputData.getUsername(),
                     signupInputData.getPassword(),
@@ -59,7 +55,7 @@ public class SignupInteractor implements SignupInputBoundary {
                     signupInputData.getLocation(),
                     signupInputData.getGender(),
                     new ArrayList<>() {{}},
-                    dateOfBirth,
+                    signupInputData.getDateOfBirth(),
                     new HashMap<>() {{put("min", 18); put("max", 99);}},
                     "",
                     new HashMap<>() {{}},
@@ -77,36 +73,6 @@ public class SignupInteractor implements SignupInputBoundary {
             //final SignupOutputData signupOutputData = new SignupOutputData(user.getFullName(), false);
 
             userPresenter.prepareSuccessView(signupOutputData);
-        }
-    }
-
-    // Method to parse the date from string
-    private Date parseDate(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            return dateFormat.parse(dateString);
-        } catch (ParseException e) {
-            return null;
-        }
-    }
-
-    // Method to check if the date matches the pattern
-    private boolean isValidDateFormat(String dateString) {
-        String pattern = "^(\\d{4})-(\\d{2})-(\\d{2})$";
-        Pattern r = Pattern.compile(pattern);
-        Matcher m = r.matcher(dateString);
-        return m.matches();
-    }
-
-    // Method to validate the actual date using SimpleDateFormat
-    private boolean isValidDate(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setLenient(false);  // Prevents accepting invalid dates like 2024-02-30
-        try {
-            Date date = dateFormat.parse(dateString);
-            return true;
-        } catch (ParseException e) {
-            return false;
         }
     }
 
