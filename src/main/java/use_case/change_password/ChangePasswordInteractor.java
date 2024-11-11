@@ -24,8 +24,23 @@ public class ChangePasswordInteractor implements ChangePasswordInputBoundary {
     @Override
     public void execute(ChangePasswordInputData changePasswordInputData) {
         Date sampleDate = new GregorianCalendar(2000, Calendar.JANUARY, 1).getTime();
-        final User user =  userFactory.create(changePasswordInputData.getUsername(), changePasswordInputData.getPassword(), "imageLink", "Fullname", "Location",
-                "gender", new ArrayList<>() {{}}, sampleDate, new HashMap<>() {{put("min", 18); put("max", 99);}}, "", new HashMap<>() {{}}, new ArrayList<>() {{}}, new ArrayList<>() {{}});
+        final User user =  userFactory.create(changePasswordInputData.getUsername(),
+                changePasswordInputData.getPassword(),
+                "imageLink",
+                "Fullname",
+                "Location",
+                "gender",
+                new ArrayList<>() {{}},
+                sampleDate,
+                new HashMap<>() {{put("min", 18); put("max", 99);}},
+                "",
+                new HashMap<>() {{}},
+                new ArrayList<>() {{}},
+                new ArrayList<>() {{}},
+                new ArrayList<>() {{}},
+                new ArrayList<>() {{}},
+                new ArrayList<>() {{}}
+        );
 
         userDataAccessObject.changePassword(user);
 

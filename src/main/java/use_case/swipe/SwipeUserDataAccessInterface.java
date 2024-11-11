@@ -9,8 +9,8 @@ public interface SwipeUserDataAccessInterface {
     /**
      * Updates the system to record this user's password.
      * @param user the user whose liked collection is being updated
-     * @param profile the user who was liked/not
+     * @param userSwipedOn the user who was liked/not
      * @param like whether liked/not
      */
-    void updateLike(User user, User profile, boolean like);
+    void updateLike(User user, User userSwipedOn, boolean like);
 }

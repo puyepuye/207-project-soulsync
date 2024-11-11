@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -86,4 +87,22 @@ public interface User {
      * @return the matched person of the user.
      */
     List<String> getMatched();
+
+    /**
+     * Returns the list of swiped right of the user.
+     * @return the list of swiped right of the user.
+     */
+    ArrayList<String> getSwipedRight();
+
+    /**
+     * Returns the list of swiped left of the user.
+     * @return the list of swiped left of the user.
+     */
+    ArrayList<String> getSwipedLeft();
+
+    /**
+     * Returns the list of swiped right on of the user.
+     * @return the list of swiped right on of the user.
+     */
+    ArrayList<String> getSwipedRightOn();
 }

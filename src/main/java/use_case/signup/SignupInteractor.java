@@ -3,9 +3,7 @@ package use_case.signup;
 import entity.User;
 import entity.UserFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The Signup Interactor.
@@ -32,8 +30,24 @@ public class SignupInteractor implements SignupInputBoundary {
             userPresenter.prepareFailView("Passwords don't match.");
         }
         else {
-            final User user = userFactory.create(signupInputData.getUsername(), signupInputData.getPassword(), signupInputData.getImage() , signupInputData.getFullname(), signupInputData.getLocation(),
-                    signupInputData.getGender(), new ArrayList<>() {{}}, signupInputData.getDateOfBirth(), new HashMap<>() {{put("min", 18); put("max", 99);}}, "", new HashMap<>() {{}}, new ArrayList<>() {{}}, new ArrayList<>() {{}});
+            Date sampleDate = new GregorianCalendar(2000, Calendar.JANUARY, 1).getTime();
+            final User user =  userFactory.create(signupInputData.getUsername(),
+                    signupInputData.getPassword(),
+                    "imageLink",
+                    "Fullname",
+                    "Location",
+                    "gender",
+                    new ArrayList<>() {{}},
+                    sampleDate,
+                    new HashMap<>() {{put("min", 18); put("max", 99);}},
+                    "",
+                    new HashMap<>() {{}},
+                    new ArrayList<>() {{}},
+                    new ArrayList<>() {{}},
+                    new ArrayList<>() {{}},
+                    new ArrayList<>() {{}},
+                    new ArrayList<>() {{}}
+            );
             userDataAccessObject.save(user);
 
             final SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), user.getUsername(), user.getImage(),

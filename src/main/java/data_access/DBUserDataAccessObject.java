@@ -18,21 +18,20 @@ import org.json.JSONObject;
 
 import entity.User;
 import entity.UserFactory;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 import use_case.preferences.PreferenceUserDataAccessInterface;
+import use_case.swipe.SwipeUserDataAccessInterface;
+
 /**
  * The DAO for user data.
  */
 public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                                                LoginUserDataAccessInterface,
-                                               ChangePasswordUserDataAccessInterface, PreferenceUserDataAccessInterface
+                                               ChangePasswordUserDataAccessInterface,
+                                               PreferenceUserDataAccessInterface,
+                                               SwipeUserDataAccessInterface
 {
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
@@ -57,31 +56,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
     @Override
     public User get(String username) {
-        // Make an API call to get the user object.
-//        final OkHttpClient client = new OkHttpClient().newBuilder().build();
-//        final Request request = new Request.Builder()
-//                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/user?username=%s", username))
-//                .addHeader("Content-Type", CONTENT_TYPE_JSON)
-//                .build();
-//        try {
-//            final Response response = client.newCall(request).execute();
-//
-//            final JSONObject responseBody = new JSONObject(response.body().string());
-//
-//            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-//                final JSONObject userJSONObject = responseBody.getJSONObject("user");
-//                final String name = userJSONObject.getString(USERNAME);
-//                final String password = userJSONObject.getString(PASSWORD);
-//
-//                return userFactory.create(name, password);
-//            }
-//            else {
-//                throw new RuntimeException(responseBody.getString(MESSAGE));
-//            }
-//        }
-//        catch (IOException | JSONException ex) {
-//            throw new RuntimeException(ex);
-//        }
         Document query = new Document("username", username);
         Document userDoc = userCollection.find(query).first();
 
@@ -89,10 +63,23 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
             String userName = userDoc.getString(USERNAME);
             String password = userDoc.getString(PASSWORD);
 
-            return userFactory.create(userName, password, userDoc.getString("image"), userDoc.getString("fullName"),
-                    userDoc.getString("location"), userDoc.getString("gender"), (List<String>) userDoc.get("preferredGender"),
-                    userDoc.getDate("dateOfBirth"), (Map<String, Integer>) userDoc.get("preferredAge"), userDoc.getString("bio"),
-                    (Map<String, Boolean>) userDoc.get("preferences"), (List<String>) userDoc.get("tags"), (List<String>) userDoc.get("matched"));
+            return userFactory.create(userName,
+                    password,
+                    userDoc.getString("image"),
+                    userDoc.getString("fullName"),
+                    userDoc.getString("location"),
+                    userDoc.getString("gender"),
+                    (List<String>) userDoc.get("preferredGender"),
+                    userDoc.getDate("dateOfBirth"),
+                    (Map<String, Integer>) userDoc.get("preferredAge"),
+                    userDoc.getString("bio"),
+                    (Map<String, Boolean>) userDoc.get("preferences"),
+                    (List<String>) userDoc.get("tags"),
+                    (List<String>) userDoc.get("matched"),
+                    (ArrayList<String>) userDoc.get("swipedRight"),
+                    (ArrayList<String>) userDoc.get("swipedLeft"),
+                    (ArrayList<String>) userDoc.get("swipedOn")
+            );
         }
         return null;  // User is NOT found
     }
@@ -109,58 +96,12 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
     @Override
     public boolean existsByName(String username) {
-//        final OkHttpClient client = new OkHttpClient().newBuilder()
-//                .build();
-//        final Request request = new Request.Builder()
-//                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/checkIfUserExists?username=%s", username))
-//                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
-//                .build();
-//        try {
-//            final Response response = client.newCall(request).execute();
-//
-//            final JSONObject responseBody = new JSONObject(response.body().string());
-//
-//            //                throw new RuntimeException(responseBody.getString("message"));
-//            return responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE;
-//        }
-//        catch (IOException | JSONException ex) {
-//            throw new RuntimeException(ex);
-//        }
         Document query = new Document("username", username);
         return userCollection.find(query).first() != null;
     }
 
     @Override
     public void save(User user) {
-//        final OkHttpClient client = new OkHttpClient().newBuilder()
-//                .build();
-//
-//        // POST METHOD
-//        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
-//        final JSONObject requestBody = new JSONObject();
-//        requestBody.put(USERNAME, user.getFullName());
-//        requestBody.put(PASSWORD, user.getPassword());
-//        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
-//        final Request request = new Request.Builder()
-//                .url("http://vm003.teach.cs.toronto.edu:20112/user")
-//                .method("POST", body)
-//                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
-//                .build();
-//        try {
-//            final Response response = client.newCall(request).execute();
-//
-//            final JSONObject responseBody = new JSONObject(response.body().string());
-//
-//            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-//                // success!
-//            }
-//            else {
-//                throw new RuntimeException(responseBody.getString(MESSAGE));
-//            }
-//        }
-//        catch (IOException | JSONException ex) {
-//            throw new RuntimeException(ex);
-//        }
         Document userDoc = new Document("username", user.getUsername())
                 .append(PASSWORD, user.getPassword())
                 .append("image", user.getImage())
@@ -173,46 +114,40 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 .append("bio", user.getBio())
                 .append("preferences", user.getPreferences())
                 .append("tags", user.getTags())
-                .append("matched", user.getMatched());
+                .append("matched", user.getMatched())
+                .append("swipedRight", user.getSwipedRight())
+                .append("swipedLeft", user.getSwipedLeft())
+                .append("swipedRightOn", user.getSwipedRightOn());
         userCollection.insertOne(userDoc);
 
     }
 
     @Override
     public void changePassword(User user) {
-//        final OkHttpClient client = new OkHttpClient().newBuilder()
-//                                        .build();
-//
-//        // POST METHOD
-//        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
-//        final JSONObject requestBody = new JSONObject();
-//        requestBody.put(USERNAME, user.getFullName());
-//        requestBody.put(PASSWORD, user.getPassword());
-//        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
-//        final Request request = new Request.Builder()
-//                                    .url("http://vm003.teach.cs.toronto.edu:20112/user")
-//                                    .method("PUT", body)
-//                                    .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
-//                                    .build();
-//        try {
-//            final Response response = client.newCall(request).execute();
-//
-//            final JSONObject responseBody = new JSONObject(response.body().string());
-//
-//            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-//                // success!
-//            }
-//            else {
-//                throw new RuntimeException(responseBody.getString(MESSAGE));
-//            }
-//        }
-//        catch (IOException | JSONException ex) {
-//            throw new RuntimeException(ex);
-//        }
         Document query = new Document("username", user.getUsername());
         Document update = new Document("$set", new Document("password", user.getPassword()));
         userCollection.updateOne(query, update);
 
+    }
+
+    @Override
+    public void updateLike(User user, User userSwipedOn, boolean like) {
+        if (like) {
+            Document swipedRightQuery = new Document("username", user.getUsername());
+            Document swipedOnQuery = new Document("username", userSwipedOn.getUsername());
+
+            Document swipedRightUpdate = new Document("$set", new Document("swipedRight", userSwipedOn.getUsername()));
+            Document swipedOnUpdate = new Document("$set", new Document("swipedOn", user.getUsername()));
+
+            userCollection.updateOne(swipedRightQuery, swipedRightUpdate);
+            userCollection.updateOne(swipedOnQuery, swipedOnUpdate);
+        }
+        else {
+            Document swipedLeftQuery = new Document("username", user.getUsername());
+            Document swipedLeftUpdate = new Document("$set", new Document("swipedLeft", userSwipedOn.getUsername()));
+
+            userCollection.updateOne(swipedLeftQuery, swipedLeftUpdate);
+        }
     }
 
 }

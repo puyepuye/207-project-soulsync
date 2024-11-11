@@ -2,7 +2,6 @@ package interface_adapter.preferences;
 
 import use_case.login.LoginInputData;
 import use_case.preferences.PreferenceInputBoundary;
-import use_case.preferences.PreferenceInputBoundary;
 import use_case.preferences.PreferenceInputData;
 
 import java.util.List;
@@ -32,5 +31,12 @@ public class PreferencesController {
                 tags, bio, preferences, preferredGender, preferredAge);
 
         preferenceInputBoundary.execute(preferenceInputData);
+    }
+
+    /**
+     * Executes the "switch to SwipeView" Use Case.
+     */
+    public void switchToSwipeView() {
+        preferenceInputBoundary.switchToSwipeView();
     }
 }

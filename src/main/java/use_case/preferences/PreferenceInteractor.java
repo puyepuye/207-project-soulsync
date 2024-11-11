@@ -28,6 +28,6 @@ public class PreferenceInteractor implements PreferenceInputBoundary {
 
     @Override
     public void switchToSwipeView() {
-//        userPresenter.switchToSwipeView();
+        userPresenter.switchToSwipeView();
     }
 }

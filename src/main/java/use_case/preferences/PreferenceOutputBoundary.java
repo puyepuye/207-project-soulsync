@@ -17,4 +17,8 @@ public interface PreferenceOutputBoundary {
      */
     void prepareFailView(String errorMessage);
 
+    /**
+     * Executes the switch to swipe view use case.
+     */
+    void switchToSwipeView();
 }
