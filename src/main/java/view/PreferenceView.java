@@ -38,7 +38,6 @@ public class PreferenceView extends JPanel  {
 
         // Set layout and add the label to the panel
         setLayout(new BorderLayout());
-        add(label, BorderLayout.CENTER);
 
         // Adding the new "Sign Up" button
         toSwipe = new JButton("Start Swiping >");
@@ -50,6 +49,9 @@ public class PreferenceView extends JPanel  {
                     }
                 }
         );
+
+        add(label, BorderLayout.CENTER);
+        add(toSwipe, BorderLayout.SOUTH);
 
     }
 
