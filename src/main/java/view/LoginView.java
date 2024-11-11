@@ -62,6 +62,8 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         JPanel passwordPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
+        gbc.weighty = 0.0; // This prevents extra vertical space
+
         // Username label and input field constraints
         gbc.gridx = 0;
         gbc.gridy = 0;

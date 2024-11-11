@@ -3,13 +3,13 @@
 ### Current TODOs
 - In order of priority; same number = same priority
 - lower priority might rely on the ones with higher priority
-#### 1. Signup Page
+#### 1. Signup Page [Claire]
 - Add input boxes and dropdowns for other attributes (refer to figma and chore diagram in README.md)
 - Connect those new input attributes to database
 #### 2. Preferences Page
 - Add input boxes and dropdowns for other attributes (refer to figma and chore diagram in README.md)
 - Connect those new input attributes to database
-#### 3. Matches Entity
+#### 3. Matches Entity [Yoli]
 - Add a new Matches Entity
 #### 4. Nav Bar
 - Swipe Page, Fengshui Page, Chat Page, Edit Profile Page (refer to figma)
@@ -19,7 +19,7 @@
 - Change state when swiped, update match data
 #### 5. Matched Pop-up notification
 - implement pop-up notification when both user finally "swiped right" on each other
-#### 5. Chat Page
+#### 5. Chat Page [Mac]
 - UI
 - oh my, so many things I don't even know...
 #### 5. Fengshui page
