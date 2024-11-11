@@ -1,6 +1,37 @@
 
 ## ✅ TODOs
-
+### Current TODOs
+- In order of priority; same number = same priority
+- lower priority might rely on the ones with higher priority
+#### 1. Signup Page
+- Add input boxes and dropdowns for other attributes (refer to figma and chore diagram in README.md)
+- Connect those new input attributes to database
+#### 2. Preferences Page
+- Add input boxes and dropdowns for other attributes (refer to figma and chore diagram in README.md)
+- Connect those new input attributes to database
+#### 3. Matches Entity
+- Add a new Matches Entity
+#### 4. Nav Bar
+- Swipe Page, Fengshui Page, Chat Page, Edit Profile Page (refer to figma)
+#### 4. Swipe Page
+- Pull user's data to add to list of profiles to display
+- Display those profiles
+- Change state when swiped, update match data
+#### 5. Matched Pop-up notification
+- implement pop-up notification when both user finally "swiped right" on each other
+#### 5. Chat Page
+- UI
+- oh my, so many things I don't even know...
+#### 5. Fengshui page
+- Connect Kimi's godly algorithms
+- UI
+#### 6. Clean up
+- clean up UI
+- delete irrelevant files & comments
+- checkstyle
+#### 6. Test cases?
+- implement test cases
+### Starter TODOs
 #### 1. Verify `MainWithDB` Functionality
 - Ensure that `MainWithDB` still runs as expected (from Lab 5).
 - Re-clone and re-run if needed.
