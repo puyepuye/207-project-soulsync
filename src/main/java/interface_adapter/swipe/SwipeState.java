@@ -34,7 +34,7 @@ public class SwipeState {
 //        return profileTags;
 //    }
     public String getProfileTags() {
-        return profileTags.get(0);
+        return "profileTags.get(0)";
     }
     public boolean getLiked() {
         return like;
