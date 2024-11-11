@@ -29,7 +29,7 @@ public class SignupController {
      * @param dateOfBirth the date of birth of the user
      */
     public void execute(String fullname, String username, String password1, String password2,
-                        String image, String location, String gender, String dateOfBirth) {
+                        String image, String location, String gender, Date dateOfBirth) {
         final SignupInputData signupInputData = new SignupInputData(
                 fullname, username, password1, image, password2, location, gender, dateOfBirth);
 
