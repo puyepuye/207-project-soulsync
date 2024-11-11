@@ -14,16 +14,17 @@ import use_case.signup.SignupOutputData;
 public class SignupPresenter implements SignupOutputBoundary {
 
     private final SignupViewModel signupViewModel;
-//    private final LoginViewModel loginViewModel;
+    private final LoginViewModel loginViewModel;
     private final PreferencesViewModel preferencesViewModel;
     private final ViewManagerModel viewManagerModel;
 
     public SignupPresenter(ViewManagerModel viewManagerModel,
                            SignupViewModel signupViewModel,
+                           LoginViewModel loginViewModel,
                            PreferencesViewModel preferencesViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.signupViewModel = signupViewModel;
-//        this.loginViewModel = loginViewModel;
+        this.loginViewModel = loginViewModel;
         this.preferencesViewModel = preferencesViewModel;
     }
 
@@ -38,6 +39,7 @@ public class SignupPresenter implements SignupOutputBoundary {
 
         this.viewManagerModel.setState(preferencesViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
+
         System.out.println("SignupPresenter.java called");
         System.out.println(preferencesViewModel.getViewName());
     }
@@ -49,15 +51,10 @@ public class SignupPresenter implements SignupOutputBoundary {
         signupViewModel.firePropertyChanged();
     }
 
-//    @Override
-//    public void switchToLoginView() {
-//        viewManagerModel.setState(loginViewModel.getViewName());
-//        viewManagerModel.firePropertyChanged();
-//    }
-
     @Override
-    public void switchToPreferenceView() {
-        viewManagerModel.setState(preferencesViewModel.getViewName());
+    public void switchToLoginView() {
+        viewManagerModel.setState(loginViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
+
 }

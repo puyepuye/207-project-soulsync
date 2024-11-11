@@ -1,8 +1,8 @@
 package interface_adapter.preferences;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.preferences.PreferencesState;
-import interface_adapter.preferences.PreferencesViewModel;
+import interface_adapter.signup.SignupViewModel;
+import interface_adapter.swipe.SwipeViewModel;
 import use_case.preferences.PreferenceOutputBoundary;
 import use_case.preferences.PreferenceOutputData;
 
@@ -12,12 +12,15 @@ import use_case.preferences.PreferenceOutputData;
 public class PreferencesPresenter implements PreferenceOutputBoundary {
 
     private final PreferencesViewModel preferencesViewModel;
+    private final SwipeViewModel swipeViewModel;
     private final ViewManagerModel viewManagerModel;
 
     public PreferencesPresenter(ViewManagerModel viewManagerModel,
-                          PreferencesViewModel preferencesViewModel) {
+                          PreferencesViewModel preferencesViewModel,
+                                SwipeViewModel swipeViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.preferencesViewModel = preferencesViewModel;
+        this.swipeViewModel = swipeViewModel;
     }
 
     @Override
@@ -38,9 +41,9 @@ public class PreferencesPresenter implements PreferenceOutputBoundary {
         preferencesViewModel.firePropertyChanged();
     }
 
-//    @Override
-//    public void switchToPreferencesView() {
-//        viewManagerModel.setState(preferencesViewModel.getViewName());
-//        viewManagerModel.firePropertyChanged();
-//    }
+    @Override
+    public void switchToSwipeView() {
+        viewManagerModel.setState(swipeViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+    }
 }

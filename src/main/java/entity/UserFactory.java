@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,16 +24,31 @@ public interface UserFactory {
      * @param preferences the preferences of the new user
      * @param tags the tags of the new user
      * @param matched the matched person of the new user
+     * @param swipedRight the other users that this user swipes right on
+     * @param swipedLeft the other users that this user swipes left on
+     * @param swipedRightOn the other users that has swiped right on this user
      * @return the new user
      */
-    User create(String username, String password, String image, String fullName,
-                String location, String gender, List<String> preferredGender, Date dateOfBirth,
-                Map<String, Integer> preferredAge, String bio, Map<String, Boolean> preferences, List<String> tags,
-                List<String> matched);
+    User create(String username,
+                String password,
+                String image,
+                String fullName,
+                String location,
+                String gender,
+                List<String> preferredGender,
+                Date dateOfBirth,
+                Map<String, Integer> preferredAge,
+                String bio,
+                Map<String, Boolean> preferences,
+                List<String> tags,
+                List<String> matched,
+                ArrayList<String> swipedRight,
+                ArrayList<String> swipedLeft,
+                ArrayList<String> swipedRightOn);
 
     // Overloaded create method with only username and password
     default User create(String userName, String password) {
-        return create(userName, password, null, null, null, null, null, null, null, null, null, null, null);
+        return create(userName, password, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
 }

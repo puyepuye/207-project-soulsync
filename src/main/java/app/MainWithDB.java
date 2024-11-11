@@ -12,12 +12,14 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
+import interface_adapter.swipe.SwipeViewModel;
 import use_case.preferences.PreferenceUserDataAccessInterface;
 import interface_adapter.signup.SignupViewModel;
 import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
 import view.PreferenceView;
+import view.SwipeView;
 import view.ViewManager;
 
 /**
@@ -55,6 +57,7 @@ public class MainWithDB {
         final LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         final SignupViewModel signupViewModel = new SignupViewModel();
         final PreferencesViewModel preferencesViewModel = new PreferencesViewModel();
+        final SwipeViewModel swipeViewModel = new SwipeViewModel();
 
         final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
 
@@ -71,9 +74,14 @@ public class MainWithDB {
         views.add(loggedInView, loggedInView.getViewName());
 
         final PreferenceView preferenceView = PreferenceUseCaseFactory.create(viewManagerModel,
-                preferencesViewModel, userDataAccessObject);
+                preferencesViewModel, swipeViewModel, userDataAccessObject);
 
         views.add(preferenceView, preferenceView.getViewName());
+
+        final SwipeView swipeView = SwipeUseCaseFactory.create(viewManagerModel,
+                swipeViewModel, userDataAccessObject);
+
+        views.add(swipeView, swipeView.getViewName());
 
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();

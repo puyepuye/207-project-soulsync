@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import java.util.Map;
@@ -22,8 +23,14 @@ public class CommonUser implements User {
     private final Map<String, Boolean> preferences;
     private final List<String> tags;
     private final List<String> matched;
+    private ArrayList<String> swipedRight;
+    private ArrayList<String> swipedLeft;
+    private ArrayList<String> swipedRightOn;
 
-    public CommonUser(String userName, String password, String image, String fullname, String location, String gender, List<String> preferredGender, Date dateOfBirth, Map<String, Integer> preferredAge, String bio, Map<String, Boolean> preferences, List<String> tags, List<String> matched) {
+    public CommonUser(String userName, String password, String image, String fullname, String location, String gender,
+                      List<String> preferredGender, Date dateOfBirth, Map<String, Integer> preferredAge, String bio,
+                      Map<String, Boolean> preferences, List<String> tags, List<String> matched,
+                      ArrayList<String> swipedRight, ArrayList<String> swipedLeft, ArrayList<String> swipedRightOn) {
         this.userName = userName;
         this.password = password;
         this.image = image;
@@ -37,6 +44,9 @@ public class CommonUser implements User {
         this.preferences = preferences;
         this.tags = tags;
         this.matched = matched;
+        this.swipedRight = swipedRight;
+        this.swipedLeft = swipedLeft;
+        this.swipedRightOn = swipedRightOn;
     }
 
     @Override
@@ -96,5 +106,20 @@ public class CommonUser implements User {
     @Override
     public List<String> getMatched() {
         return matched;
+    }
+
+    @Override
+    public ArrayList<String> getSwipedRight() {
+        return swipedRight;
+    }
+
+    @Override
+    public ArrayList<String> getSwipedLeft() {
+        return swipedLeft;
+    }
+
+    @Override
+    public ArrayList<String> getSwipedRightOn() {
+        return swipedRightOn;
     }
 }

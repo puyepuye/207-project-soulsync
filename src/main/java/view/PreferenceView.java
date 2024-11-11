@@ -27,6 +27,7 @@ public class PreferenceView extends JPanel  {
     private final String viewName = "preferences";
     private PreferencesViewModel preferencesViewModel;
     private PreferencesController preferencesController;
+    private final JButton toSwipe;
 
     public PreferenceView(PreferencesViewModel preferencesViewModel, PreferencesController controller) {
         this.preferencesController = controller;
@@ -37,7 +38,21 @@ public class PreferenceView extends JPanel  {
 
         // Set layout and add the label to the panel
         setLayout(new BorderLayout());
+
+        // Adding the new "Sign Up" button
+        toSwipe = new JButton("Start Swiping >");
+        toSwipe.setAlignmentX(Component.CENTER_ALIGNMENT);
+        toSwipe.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        preferencesController.switchToSwipeView();  // Assuming the switch method is in controller
+                    }
+                }
+        );
+
         add(label, BorderLayout.CENTER);
+        add(toSwipe, BorderLayout.SOUTH);
+
     }
 
     public String getViewName() {
