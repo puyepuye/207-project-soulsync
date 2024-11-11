@@ -12,32 +12,38 @@ When making contributions, please follow the commit message conventions below to
 - `feat:` - Use for new features.
 - `chore:` - Use for maintenance tasks (e.g., updating dependencies, configuration changes).
 
+```mermaid
+erDiagram
+    User {
+        String userName
+        String password
+        String image
+        String fullname
+        String location
+        String gender
+        List preferredGender
+        Date dateOfBirth
+        Map preferredAge
+        String bio
+        Map preferences
+        List tags
+        List matched
+        List swipedRight
+        List swipedLeft
+        List swipedRightOn
+    }
 
-## ✅ TODOs
+    Matches {
+        ObjectId userAId
+        ObjectId userBId
+        Date matchDate
+        Boolean isActive
+    }
 
-#### 1. Verify `MainWithDB` Functionality
-- Ensure that `MainWithDB` still runs as expected (from Lab 5).
-- Re-clone and re-run if needed.
+    User ||--o{ Matches : "has matched with"
+    Matches ||--|| User : "involves"
 
-#### 2. Create a New Branch with Your UTORid
-- Create and switch to a branch with your UTORid as the branch name.
-
-```bash
-  git branch chuyian
-  git switch chuyian
-  git branch
-   ```
-
-4. Try adding your name under Contributors in ReadME and make a Pull Request. Happy!
-
-```bash
-  git add .
-  git commit -m "chore add ----"
-  git push --set-upstream origin branchname
-   ```
-Follow pull request instructions in terminal, make sure "branch has no conflicts with the base branch".
-      ![img.png](img.png)
-
+```
 ## Tasks
 ### Phase 1: Research, Prepare DB & entities, new Login & SignUp
 
