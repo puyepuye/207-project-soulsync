@@ -3,6 +3,7 @@ package interface_adapter.signup;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInputData;
 
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -28,11 +29,15 @@ public class SignupController {
      * @param dateOfBirth the date of birth of the user
      */
     public void execute(String fullname, String username, String password1, String password2,
-                        String image, String location, String gender, Date dateOfBirth) {
+                        String image, String location, String gender, String dateOfBirth) {
         final SignupInputData signupInputData = new SignupInputData(
                 fullname, username, password1, image, password2, location, gender, dateOfBirth);
 
-        userSignupUseCaseInteractor.execute(signupInputData);
+        try {
+            userSignupUseCaseInteractor.execute(signupInputData);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

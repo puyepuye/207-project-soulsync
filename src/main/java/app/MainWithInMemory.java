@@ -12,6 +12,7 @@ import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.swipe.SwipeViewModel;
 import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
@@ -51,6 +52,7 @@ public class MainWithInMemory {
         // be "observed" by the Views.
         final LoginViewModel loginViewModel = new LoginViewModel();
         final LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
+        final SwipeViewModel swipeViewModel = new SwipeViewModel();
         final SignupViewModel signupViewModel = new SignupViewModel();
         final PreferencesViewModel preferencesViewModel = new PreferencesViewModel();
 
@@ -62,7 +64,7 @@ public class MainWithInMemory {
         views.add(signupView, signupView.getViewName());
 
         final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,
-                loggedInViewModel, signupViewModel, userDataAccessObject);
+                swipeViewModel, signupViewModel, userDataAccessObject);
         views.add(loginView, loginView.getViewName());
 
         final LoggedInView loggedInView = ChangePasswordUseCaseFactory.create(viewManagerModel,

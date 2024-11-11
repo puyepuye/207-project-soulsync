@@ -3,11 +3,13 @@ package view;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -15,6 +17,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupState;
@@ -29,8 +35,13 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final SignupViewModel signupViewModel;
     private final JTextField usernameInputField = new JTextField(15);
     private final JPasswordField passwordInputField = new JPasswordField(15);
+    private final JTextField dobInputField = new JTextField(8);
     private final JPasswordField repeatPasswordInputField = new JPasswordField(15);
+    private final JTextField fullnameInputField = new JTextField(15);
     private final SignupController signupController;
+    private final JComboBox<String> genderComboBox = new JComboBox<>(SignupViewModel.GENDERS);
+    private final JComboBox<String> countryComboBox = new JComboBox<>(SignupViewModel.COUNTRIES);
+    private final JComboBox<String> cityComboBox = new JComboBox<>(SignupViewModel.CITIES);
 
     private final JButton signUp;
     private final JButton cancel;
@@ -45,12 +56,26 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         final JLabel title = new JLabel(SignupViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        final LabelTextPanel fullNameInfo = new LabelTextPanel(
+                new JLabel(SignupViewModel.FULLNAME_LABEL), fullnameInputField);
         final LabelTextPanel usernameInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.USERNAME_LABEL), usernameInputField);
         final LabelTextPanel passwordInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.PASSWORD_LABEL), passwordInputField);
         final LabelTextPanel repeatPasswordInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.REPEAT_PASSWORD_LABEL), repeatPasswordInputField);
+        final LabelTextPanel dateOfBirth = new LabelTextPanel(
+                new JLabel(SignupViewModel.DOB_LABEL), dobInputField);
+        dobInputField.setText("YYYY-MM-DD");
+
+        final LabelDropdownPanel genderDropdown = new LabelDropdownPanel(
+                new JLabel(SignupViewModel.GENDER_LABEL), genderComboBox);
+
+        final LabelDropdownPanel countryDropdown = new LabelDropdownPanel(
+                new JLabel(SignupViewModel.COUNTRY_LABEL), countryComboBox);
+
+        final LabelDropdownPanel cityDropDown = new LabelDropdownPanel(
+                new JLabel(SignupViewModel.CITY_LABEL), cityComboBox);
 
         final JPanel buttons = new JPanel();
         toLogin = new JButton(SignupViewModel.TO_LOGIN_BUTTON_LABEL);
@@ -99,6 +124,10 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         addUsernameListener();
         addPasswordListener();
         addRepeatPasswordListener();
+        addDOBListener();
+        addGenderListener();
+        addLocationListener();
+        addFullNameListener();
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -106,6 +135,11 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.add(usernameInfo);
         this.add(passwordInfo);
         this.add(repeatPasswordInfo);
+        this.add(fullNameInfo);
+        this.add(dateOfBirth);
+        this.add(genderDropdown);
+        this.add(countryDropdown);
+        this.add(cityDropDown);
         this.add(buttons);
     }
 
@@ -186,6 +220,104 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
             }
         });
     }
+
+    private void addFullNameListener() {
+        fullnameInputField.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void documentListenerHelper() {
+                final SignupState currentState = signupViewModel.getState();
+                currentState.setFullname(fullnameInputField.getText());
+                signupViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
+    }
+
+    private void addDOBListener() {
+        dobInputField.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void documentListenerHelper() {
+                final SignupState currentState = signupViewModel.getState();
+                currentState.setDateOfBirth(dobInputField.getText());
+                signupViewModel.setState(currentState);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+        });
+    }
+
+    private void addGenderListener() {
+        genderComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                final SignupState currentState = signupViewModel.getState();
+                currentState.setGender((String) genderComboBox.getSelectedItem());
+                signupViewModel.setState(currentState);
+            }
+        });
+    }
+
+    private void addLocationListener() {
+        countryComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                final SignupState currentState = signupViewModel.getState();
+
+                String location = (String) countryComboBox.getSelectedItem();
+                String city = (String) cityComboBox.getSelectedItem();
+
+                if (city != null) {
+                    location += ", " + city;
+                }
+
+                currentState.setLocation(location);
+                signupViewModel.setState(currentState);
+            }
+        });
+
+        cityComboBox.addItemListener(e -> {
+
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                final SignupState currentState = signupViewModel.getState();
+
+                String location = (String) countryComboBox.getSelectedItem();
+                String city = (String) cityComboBox.getSelectedItem();
+
+                if (city != null) {
+                    location += ", " + city;
+                }
+
+                currentState.setLocation(location);
+                signupViewModel.setState(currentState);
+            }
+        });
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent evt) {
