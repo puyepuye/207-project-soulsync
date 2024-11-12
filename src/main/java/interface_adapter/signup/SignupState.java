@@ -1,5 +1,7 @@
 package interface_adapter.signup;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -143,13 +145,9 @@ public class SignupState {
         this.genderError = genderError;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
+    public void setDateOfBirth(Date dateOfBirth) { this.dateOfBirth = dateOfBirth; }
 
-    public void setDateOfBirthError(String dateOfBirthError) {
-        this.dateOfBirthError = dateOfBirthError;
-    }
+    public void setDateOfBirthError(String dateOfBirthError) { this.dateOfBirthError = dateOfBirthError; }
 
     @Override
     public String toString() {

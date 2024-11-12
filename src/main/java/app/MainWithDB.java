@@ -66,7 +66,7 @@ public class MainWithDB {
         views.add(signupView, signupView.getViewName());
 
         final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,
-                                                               loggedInViewModel, signupViewModel, userDataAccessObject);
+                                                               swipeViewModel, signupViewModel, userDataAccessObject);
         views.add(loginView, loginView.getViewName());
 
         final LoggedInView loggedInView = ChangePasswordUseCaseFactory.create(viewManagerModel,
@@ -87,6 +87,7 @@ public class MainWithDB {
         viewManagerModel.firePropertyChanged();
 
         application.pack();
+        application.setSize(400, 600);
         application.setVisible(true);
 
     }

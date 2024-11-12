@@ -1,9 +1,14 @@
 package data_access;
 
-import entity.UserFactory;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -17,164 +22,129 @@ import java.util.List;
 import java.util.Scanner;
 
 public class SendBirdChatObject {
-    private final UserFactory userFactory;
     private final String apiKey;
     private final String appID;
-
-    public SendBirdChatObject(UserFactory userFactory, String newID) {
-        this.userFactory = userFactory;
-        // apiKey =  System.getenv("SendBird_API_KEY");
-        apiKey = "93889ba89ee5d24de7c1f73b924c54fafc3e75be";
-        appID = "CE20803F-158E-4B7E-A270-2FD7B78C5F4F"; //TODO: un-hardcode this.
-    }
-
+    public static final String USERID = "user_id";
+    public static final String MESSAGE = "message";
+    public static final String API_TOKEN = "Api-token";
     public SendBirdChatObject() {
-        //apiKey =  System.getenv("SENDBIRD_API_KEY");
-        apiKey = "93889ba89ee5d24de7c1f73b924c54fafc3e75be";
-        appID = "CE20803F-158E-4B7E-A270-2FD7B78C5F4F"; //TODO: un-hardcode this.
-        this.userFactory = null;
+        Dotenv dotenv = Dotenv.load();
+        apiKey = dotenv.get("SEND_BIRD_API_KEY");
+        appID = dotenv.get("SEND_BIRD_APP_ID");
     }
 
     /**
      * Creates a new user in SendBird's database
      */
-    public void CreateSendBirdUser(String uniqueID, String username, String profilePicture){
+    public void createSendBirdUser(String uniqueID, String username, String profilePicture) throws InterruptedException, IOException {
         JSONObject requestBody = new JSONObject();
-        requestBody.put("user_id", uniqueID);
+        requestBody.put(USERID, uniqueID);
         requestBody.put("nickname", username);
         requestBody.put("profile_url", profilePicture);
+
         HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create("https://api-" + appID + ".sendbird.com/v3/users"))
-                .header("Api-token", apiKey)
+                .uri(URI.create(String.format("https://api-%s.sendbird.com/v3/users", appID)))
+                .header(API_TOKEN, apiKey)
                 .header("Content-Type", "application/json; charset=utf8")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                 .build();
         HttpClient client = HttpClient.newHttpClient();
-        try {
-            HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-            JSONObject responseJSON = new JSONObject(response.body());
-            if (responseJSON.has("error")) {
-                if (responseJSON.getJSONObject("error").equals(true)){
-                    System.out.println("Something went wrong, server threw an error");
-                }
-            }
-
-        } catch (InterruptedException | IOException e) {
-            System.out.println("Something went wrong");
+        HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+        JSONObject responseJSON = new JSONObject(response.body());
+        if (responseJSON.has("error")) {
+            System.out.println("Something went wrong, server threw an error");
         }
+
     }
 
-    public String GetUser(){
-        return "";
-    }
 
     /**
-     * @param user_id1
-     * @param user_id2
+     * @param userID1 user_id
+     * @param userID2
      *
      * Creates a SendBird with url being "{user_id1}_{user_id2}_chat"
      */
-    public void CreateSendBirdChat(String user_id1, String user_id2){
+    public void createSendBirdChat(String userID1, String userID2) throws InterruptedException, IOException {
 
-        // TODO: Add check if the two users are matched in MongoDB
         List<String> chatUsers = new ArrayList<>();
-        chatUsers.add(user_id1);
-        chatUsers.add(user_id2);
+        chatUsers.add(userID1);
+        chatUsers.add(userID2);
         JSONObject requestBody = new JSONObject();
 
-        requestBody.put("name", user_id1 + "_" + user_id2 + "_chat"); // name of chat
-        requestBody.put("channel_url", user_id1 + "_" + user_id2 + "_chat"); // url of chat
+        requestBody.put("name", userID1 + "_" + userID2 + "_chat"); // name of chat
+        requestBody.put("channel_url", userID1 + "_" + userID2 + "_chat"); // url of chat
         requestBody.put("operator_ids", chatUsers); // the 2 users involved in a chat
 
         // build request
         HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create("https://api-" + appID + ".sendbird.com/v3/open_channels"))
-                .header("Api-token", apiKey)
+                .uri(URI.create(String.format("https://api-%s.sendbird.com/v3/open_channels", appID)))
+                .header(API_TOKEN, apiKey)
                 .header("Content-Type", "application/json; charset=utf8")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                 .build();
         HttpClient client = HttpClient.newHttpClient();
-        try {
-            HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-            JSONObject responseJSON = new JSONObject(response.body());
-            if (responseJSON.has("error")) {
-                if (responseJSON.getJSONObject("error").equals(true)){
-                    System.out.println("Something went wrong, likely, the user doesn't exist");
-                }
-            }
-
-        } catch (InterruptedException | IOException e) {
-            System.out.println("Something went wrong, couldn't get a ");
+        HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+        JSONObject responseJSON = new JSONObject(response.body());
+        if (responseJSON.has("error")) {
+            System.out.println("Something went wrong, likely, the user doesn't exist");
         }
 
     }
 
-    public void SendMessage(String channelURL, String senderID, String message){
+    public void sendMessage(String channelURL, String senderID, String message) throws InterruptedException, IOException {
         JSONObject requestBody = new JSONObject();
         requestBody.put("message_type", "MESG");
-        requestBody.put("user_id", senderID);
-        requestBody.put("message", message);
+        requestBody.put(USERID, senderID);
+        requestBody.put(MESSAGE, message);
         // build request
         HttpRequest postRequest = HttpRequest.newBuilder()
                 .uri(URI.create("https://api-" + appID + ".sendbird.com/v3/open_channels/" + channelURL + "/messages"))
-                .header("Api-token", apiKey)
+                .header(API_TOKEN, apiKey)
                 .header("Content-Type", "application/json; charset=utf8")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                 .build();
         HttpClient client = HttpClient.newHttpClient();
-        try {
-            HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-            JSONObject responseJSON = new JSONObject(response.body());
-            if (responseJSON.has("error")) {
-                if (responseJSON.getJSONObject("error").equals(true)){
-                    System.out.println("Something went wrong, likely, the user doesn't exist");
-                }
-            }
-
-        } catch (InterruptedException | IOException e) {
-            System.out.println("Something went wrong, couldn't get a ");
+        HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+        JSONObject responseJSON = new JSONObject(response.body());
+        if (responseJSON.has("error")) {
+            System.out.println("A server side error occured");
         }
+
     }
 
     /**
-     * @param channelURL
+     * @param channelURL The URL of the channel you're trying to send a message through to.
      * @return a JSON object containing a list of messages, its sender, time stamp, read-status
      */
-    public List<JSONObject> GetChatMessages(String channelURL){
+    public List<JSONObject> getChatMessages(String channelURL) throws InterruptedException, IOException {
         // build request
         HttpRequest postRequest = HttpRequest.newBuilder()
                 .uri(URI.create("https://api-" + appID + ".sendbird.com/v3/open_channels/" + channelURL
                         + "/messages?message_ts=" + System.currentTimeMillis()))
-                .header("Api-token", apiKey)
+                .header(API_TOKEN, apiKey)
                 .header("Content-Type", "application/json; charset=utf8")
                 .GET()
                 .build();
         HttpClient client = HttpClient.newHttpClient();
-        try {
-            HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-            JSONObject responseJSON = new JSONObject(response.body());
+        HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+        JSONObject responseJSON = new JSONObject(response.body());
 
-            if (responseJSON.has("error")) {
-                if (responseJSON.getJSONObject("error").equals(true)){
-                    System.out.println("Couldn't get the chat messages, URL is likely wrong");
-                    return new ArrayList<>();
-                }
-            }
+        if (responseJSON.has("error")) {
+                System.out.println("Couldn't get the chat messages, URL is likely wrong");
+                return new ArrayList<>();
 
-            // for each message
-            return ExtractMessagesFromJSON(responseJSON);
-
-        } catch (InterruptedException | IOException e) {
-            System.out.println("Something went wrong, the endpoint had an error. ");
-            return new ArrayList<>();
         }
+
+        // for each message
+        return extractMessagesFromJSON(responseJSON);
+
     }
 
-    public List<JSONObject> ExtractMessagesFromJSON(JSONObject inputJSON) {
+    public List<JSONObject> extractMessagesFromJSON(JSONObject inputJSON) {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT.withZone(ZoneOffset.UTC);
         JSONArray messages = inputJSON.getJSONArray("messages");
         List<JSONObject> result = new ArrayList<>();
@@ -182,10 +152,10 @@ public class SendBirdChatObject {
         for (int i = 0; i < messages.length(); i++) {
             JSONObject messageSummary = new JSONObject();
             JSONObject message = messages.getJSONObject(i);
-            messageSummary.put("message", message.getString("message"));
+            messageSummary.put(MESSAGE, message.getString(MESSAGE));
             String timestamp = formatter.format(Instant.ofEpochMilli(message.getLong("created_at")));
             messageSummary.put("timestamp", timestamp);
-            messageSummary.put("user_id", message.getJSONObject("user").getString("user_id"));
+            messageSummary.put(USERID, message.getJSONObject("user").getString(USERID));
             messageSummary.put("user_name", message.getJSONObject("user").getString("nickname"));
             result.add(messageSummary);
 
@@ -193,9 +163,8 @@ public class SendBirdChatObject {
         return result;
 }
 
-    public static void test() {
+    public static void test() throws IOException, InterruptedException {
         SendBirdChatObject so = new SendBirdChatObject();
-        //so.CreateSendBirdUser("1234567", "Yollie", "");
         String sampleObject = "{\n" +
                 "    \"messages\": [\n" +
                 "        {\n" +
@@ -236,19 +205,63 @@ public class SendBirdChatObject {
                 "    ]\n" +
                 "}";
         JSONObject sample_response = new JSONObject(sampleObject);
-        //List<JSONObject> jo = so.ExtractMessagesFromJSON(sample_response);
-        // System.out.println(jo.toString());
-        //so.CreateSendBirdUser("42069", "Yollie", "https://cdn.britannica.com/96/1296-050-4A65097D/gelding-bay-coat.jpg");
-        //so.CreateSendBirdChat("42069", "69");
-        so.SendMessage("42069_69_chat", "42069",
-                "Hello, this is mac sending a test message via Java");
-        so.SendMessage("42069_69_chat", "69",
-                "Hello Yole");
-        System.out.println(so.GetChatMessages("42069_69_chat"));
+        List<JSONObject> jo = so.extractMessagesFromJSON(sample_response);
+        System.out.println(jo.toString());
+        try {
+            so.sendMessage("42069_69_chat", "42069",
+                    "Hello, this is mac sending a test message via Java");
+            so.sendMessage("42069_69_chat", "69",
+                    "Hello Yole");
+        }
+        catch (Exception e) {
+            System.out.println("womp womp....");
+        }
+        System.out.println(so.getChatMessages("42069_69_chat"));
     }
 
 
+//    public static void main(String[] args) throws IOException, InterruptedException {
+//        SendBirdChatObject.test();
+//    }
+}
+
+
+@SpringBootApplication
+class app {
     public static void main(String[] args) {
-        SendBirdChatObject.test();
+        SpringApplication.run(app.class, args);
+        System.out.println("Hello World");
+
     }
 }
+
+
+@RestController
+class Controller {
+    @PostMapping("/")
+    public Message receiveMessages(@RequestBody String body) throws JSONException {
+        JSONObject json = new JSONObject(body);
+
+        // Access the "payload" object
+        JSONObject payload = json.getJSONObject("payload");
+
+        // Retrieve "message" and "created_at" values
+        String message = payload.getString("message");
+        long createdAt = payload.getLong("created_at");
+
+        // Print the values
+        System.out.println("Message: " + message);
+        System.out.println("Created At: " + createdAt);
+        return new Message(body);
+    }
+}
+class Message {
+    public String msg;
+    public Message(String content) {
+        this.msg = content;
+    }
+}
+
+
+
+

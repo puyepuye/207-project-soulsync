@@ -105,7 +105,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         Document userDoc = new Document("username", user.getUsername())
                 .append(PASSWORD, user.getPassword())
                 .append("image", user.getImage())
-                .append("fullName", user.getUsername())
+                .append("fullName", user.getFullname())
                 .append("location", user.getLocation())
                 .append("gender", user.getGender())
                 .append("preferredGender", user.getPreferredGender())

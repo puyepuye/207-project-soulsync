@@ -3,7 +3,12 @@ package use_case.signup;
 import entity.User;
 import entity.UserFactory;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The Signup Interactor.
@@ -22,23 +27,35 @@ public class SignupInteractor implements SignupInputBoundary {
     }
 
     @Override
-    public void execute(SignupInputData signupInputData) {
+    public void execute(SignupInputData signupInputData) throws ParseException {
         if (userDataAccessObject.existsByName(signupInputData.getUsername())) {
             userPresenter.prepareFailView("User already exists.");
         }
         else if (!signupInputData.getPassword().equals(signupInputData.getRepeatPassword())) {
             userPresenter.prepareFailView("Passwords don't match.");
         }
+        else if (!signupInputData.getFullname().matches("[\\p{IsAlphabetic} ]+")) {
+            userPresenter.prepareFailView("Please Enter your full name.");
+        }
+        else if (signupInputData.getDateOfBirth() == null) {
+            userPresenter.prepareFailView("Date of birth is required.");
+        }
+        else if (signupInputData.getGender().isEmpty() || signupInputData.getGender().equals("Select Gender")) {
+            userPresenter.prepareFailView("Please choose your gender.");
+        }
+        else if (signupInputData.getLocation().isEmpty() || signupInputData.getLocation().contains("Select")) {
+            userPresenter.prepareFailView("Please choose your country and city.");
+        }
         else {
-            Date sampleDate = new GregorianCalendar(2000, Calendar.JANUARY, 1).getTime();
+
             final User user =  userFactory.create(signupInputData.getUsername(),
                     signupInputData.getPassword(),
                     "imageLink",
-                    "Fullname",
-                    "Location",
-                    "gender",
+                    signupInputData.getFullname(),
+                    signupInputData.getLocation(),
+                    signupInputData.getGender(),
                     new ArrayList<>() {{}},
-                    sampleDate,
+                    signupInputData.getDateOfBirth(),
                     new HashMap<>() {{put("min", 18); put("max", 99);}},
                     "",
                     new HashMap<>() {{}},
