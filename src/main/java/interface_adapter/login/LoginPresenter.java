@@ -31,9 +31,8 @@ public class LoginPresenter implements LoginOutputBoundary {
     public void prepareSuccessView(LoginOutputData response) {
         // On success, switch to the logged in view.
 
-        final SwipeState loggedInState = swipeViewModel.getState();
-//        swipeViewModel.setUsername(response.getUsername());
-        this.swipeViewModel.setState(loggedInState);
+        final SwipeState swipeState = swipeViewModel.getState();
+        this.swipeViewModel.setState(swipeState);
         this.swipeViewModel.firePropertyChanged();
 
         this.viewManagerModel.setState(swipeViewModel.getViewName());

@@ -1,6 +1,6 @@
 package view;
 
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -17,6 +17,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import interface_adapter.logged_in.LoggedInState;
+import interface_adapter.navbar.NavbarController;
 import interface_adapter.swipe.SwipeController;
 import interface_adapter.swipe.SwipeState;
 import interface_adapter.swipe.SwipeViewModel;
@@ -38,8 +39,7 @@ public class SwipeView extends JPanel implements PropertyChangeListener {
     private final JButton like;
     private final JButton dislike;
 
-    public SwipeView(SwipeController controller, SwipeViewModel swipeViewModel) {
-
+    public SwipeView(SwipeController controller, SwipeViewModel swipeViewModel, NavbarController navbarController) {
         this.swipeController = controller;
         this.swipeViewModel = swipeViewModel;
         swipeViewModel.addPropertyChangeListener(this);
@@ -53,6 +53,8 @@ public class SwipeView extends JPanel implements PropertyChangeListener {
         buttons.add(dislike);
         like = new JButton(SwipeViewModel.LIKE_BUTTON_LABEL);
         buttons.add(like);
+
+        NavBarView navBarView = new NavBarView(navbarController);
 
         dislike.addActionListener(
                 new ActionListener() {
@@ -82,11 +84,20 @@ public class SwipeView extends JPanel implements PropertyChangeListener {
                 }
         );
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        // Use BorderLayout for layout management
+        this.setLayout(new BorderLayout());
 
-        this.add(profileName);
-        this.add(profileBio);
-        this.add(buttons);
+        // Add the profile info and buttons to the center of the screen
+        JPanel profilePanel = new JPanel();
+        profilePanel.setLayout(new BoxLayout(profilePanel, BoxLayout.Y_AXIS));
+        profilePanel.add(profileName);
+        profilePanel.add(profileBio);
+        profilePanel.add(buttons);
+
+        this.add(profilePanel, BorderLayout.CENTER);
+
+        // Add NavBarView to the bottom (SOUTH) of the screen
+        this.add(navBarView, BorderLayout.SOUTH);
     }
 
     @Override
@@ -108,3 +119,4 @@ public class SwipeView extends JPanel implements PropertyChangeListener {
         return viewName;
     }
 }
+
