@@ -2,7 +2,6 @@ package data_access;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +12,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import org.bson.Document;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import entity.User;
 import entity.UserFactory;
@@ -41,7 +38,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String PASSWORD = "password";
     private static final String MESSAGE = "message";
     private final UserFactory userFactory;
-
     private final MongoCollection<Document> userCollection;
 
     public DBUserDataAccessObject(UserFactory userFactory) {
@@ -85,9 +81,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     }
 
     @Override
-    public void setCurrentUser(String name) {
-
-    }
+    public void setCurrentUser(String name) { }
 
     @Override
     public String getCurrentUser() {
@@ -127,7 +121,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         Document query = new Document("username", user.getUsername());
         Document update = new Document("$set", new Document("password", user.getPassword()));
         userCollection.updateOne(query, update);
-
     }
 
     @Override
@@ -149,5 +142,4 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
             userCollection.updateOne(swipedLeftQuery, swipedLeftUpdate);
         }
     }
-
 }
