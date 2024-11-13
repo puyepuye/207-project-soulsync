@@ -54,7 +54,7 @@ public class MongoDB {
                 .append("matchDate", "2024-11-11T11:11:11Z") // Example ISO date string
                 .append("isActive", true);
 
-        col2.insertOne(matchDoc);  // Inserts into matchesCollection
+        col2.insertOne(matchDoc);  // Inserts iinto matchesCollection
 
         client.close();  // Close the MongoDB client
     }

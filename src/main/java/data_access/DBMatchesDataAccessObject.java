@@ -28,7 +28,7 @@ public class DBMatchesDataAccessObject {
 
     /** Saves the CommonMatches object to MongoDB collection.
      *
-     * @param match is the CommonMatches object to save.
+     * @param match iss the CommonMatches object to save.
      */
     public void saveMatch(CommonMatches match) {
         Document saveMatchDoc = new Document("userAId", match.getUserAId())

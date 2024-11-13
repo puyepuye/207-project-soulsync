@@ -22,7 +22,7 @@ import use_case.preferences.PreferenceUserDataAccessInterface;
 import use_case.swipe.SwipeUserDataAccessInterface;
 
 /**
- * The DAO for user data.
+ * The DAO for usser data.
  */
 public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                                                LoginUserDataAccessInterface,
