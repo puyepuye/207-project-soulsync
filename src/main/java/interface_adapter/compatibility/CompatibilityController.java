@@ -3,6 +3,10 @@ package interface_adapter.compatibility;
 import use_case.compatibility.CompatibilityInputBoundary;
 import use_case.compatibility.CompatibilityInputData;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
  * The controller for the Login Use Case.
  */
@@ -15,15 +19,39 @@ public class CompatibilityController {
     }
 
     /**
-     * Executes the Login Use Case.
+     * Executes the Compatibility Use Case.
      *
-     * @param username the username of the user logging in
-     * @param password the password of the user logging in
+     * @param username the username of the current user
+     * @param otherUsername the username of the other user
      */
-    public void execute(String username, String password) {
-        final CompatibilityInputData compatibilityInputData = new CompatibilityInputData(
-                username, password);
+    public void execute(String username, String otherUsername) {
+        final CompatibilityInputData compatibilityInputData = new CompatibilityInputData(username);
 
         compatibilityUseCaseInteractor.execute(compatibilityInputData);
     }
+
+    /**
+     * Executes the getMatchedUser Compatibility Use Case.
+     *
+     * @param username the username of the current user
+     */
+    public String[] getMatchedUsers(String username) {
+        final CompatibilityInputData compatibilityInputData = new CompatibilityInputData(username);
+
+        return compatibilityUseCaseInteractor.getMatchedUsers(compatibilityInputData);
+
+    }
+
+    /**
+     * Executes the getUserDOB Compatibility Use Case.
+     *
+     * @param username the username of the current user
+     */
+    public Date getUserDOB(String username) {
+        final CompatibilityInputData compatibilityInputData = new CompatibilityInputData(username);
+
+        return compatibilityUseCaseInteractor.getUserDOB(compatibilityInputData);
+
+    }
+
 }

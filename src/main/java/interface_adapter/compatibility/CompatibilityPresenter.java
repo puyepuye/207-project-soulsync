@@ -20,11 +20,12 @@ public class CompatibilityPresenter implements CompatibilityOutputBoundary {
 
     @Override
     public void prepareSuccessView(CompatibilityOutputData outputData) {
-        compatibilityViewModel.firePropertyChanged("password");
+        compatibilityViewModel.firePropertyChanged("username");
 
     }
 
     @Override
     public void prepareFailView(String error) {
+
     }
 }

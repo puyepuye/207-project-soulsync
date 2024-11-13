@@ -1,19 +1,18 @@
 package use_case.compatibility;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class CompatibilityInputData {
     private final String username;
-    private final String password;
 
-    public CompatibilityInputData(String username, String password) {
+    public CompatibilityInputData(String username) {
         this.username = username;
-        this.password = password;
     }
 
     String getUsername() {
         return username;
     }
 
-    String getPassword() {
-        return password;
-    }
 }

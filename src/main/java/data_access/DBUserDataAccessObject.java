@@ -16,6 +16,7 @@ import org.bson.Document;
 import entity.User;
 import entity.UserFactory;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.compatibility.CompatibilityUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 import use_case.preferences.PreferenceUserDataAccessInterface;
@@ -28,7 +29,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                                                LoginUserDataAccessInterface,
                                                ChangePasswordUserDataAccessInterface,
                                                PreferenceUserDataAccessInterface,
-                                               SwipeUserDataAccessInterface
+                                               SwipeUserDataAccessInterface,
+                                               CompatibilityUserDataAccessInterface
 {
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";

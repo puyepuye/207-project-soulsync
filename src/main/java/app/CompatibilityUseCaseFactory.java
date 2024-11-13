@@ -6,6 +6,7 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityController;
 import interface_adapter.compatibility.CompatibilityPresenter;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -51,10 +52,11 @@ public final class CompatibilityUseCaseFactory {
             ViewManagerModel viewManagerModel,
             CompatibilityViewModel compatibilityViewModel,
             NavbarViewModel navbarViewModel,
-            SwipeViewModel swipeViewModel) {
+            SwipeViewModel swipeViewModel,
+            CompatibilityUserDataAccessInterface userDataAccessInterface) {
 
         final CompatibilityController compatibilityController =
-                createCompatibilityUseCase(viewManagerModel, compatibilityViewModel);
+                createCompatibilityUseCase(viewManagerModel, compatibilityViewModel, userDataAccessInterface);
 
         final NavbarController navBarController =
                 createNavbarUseCase(viewManagerModel, swipeViewModel, navbarViewModel, compatibilityViewModel);
@@ -65,11 +67,15 @@ public final class CompatibilityUseCaseFactory {
 
     private static CompatibilityController createCompatibilityUseCase(
             ViewManagerModel viewManagerModel,
-            CompatibilityViewModel compatibilityViewModel) {
+            CompatibilityViewModel compatibilityViewModel,
+            CompatibilityUserDataAccessInterface userDataAccessInterface) {
 
-        // Notice how we pass this method's parameters to the Presenter.
-//        final CompatibilityOutputBoundary compatibilityOutputBoundary = new CompatibilityPresenter(viewManagerModel, compatibilityViewModel);
-        final CompatibilityInputBoundary compatibilityInteractor = new CompatibilityInteractor();
+//        final CompatibilityController compatibilityController =
+//                createCompatibilityUseCase(viewManagerModel, compatibilityViewModel, userDataAccessInterface);
+        final CompatibilityOutputBoundary compatibilityOutputBoundary = new CompatibilityPresenter(viewManagerModel,
+                compatibilityViewModel);
+        final CompatibilityInputBoundary compatibilityInteractor = new CompatibilityInteractor(userDataAccessInterface,
+                compatibilityOutputBoundary);
 
         return new CompatibilityController(compatibilityInteractor);
     }

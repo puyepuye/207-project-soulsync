@@ -64,8 +64,8 @@ public class MainWithDB {
                                                                   signupViewModel, preferencesViewModel, userDataAccessObject);
         views.add(signupView, signupView.getViewName());
 
-        final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,
-                                                               swipeViewModel, signupViewModel, userDataAccessObject);
+        final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, swipeViewModel,
+                signupViewModel, compatibilityViewModel, userDataAccessObject);
         views.add(loginView, loginView.getViewName());
 
         final LoggedInView loggedInView = ChangePasswordUseCaseFactory.create(viewManagerModel,
@@ -88,7 +88,7 @@ public class MainWithDB {
         views.add(swipeView, swipeView.getViewName());
 
         final CompatibilityView compatibilityView = CompatibilityUseCaseFactory.create(viewManagerModel,
-                compatibilityViewModel, navbarViewModel, swipeViewModel);
+                compatibilityViewModel, navbarViewModel, swipeViewModel, userDataAccessObject);
 
         views.add(compatibilityView, compatibilityView.getViewName());
 
