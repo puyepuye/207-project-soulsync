@@ -9,18 +9,15 @@ import javax.swing.WindowConstants;
 import data_access.DBUserDataAccessObject;
 import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.compatibility.CompatibilityViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.navbar.NavbarViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.swipe.SwipeViewModel;
 import use_case.preferences.PreferenceUserDataAccessInterface;
 import interface_adapter.signup.SignupViewModel;
-import view.LoggedInView;
-import view.LoginView;
-import view.SignupView;
-import view.PreferenceView;
-import view.SwipeView;
-import view.ViewManager;
+import view.*;
 
 /**
  * The version of Main with an external database used to persist user data.
@@ -58,6 +55,8 @@ public class MainWithDB {
         final SignupViewModel signupViewModel = new SignupViewModel();
         final PreferencesViewModel preferencesViewModel = new PreferencesViewModel();
         final SwipeViewModel swipeViewModel = new SwipeViewModel();
+        final NavbarViewModel navbarViewModel = new NavbarViewModel();
+        final CompatibilityViewModel compatibilityViewModel = new CompatibilityViewModel();
 
         final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
 
@@ -65,8 +64,8 @@ public class MainWithDB {
                                                                   signupViewModel, preferencesViewModel, userDataAccessObject);
         views.add(signupView, signupView.getViewName());
 
-        final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,
-                                                               swipeViewModel, signupViewModel, userDataAccessObject);
+        final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, swipeViewModel,
+                signupViewModel, compatibilityViewModel, userDataAccessObject);
         views.add(loginView, loginView.getViewName());
 
         final LoggedInView loggedInView = ChangePasswordUseCaseFactory.create(viewManagerModel,
@@ -78,10 +77,20 @@ public class MainWithDB {
 
         views.add(preferenceView, preferenceView.getViewName());
 
+        final NavBarView navBarView = NavbarUseCaseFactory.create(viewManagerModel,
+                swipeViewModel, navbarViewModel, compatibilityViewModel);
+
+        views.add(navBarView, navBarView.getViewName());
+
         final SwipeView swipeView = SwipeUseCaseFactory.create(viewManagerModel,
-                swipeViewModel, userDataAccessObject);
+                swipeViewModel, navbarViewModel, compatibilityViewModel, userDataAccessObject);
 
         views.add(swipeView, swipeView.getViewName());
+
+        final CompatibilityView compatibilityView = CompatibilityUseCaseFactory.create(viewManagerModel,
+                compatibilityViewModel, navbarViewModel, swipeViewModel, userDataAccessObject);
+
+        views.add(compatibilityView, compatibilityView.getViewName());
 
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();

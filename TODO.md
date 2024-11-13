@@ -3,17 +3,15 @@
 ### Current TODOs
 - In order of priority; same number = same priority
 - lower priority might rely on the ones with higher priority
-#### 1. Signup Page [Claire]
-- Add input boxes and dropdowns for other attributes (refer to figma and chore diagram in README.md)
-- Connect those new input attributes to database
-#### 2. Preferences Page
+#### 1. Signup Page [DONE]
+#### 2. Preferences Page [Kimi]
 - Add input boxes and dropdowns for other attributes (refer to figma and chore diagram in README.md)
 - Connect those new input attributes to database
 #### 3. Matches Entity [Yoli]
 - Add a new Matches Entity
-#### 4. Nav Bar
+#### 4. Nav Bar [Claire]
 - Swipe Page, Fengshui Page, Chat Page, Edit Profile Page (refer to figma)
-#### 4. Swipe Page
+#### 4. Swipe Page [Puye]
 - Pull user's data to add to list of profiles to display
 - Display those profiles
 - Change state when swiped, update match data
@@ -22,9 +20,10 @@
 #### 5. Chat Page [Mac]
 - UI
 - oh my, so many things I don't even know...
-#### 5. Fengshui page
+#### 5. Fengshui Page [Claire]
 - Connect Kimi's godly algorithms
 - UI
+#### 5. Edit Profile Page
 #### 6. Clean up
 - clean up UI
 - delete irrelevant files & comments

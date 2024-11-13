@@ -33,7 +33,7 @@ public class SignupPresenter implements SignupOutputBoundary {
         // On success, switch to the login view.
         final PreferencesState preferencesState = preferencesViewModel.getState();
 //        loginState.setUsername(response.getUsername());
-        preferencesState.setFullName(response.getFullName());
+        preferencesState.setUsername(response.getUsername());
         this.preferencesViewModel.setState(preferencesState);
         this.preferencesViewModel.firePropertyChanged();
 

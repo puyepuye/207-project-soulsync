@@ -28,6 +28,11 @@ public class PreferencesPresenter implements PreferenceOutputBoundary {
         // On success, switch to the preferences view.
 
         final PreferencesState preferencesState = preferencesViewModel.getState();
+        preferencesState.setPreferences(response.getPreferences());
+        preferencesState.setPreferredAge(response.getPreferredAge());
+        preferencesState.setPreferredGender(response.getPreferredGender());
+        preferencesState.setBio(response.getBio());
+        preferencesState.setTags(response.getTags());
         this.preferencesViewModel.setState(preferencesState);
         this.preferencesViewModel.firePropertyChanged();
 

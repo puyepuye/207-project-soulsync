@@ -16,6 +16,7 @@ import org.bson.Document;
 import entity.User;
 import entity.UserFactory;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.compatibility.CompatibilityUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 import use_case.preferences.PreferenceUserDataAccessInterface;
@@ -28,7 +29,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                                                LoginUserDataAccessInterface,
                                                ChangePasswordUserDataAccessInterface,
                                                PreferenceUserDataAccessInterface,
-                                               SwipeUserDataAccessInterface
+                                               SwipeUserDataAccessInterface,
+                                               CompatibilityUserDataAccessInterface
 {
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
@@ -115,6 +117,19 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         userCollection.insertOne(userDoc);
 
     }
+
+    @Override
+    public void updatePreference(User user) {
+        Document query = new Document("username", user.getUsername());
+        Document update = new Document("$set", new Document("tags", user.getTags())
+                .append("preferences", user.getPreferences())
+                .append("preferredAge", user.getPreferredAge())
+                .append("bio", user.getBio())
+                .append("preferredGender", user.getPreferredGender()));
+
+        userCollection.updateOne(query, update);
+    }
+
 
     @Override
     public void changePassword(User user) {

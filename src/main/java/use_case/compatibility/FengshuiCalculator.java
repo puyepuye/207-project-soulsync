@@ -277,10 +277,10 @@ public class FengshuiCalculator {
     }
 
     public static void main(String[] args) {
-        Calendar myCalendar = new GregorianCalendar(2022, 1, 4);
+        Calendar myCalendar = new GregorianCalendar(2002, 12, 3);
         Date myDate = myCalendar.getTime();
 
-        Calendar myCalendar2 = new GregorianCalendar(2026, 4, 17);
+        Calendar myCalendar2 = new GregorianCalendar(2000, 1, 7);
         Date myDate2 = myCalendar2.getTime();
 
         FengshuiCalculator calculator = new FengshuiCalculator(myDate, myDate2);
