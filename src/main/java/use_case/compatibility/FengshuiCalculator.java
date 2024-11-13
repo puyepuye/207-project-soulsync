@@ -21,10 +21,15 @@ public class FengshuiCalculator {
 
         // Initialize control relationships (相剋) for Heavenly Stems
         controlMap.put("JIA", "GENG");      // 甲剋庚
+        controlMap.put("YI", "XIN");        // 乙剋辛
         controlMap.put("BING", "REN");      // 丙剋壬
-        controlMap.put("WU", "GUI");        // 戊剋癸
-        controlMap.put("GENG", "JIA");      // 庚剋甲
-        controlMap.put("REN", "BING");      // 壬剋丙
+        controlMap.put("DING", "GUI");      // 丁剋癸
+        controlMap.put("WU", "JIA");        // 戊剋甲
+        controlMap.put("JI", "YI");         // 己剋乙
+        controlMap.put("GENG", "BING");     // 庚剋丙
+        controlMap.put("XIN", "DING");      // 辛剋丁
+        controlMap.put("REN", "WU");        // 壬剋戊
+        controlMap.put("GUI", "JI");        // 癸剋己
 
         // Initialize harmony relationships (六合) for Earthly Branches
         harmonyMap.put("ZI", "CHOU");       // 子丑合
@@ -33,18 +38,34 @@ public class FengshuiCalculator {
         harmonyMap.put("CHEN", "YOU");      // 辰酉合
         harmonyMap.put("SI", "SHEN");       // 巳申合
         harmonyMap.put("WU", "WEI");        // 午未合
+        harmonyMap.put("CHOU", "ZI");       // 丑子合
+        harmonyMap.put("HAI", "YIN");       // 亥寅合
+        harmonyMap.put("XU", "MAO");        // 戌卯合
+        harmonyMap.put("YOU", "CHEN");      // 酉辰合
+        harmonyMap.put("SHEN", "SI");       // 申巳合
+        harmonyMap.put("WEI", "WU");        // 未午合
 
         // Initialize clash relationships (相沖) for Earthly Branches
         clashMap.put("ZI", "WU");           // 子午沖
+        clashMap.put("WU", "ZI");           // 午子沖
         clashMap.put("CHOU", "WEI");        // 丑未沖
+        clashMap.put("WEI", "CHOU");        // 未丑沖
         clashMap.put("YIN", "SHEN");        // 寅申沖
+        clashMap.put("SHEN", "YIN");        // 申寅沖
         clashMap.put("MAO", "YOU");         // 卯酉沖
+        clashMap.put("YOU", "MAO");         // 酉卯沖
         clashMap.put("CHEN", "XU");         // 辰戌沖
+        clashMap.put("XU", "CHEN");         // 戌辰沖
         clashMap.put("SI", "HAI");          // 巳亥沖
+        clashMap.put("HAI", "SI");          // 亥巳沖
+
 
         user1stembranch.addAll(calculateYearStems(userDate1));
+        System.out.println(calculateYearStems(userDate1));
         user1stembranch.addAll(calculateMonthStems(userDate1));
+        System.out.println(calculateMonthStems(userDate1));
         user1stembranch.addAll(calculateDayStems(userDate1));
+        System.out.println(calculateDayStems(userDate1));
 
         user2stembranch.addAll(calculateYearStems(userDate2));
         user2stembranch.addAll(calculateMonthStems(userDate2));
@@ -52,65 +73,68 @@ public class FengshuiCalculator {
     }
 
     public List<String> calculateYearStems(Date date) {
-        List<String> heavenlyStems = Arrays.asList("GENG", "XIN", "WU", "JI", "JIA", "YI", "BING",
-                "DING", "REN", "GUI");
-        List<String> earthlyBranches = Arrays.asList("ZI", "CHOU", "YIN", "MAO", "CHEN", "SI", "WU", "WEI",
-                "SHEN", "YOU", "XU", "HAI");
+        List<String> heavenlyStems = Arrays.asList("JIA", "YI", "BING", "DING", "WU", "JI", "GENG", "XIN", "REN", "GUI");
+        List<String> earthlyBranches = Arrays.asList("ZI", "CHOU", "YIN", "MAO", "CHEN", "SI", "WU", "WEI", "SHEN",
+                "YOU", "XU", "HAI");
 
-        List<String> yearStems = new ArrayList<>();
         // Use Calendar to extract the year from the Date object
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
 
-        // Adjust the year relative to 1900 and calculate modulo 60
-        int yearOffset = (year - 1900) % 60;
+        // Adjust the year relative to 1984, the starting point of the 60-year cycle (甲子年)
+        int yearOffset = (year - 1984) % 60;
+        if (yearOffset < 0) {
+            yearOffset += 60; // Ensure it's within the 0-59 range
+        }
 
         // Calculate Heavenly Stem (天干) and Earthly Branch (地支) based on the year offset
         int heavenlyStemIndex = yearOffset % 10; // Heavenly Stem index (0 to 9)
         int earthlyBranchIndex = yearOffset % 12; // Earthly Branch index (0 to 11)
 
         // Output the result
-        yearStems.add(heavenlyStems.get(heavenlyStemIndex));
-        yearStems.add(earthlyBranches.get(earthlyBranchIndex));
+        List<String> yearStemBranch = new ArrayList<>();
+        yearStemBranch.add(heavenlyStems.get(heavenlyStemIndex));
+        yearStemBranch.add(earthlyBranches.get(earthlyBranchIndex));
 
-        return yearStems;
+        return yearStemBranch;
     }
 
     public List<String> calculateMonthStems(Date date) {
+        // Lists for Heavenly Stems (天干) and Earthly Branches (地支)
         List<String> heavenlyStems = Arrays.asList("JIA", "YI", "BING", "DING", "WU", "JI", "GENG", "XIN", "REN", "GUI");
-        List<String> earthlyBranches = Arrays.asList("YIN", "MAO", "CHEN", "SI", "WU", "WEI", "SHEN", "YOU", "XU",
-                "HAI", "ZI", "CHOU");
+        List<String> earthlyBranches = Arrays.asList("YIN", "MAO", "CHEN", "SI", "WU", "WEI", "SHEN", "YOU", "XU", "HAI", "ZI", "CHOU");
 
-        List<String> monthStems = new ArrayList<>();
-        // Use Calendar to get year, month, and day
+        // Use Calendar to extract year and month from the Date object
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;  // Calendar months are 0-based, so add 1
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        // Adjust month value if it's January and day is 1, 2, or 0 (for some specific rule in the original Python code)
-        if (month == 1 && (day == 1 || day == 2)) {
-            month = Integer.parseInt(day + "" + month); // Concatenate day and month as integer if condition meets
+        // Calculate the Heavenly Stem and Earthly Branch for the year
+        int yearOffset = (year - 1984) % 60;
+        if (yearOffset < 0) {
+            yearOffset += 60; // Ensure it's within the 0-59 range
+        }
+        int yearHeavenlyStemIndex = yearOffset % 10; // Index for the year's Heavenly Stem
+
+        // Adjust for Chinese lunar calendar: If date is before February 4, it's still the previous lunar year
+        if (month < 2 || (month == 2 && calendar.get(Calendar.DAY_OF_MONTH) < 4)) {
+            yearHeavenlyStemIndex = (yearHeavenlyStemIndex + 9) % 10; // Move to the previous year's Heavenly Stem
         }
 
-        // Calculate month stem (天干) and branch (地支)
-        int yearStemIndex = (year % 10) - 3; // Simulate last digit of year in Heavenly Stem cycle, adjusted by -3
-        int mon_gx = (yearStemIndex * 2 + month) % 10; // Month Heavenly Stem calculation
-        int mon_zx = (month - 1) % 12;                 // Month Earthly Branch calculation, month - 1 for 0-based index
+        // Calculate the month Heavenly Stem based on the adjusted year's Heavenly Stem
+        int monthHeavenlyStemIndex = (yearHeavenlyStemIndex * 2 + month - 2) % 10; // Start from 寅月, adjust by -2
 
-        // Adjust mon_gx if it goes out of bounds (not likely needed here but retained for logic consistency)
-        if (mon_gx < 0) {
-            mon_gx += 10;
-        }
+        // Determine the Earthly Branch for the month (0-based index for months starting with 寅 in Lunar Calendar)
+        int monthEarthlyBranchIndex = (month - 2 + 12) % 12; // 寅月是第一个月, month-2对齐
 
-        // Output the result
-        monthStems.add(heavenlyStems.get(mon_gx));
-        monthStems.add(earthlyBranches.get(mon_zx));
+        // Output the result as month stem and branch
+        List<String> monthStemBranch = new ArrayList<>();
+        monthStemBranch.add(heavenlyStems.get(monthHeavenlyStemIndex));
+        monthStemBranch.add(earthlyBranches.get(monthEarthlyBranchIndex));
 
-        return monthStems;
+        return monthStemBranch;
     }
 
     public List<String> calculateDayStems(Date birthday) {
@@ -196,9 +220,9 @@ public class FengshuiCalculator {
     }
 
     private int calculateStemCompatibility(String stem1, String stem2) {
-        if (generationMap.get(stem1).equals(stem2)) {
+        if (Objects.equals(generationMap.get(stem1), stem2)) {
             return 2; // 相生
-        } else if (controlMap.get(stem1).equals(stem2)) {
+        } else if (Objects.equals(controlMap.get(stem1), stem2)) {
             return -1; // 相剋
         }
         return 0; // 無相生或相剋
@@ -206,9 +230,9 @@ public class FengshuiCalculator {
 
     // 計算地支相合或相沖的分數
     private int calculateBranchCompatibility(String branch1, String branch2) {
-        if (harmonyMap.get(branch1).equals(branch2) || harmonyMap.get(branch2).equals(branch1)) {
+        if (Objects.equals(harmonyMap.get(branch1), branch2) || Objects.equals(harmonyMap.get(branch2), branch1)) {
             return 2; // 相合
-        } else if (clashMap.get(branch1).equals(branch2) || clashMap.get(branch2).equals(branch1)) {
+        } else if ((Objects.equals(clashMap.get(branch1), branch2) || Objects.equals(clashMap.get(branch2), branch1))) {
             return -1; // 相沖
         }
         return 0; // 無相合或相沖
@@ -250,6 +274,17 @@ public class FengshuiCalculator {
         int compatibilityScore = calculateCompatibilityScore(user1stembranch, user2stembranch);
 
         return getCompatibilityResult(compatibilityScore);
+    }
+
+    public static void main(String[] args) {
+        Calendar myCalendar = new GregorianCalendar(2022, 1, 4);
+        Date myDate = myCalendar.getTime();
+
+        Calendar myCalendar2 = new GregorianCalendar(2026, 4, 17);
+        Date myDate2 = myCalendar2.getTime();
+
+        FengshuiCalculator calculator = new FengshuiCalculator(myDate, myDate2);
+        System.out.println(calculator.calculateScore());
     }
 
 }
