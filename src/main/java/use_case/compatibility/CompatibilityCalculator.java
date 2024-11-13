@@ -17,7 +17,7 @@ public class CompatibilityCalculator {
         this.preferencesUser2 = preferencesUser2;
         this.samplePreferences.put("Morning", Boolean.TRUE);
         this.samplePreferences.put("Spontaneous", Boolean.FALSE);
-        this.samplePreferences.put("Cinema", Boolean.FALSE);
+        this.samplePreferences.put("Food", Boolean.FALSE);
         this.samplePreferences.put("Mountain", Boolean.TRUE);
         this.samplePreferences.put("Music", Boolean.TRUE);
         this.samplePreferences.put("Reading", Boolean.FALSE);
