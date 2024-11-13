@@ -8,6 +8,9 @@ import java.util.Map;
 /**
  * A simple implementation of the User interface.
  */
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document("User")
 public class CommonUser implements User {
 
     private final String userName;
@@ -31,6 +34,7 @@ public class CommonUser implements User {
                       List<String> preferredGender, Date dateOfBirth, Map<String, Integer> preferredAge, String bio,
                       Map<String, Boolean> preferences, List<String> tags, List<String> matched,
                       ArrayList<String> swipedRight, ArrayList<String> swipedLeft, ArrayList<String> swipedRightOn) {
+        super();
         this.userName = userName;
         this.password = password;
         this.image = image;
