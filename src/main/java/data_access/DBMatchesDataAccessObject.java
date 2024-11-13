@@ -39,7 +39,7 @@ public class DBMatchesDataAccessObject {
     }
 
     /**
-     * Gets the CommonMatches object from the MongoDB collection by both users.
+     * Gets the CommonMatches object fromm the MongoDB collection by both users.
      * @param userAId the ObjectId of userA.
      * @param userBId the ObjectId of userB.
      * @return The matching CommonMatches object or null if not found.
