@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileTagUI extends JPanel {
 
@@ -18,20 +20,19 @@ public class ProfileTagUI extends JPanel {
     private final Color topColor = Color.decode("#FFEFF1");
     private final Color bottomColor = Color.decode("#FFA2B0");
 
+    // Preference storage
+    private final Map<String, Boolean> userPreferences = new HashMap<>();
+    private final Map<String, JRadioButton[]> preferenceButtons = new HashMap<>();
+
     public ProfileTagUI() {
         // Set layout for the main panel
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        this.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
 
         // Title Section
         final JLabel titleLabel = new JLabel("Your Profile");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Tag Section
-        final JLabel tagLabel = new JLabel("Add Profile Tags");
-        tagLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        tagLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Panel to hold the tags
         final JPanel tagPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -67,7 +68,7 @@ public class ProfileTagUI extends JPanel {
         // Selected Tags Panel
         selectedTagPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         selectedTagPanel.setBackground(new Color(255, 245, 247));
-        selectedTagPanel.setBorder(BorderFactory.createTitledBorder("Selected Tags"));
+        selectedTagPanel.setBorder(BorderFactory.createTitledBorder("Add profile tags"));
         selectedTagPanel.setPreferredSize(new Dimension(140, 60));
 
         // Bio Section
@@ -79,7 +80,8 @@ public class ProfileTagUI extends JPanel {
         bioTextArea.setLineWrap(true);
         bioTextArea.setWrapStyleWord(true);
         bioTextArea.setBackground(new Color(255, 245, 247)); // Set the background color to light pink
-        bioTextArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY)); // Optional: add a border
+        bioTextArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        bioTextArea.setPreferredSize(new Dimension(350, 60)); // Smaller height for bio
 
         // Limit bioTextArea to 100 characters
         bioTextArea.setDocument(new PlainDocument() {
@@ -95,13 +97,72 @@ public class ProfileTagUI extends JPanel {
             }
         });
 
+        // Preferences Section
+        final JLabel preferencesLabel = new JLabel("Preferences");
+        preferencesLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        preferencesLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel preferencesPanel = new JPanel(new GridBagLayout());
+        preferencesPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        preferencesPanel.setBackground(new Color(255, 245, 247));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5); // Add padding between elements
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        String[] questions = {
+                "I am a morning person",
+                "I am a spontaneous person",
+                "I like trying new food",
+                "Mountains over the seas",
+                "I enjoy listening to music",
+                "I enjoy reading",
+                "I enjoy being in nature",
+                "I like half-boiled eggs"
+        };
+
+        String[] keys = {
+                "Morning", "Spontaneous", "Food", "Mountain",
+                "Music", "Reading", "Nature", "Half-boiled eggs"
+        };
+
+        for (int i = 0; i < questions.length; i++) {
+            String question = questions[i];
+            String key = keys[i];  // Use key for storage
+
+            JLabel questionLabel = new JLabel(question);
+
+            JRadioButton trueButton = new JRadioButton("True");
+            JRadioButton falseButton = new JRadioButton("False");
+            ButtonGroup group = new ButtonGroup();
+            group.add(trueButton);
+            group.add(falseButton);
+
+            // Store the radio buttons in preferenceButtons using the key
+            preferenceButtons.put(key, new JRadioButton[]{trueButton, falseButton});
+
+            gbc.gridx = 0;
+            gbc.weightx = 0.998; // Give more space to the question label
+            preferencesPanel.add(questionLabel, gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 0.001; // Adjust weight for spacing of "True"
+            preferencesPanel.add(trueButton, gbc);
+
+            gbc.gridx = 2;
+            gbc.weightx = 0.001; // Adjust weight for spacing of "False"
+            preferencesPanel.add(falseButton, gbc);
+        }
+
+
         // Button Section
         JButton createProfileButton = new JButton("CREATE PROFILE");
         createProfileButton.setFont(new Font("Arial", Font.BOLD, 14));
         createProfileButton.setForeground(Color.WHITE);
         createProfileButton.setBackground(new Color(215, 87, 78));
         createProfileButton.setFocusPainted(false);
-        createProfileButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        createProfileButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); // Reduced button padding
         createProfileButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Make the button rounded
@@ -114,14 +175,16 @@ public class ProfileTagUI extends JPanel {
 
         // Add components to the main panel
         this.add(titleLabel);
-        this.add(Box.createRigidArea(new Dimension(0, 10)));
-        this.add(tagLabel);
-        this.add(tagScrollPane); // Add the JScrollPane containing the tagPanel
+        this.add(Box.createRigidArea(new Dimension(0, 5)));
+        this.add(tagScrollPane);
         this.add(selectedTagPanel);
-        this.add(Box.createRigidArea(new Dimension(0, 10)));
+        this.add(Box.createRigidArea(new Dimension(0, 5)));
         this.add(bioLabel);
         this.add(bioTextArea);
-        this.add(Box.createRigidArea(new Dimension(0, 20)));
+        this.add(Box.createRigidArea(new Dimension(0, 5)));
+        this.add(preferencesLabel);
+        this.add(preferencesPanel);
+        this.add(Box.createRigidArea(new Dimension(0, 5)));
         this.add(createProfileButton);
     }
 
@@ -244,19 +307,35 @@ public class ProfileTagUI extends JPanel {
                     addTagToSelectedPanel(tag);
                 } else {
                     // Show message if the limit is reached
-                    JOptionPane.showMessageDialog(ProfileTagUI.this, "You can only select up to 3 tags.", "Limit Reached", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(ProfileTagUI.this,
+                            "You can only select up to 3 tags.", "Limit Reached", JOptionPane.WARNING_MESSAGE);
                 }
             }
             System.out.println("Selected Tags: " + selectedTags);
         }
     }
 
-    // Method to save the profile information
     private void saveProfile() {
         String bio = bioTextArea.getText();
+        String[] keys = {
+                "Morning", "Spontaneous", "Cinema", "Mountain",
+                "Music", "Reading", "Nature", "Half-boiled eggs"
+        };
+
+        // Store the selected preferences in userPreferences using keys
+        for (String key : keys) {
+            JRadioButton[] buttons = preferenceButtons.get(key);
+
+            // If "True" is selected, store true; otherwise, store false
+            userPreferences.put(key, buttons[0].isSelected());
+        }
+
         System.out.println("Selected Tags: " + selectedTags);
         System.out.println("Bio: " + bio);
-        JOptionPane.showMessageDialog(this, "Profile saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        System.out.println("User Preferences: " + userPreferences);
+
+        JOptionPane.showMessageDialog(this, "Profile saved successfully!",
+                "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
