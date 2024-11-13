@@ -16,6 +16,7 @@ public class MongoDB {
         MongoClient client = MongoClients.create(mongoUri);
         MongoDatabase db = client.getDatabase("sampleDB");
         MongoCollection<Document> col = db.getCollection("sampleCollection");
+        MongoCollection<Document> col2 = db.getCollection("matchesCollection");
 
         // Example insert to test that it shows up in sampleCollection
         Document sampleDoc = new Document("_id", 1).append("name", "Yolanda Lee");
@@ -47,6 +48,13 @@ public class MongoDB {
                 .append("email", "charlie@example.com");
 
         col.insertOne(documentWithId);
+
+        Document matchDoc = new Document("userAId", new Document("$oid", "60b8d6c2f123456789abcdef"))  // Example ObjectId
+                .append("userBId", new Document("$oid", "60b8d6c2f123456789abcdee"))
+                .append("matchDate", "2024-11-11T11:11:11Z") // Example ISO date string
+                .append("isActive", true);
+
+        col2.insertOne(matchDoc);  // Inserts iinto matchesCollection
 
         client.close();  // Close the MongoDB client
     }
