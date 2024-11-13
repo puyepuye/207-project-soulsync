@@ -4,13 +4,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.*;
 import interface_adapter.preferences.PreferencesController;
+import interface_adapter.preferences.PreferencesState;
 import interface_adapter.preferences.PreferencesViewModel;
+import interface_adapter.swipe.SwipeState;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
@@ -156,6 +159,7 @@ public class PreferenceView extends JPanel  {
 
             // Store the radio buttons in preferenceButtons using the key
             preferenceButtons.put(key, new JRadioButton[]{trueButton, falseButton});
+            System.out.println(preferenceButtons.get(key)[0]);
 
             gbc.gridx = 0;
             gbc.weightx = 0.998; // Give more space to the question label
@@ -247,7 +251,7 @@ public class PreferenceView extends JPanel  {
 
 
     // Listener for tag buttons
-    private class TagButtonListener implements ActionListener {
+    private class TagButtonListener implements ActionListener{
         private final JButton button;
         private final String tag;
 
@@ -336,22 +340,34 @@ public class PreferenceView extends JPanel  {
 
     private void saveProfile() {
         String bio = bioTextArea.getText();
-        String[] keys = {
-                "Morning", "Spontaneous", "Cinema", "Mountain",
-                "Music", "Reading", "Nature", "Half-boiled eggs"
-        };
 
-        // Store the selected preferences in userPreferences using keys
-        for (String key : keys) {
-            JRadioButton[] buttons = preferenceButtons.get(key);
+        for (Map.Entry<String, JRadioButton[]> entry : preferenceButtons.entrySet()) {
+            String key = entry.getKey();
+            JRadioButton[] buttons = entry.getValue();
 
-            // If "True" is selected, store true; otherwise, store false
-            userPreferences.put(key, buttons[0].isSelected());
+            if (buttons[0].isSelected()) {
+                userPreferences.put(key, true); // Store as 'true'
+            } else if (buttons[1].isSelected()) {
+                userPreferences.put(key, false); // Store as 'false'
+            } else {
+                userPreferences.put(key, null); // Handle unselected state if necessary
+            }
         }
 
-        System.out.println("Selected Tags: " + selectedTags);
-        System.out.println("Bio: " + bio);
-        System.out.println("User Preferences: " + userPreferences);
+        final PreferencesState currentState = preferencesViewModel.getState();
+        currentState.setBio(bio);
+        currentState.setTags(selectedTags);
+        currentState.setPreferences(userPreferences);
+        preferencesViewModel.setState(currentState);
+
+        preferencesController.execute(
+                currentState.getUsername(),
+                currentState.getTags(),
+                currentState.getBio(),
+                currentState.getPreferences(),
+                currentState.getPreferredGender(),
+                currentState.getPreferredAge()
+        );
 
         JOptionPane.showMessageDialog(this, "Profile saved successfully!",
                 "Success", JOptionPane.INFORMATION_MESSAGE);

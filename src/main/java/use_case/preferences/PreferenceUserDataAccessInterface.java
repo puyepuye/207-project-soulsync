@@ -13,10 +13,18 @@ public interface PreferenceUserDataAccessInterface {
      * @return true if a user with the given username exists; false otherwise
      */
     boolean existsByName(String username);
-//
-//    /**
-//     * Saves the user.
-//     * @param user the user to save
-//     */
-//    void updatePreference(User user);
+
+    /**
+     * Get the user.
+     *
+     * @param username the user to get
+     * @return
+     */
+    User get(String username);
+
+    /**
+     * Saves the user.
+     * @param user the user to save
+     */
+    void updatePreference(User user);
 }

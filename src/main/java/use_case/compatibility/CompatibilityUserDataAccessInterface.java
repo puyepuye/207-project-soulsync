@@ -8,6 +8,7 @@ import entity.User;
 public interface CompatibilityUserDataAccessInterface {
     /**
      * Checks if the given username exists.
+     *
      * @param username the username to look for
      * @return true if a user with the given username exists; false otherwise
      */
@@ -20,10 +21,4 @@ public interface CompatibilityUserDataAccessInterface {
      * @return
      */
     User get(String username);
-
-    /**
-     * Returns the current session user.
-     * @return the current user
-     */
-    String getCurrentUser();
 }

@@ -119,6 +119,19 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     }
 
     @Override
+    public void updatePreference(User user) {
+        Document query = new Document("username", user.getUsername());
+        Document update = new Document("$set", new Document("tags", user.getTags())
+                .append("preferences", user.getPreferences())
+                .append("preferredAge", user.getPreferredAge())
+                .append("bio", user.getBio())
+                .append("preferredGender", user.getPreferredGender()));
+
+        userCollection.updateOne(query, update);
+    }
+
+
+    @Override
     public void changePassword(User user) {
         Document query = new Document("username", user.getUsername());
         Document update = new Document("$set", new Document("password", user.getPassword()));

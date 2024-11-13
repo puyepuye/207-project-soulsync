@@ -23,7 +23,7 @@ public class CompatibilityView extends JPanel implements PropertyChangeListener 
     private final JComboBox<String> compatibilityDropdown;
     private final JLabel fengshuiResult;
     private final JLabel compatibilityResult;
-    private final JLabel fengshuiPercentage;
+    private final JTextArea fengshuiText;
     private final JLabel compatibilityPercentage;
 
     public CompatibilityView(CompatibilityViewModel compatibilityViewModel, CompatibilityController controller,
@@ -66,13 +66,10 @@ public class CompatibilityView extends JPanel implements PropertyChangeListener 
         fengshuiResult.setFont(new Font("SansSerif", Font.PLAIN, 18));
         fengshuiPanel.add(fengshuiResult);
 
-        fengshuiPercentage = new JLabel();
-        fengshuiPercentage.setFont(new Font("SansSerif", Font.BOLD, 24));
-        fengshuiPanel.add(fengshuiPercentage);
+        fengshuiText = createWrappingTextArea("");
+        fengshuiText.setFont(new Font("SansSerif", Font.BOLD, 12));
+        fengshuiPanel.add(fengshuiText);
 
-        JTextArea fengshuiMessage = createWrappingTextArea("Based on you and Mark’s date of birth, it seems like your Fengshui are 69% aligned. That is a great score!");
-        fengshuiMessage.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        fengshuiPanel.add(fengshuiMessage);
 
         // Compatibility Section
         JPanel compatibilityPanel = new JPanel();
@@ -98,12 +95,8 @@ public class CompatibilityView extends JPanel implements PropertyChangeListener 
         compatibilityPanel.add(compatibilityResult);
 
         compatibilityPercentage = new JLabel();
-        compatibilityPercentage.setFont(new Font("SansSerif", Font.BOLD, 24));
+        compatibilityPercentage.setFont(new Font("SansSerif", Font.BOLD, 12));
         compatibilityPanel.add(compatibilityPercentage);
-
-        JTextArea compatibilityMessage = createWrappingTextArea("Based on you and Mark’s date of birth, it seems like your Fengshui are 69% aligned. That is a great score!");
-        compatibilityMessage.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        compatibilityPanel.add(compatibilityMessage);
 
         // Add sections to main content panel
         mainContentPanel.add(fengshuiPanel);
@@ -118,16 +111,16 @@ public class CompatibilityView extends JPanel implements PropertyChangeListener 
 
         // Add listeners to the dropdowns
         fengshuiDropdown.addActionListener(e -> updateCompatibilityResult(fengshuiDropdown, fengshuiResult));
-        fengshuiDropdown.addActionListener(e -> updateFengshuiScore(fengshuiDropdown, fengshuiPercentage));
+        fengshuiDropdown.addActionListener(e -> updateFengshuiScore(fengshuiDropdown, fengshuiText));
         compatibilityDropdown.addActionListener(e -> updateCompatibilityResult(compatibilityDropdown, compatibilityResult));
     }
 
     private void updateCompatibilityResult(JComboBox<String> dropdown, JLabel resultLabel) {
         String selectedUser = (String) dropdown.getSelectedItem();
-        resultLabel.setText("You❤" + selectedUser); // Update result label with selected user
+        resultLabel.setText("You ❤ " + selectedUser); // Update result label with selected user
     }
 
-    private void updateFengshuiScore(JComboBox<String> dropdown, JLabel fengshuiPercentage) {
+    private void updateFengshuiScore(JComboBox<String> dropdown, JTextArea fengshuiText) {
 
         final CompatibilityState state = compatibilityViewModel.getState();
         String currentUser = state.getUsername();
@@ -140,7 +133,7 @@ public class CompatibilityView extends JPanel implements PropertyChangeListener 
 
         FengshuiCalculator fengshuiCalculator = new FengshuiCalculator(currentUserDate, selectedUserDate);
 
-        fengshuiPercentage.setText(fengshuiCalculator.calculateScore());
+        fengshuiText.setText(fengshuiCalculator.calculateScore());
     }
 
 //    private void updateCompatibilityScore(JComboBox<String> dropdown, JLabel compatibilityPercentage) {
