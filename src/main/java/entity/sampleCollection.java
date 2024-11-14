@@ -10,8 +10,8 @@ import java.util.Map;
  */
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("User")
-public class CommonUser implements User {
+@Document(collection = "sampleCollection")
+public class sampleCollection implements User {
 
     private final String userName;
     private final String password;
@@ -30,7 +30,7 @@ public class CommonUser implements User {
     private ArrayList<String> swipedLeft;
     private ArrayList<String> swipedRightOn;
 
-    public CommonUser(String userName, String password, String image, String fullname, String location, String gender,
+    public sampleCollection(String userName, String password, String image, String fullname, String location, String gender,
                       List<String> preferredGender, Date dateOfBirth, Map<String, Integer> preferredAge, String bio,
                       Map<String, Boolean> preferences, List<String> tags, List<String> matched,
                       ArrayList<String> swipedRight, ArrayList<String> swipedLeft, ArrayList<String> swipedRightOn) {
