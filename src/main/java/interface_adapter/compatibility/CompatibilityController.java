@@ -3,9 +3,8 @@ package interface_adapter.compatibility;
 import use_case.compatibility.CompatibilityInputBoundary;
 import use_case.compatibility.CompatibilityInputData;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 /**
  * The controller for the Login Use Case.
@@ -51,6 +50,18 @@ public class CompatibilityController {
         final CompatibilityInputData compatibilityInputData = new CompatibilityInputData(username);
 
         return compatibilityUseCaseInteractor.getUserDOB(compatibilityInputData);
+
+    }
+
+    /**
+     * Executes the getUserPreferences Compatibility Use Case.
+     *
+     * @param username the username of the current user
+     */
+    public Map<String, Boolean> getUserPreferences(String username) {
+        final CompatibilityInputData compatibilityInputData = new CompatibilityInputData(username);
+
+        return compatibilityUseCaseInteractor.getUserPreferences(compatibilityInputData);
 
     }
 

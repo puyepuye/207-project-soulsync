@@ -272,19 +272,18 @@ public class FengshuiCalculator {
     public String calculateScore() {
 
         int compatibilityScore = calculateCompatibilityScore(user1stembranch, user2stembranch);
-
         return getCompatibilityResult(compatibilityScore);
     }
 
     public static void main(String[] args) {
-        Calendar myCalendar = new GregorianCalendar(2002, 12, 3);
+        Calendar myCalendar = new GregorianCalendar(1981, 3, 15);
         Date myDate = myCalendar.getTime();
 
-        Calendar myCalendar2 = new GregorianCalendar(2000, 1, 7);
+        Calendar myCalendar2 = new GregorianCalendar(1999, 7, 25);
         Date myDate2 = myCalendar2.getTime();
 
         FengshuiCalculator calculator = new FengshuiCalculator(myDate, myDate2);
-        System.out.println(calculator.calculateScore());
+        calculator.calculateScore();
     }
 
 }

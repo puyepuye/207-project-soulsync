@@ -36,7 +36,7 @@ public class PreferencesPresenter implements PreferenceOutputBoundary {
         this.preferencesViewModel.setState(preferencesState);
         this.preferencesViewModel.firePropertyChanged();
 
-        this.viewManagerModel.setState(preferencesViewModel.getViewName());
+        this.viewManagerModel.setState(swipeViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
     }
 
