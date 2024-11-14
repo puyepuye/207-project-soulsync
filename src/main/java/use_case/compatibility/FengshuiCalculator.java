@@ -61,11 +61,8 @@ public class FengshuiCalculator {
 
 
         user1stembranch.addAll(calculateYearStems(userDate1));
-        System.out.println(calculateYearStems(userDate1));
         user1stembranch.addAll(calculateMonthStems(userDate1));
-        System.out.println(calculateMonthStems(userDate1));
         user1stembranch.addAll(calculateDayStems(userDate1));
-        System.out.println(calculateDayStems(userDate1));
 
         user2stembranch.addAll(calculateYearStems(userDate2));
         user2stembranch.addAll(calculateMonthStems(userDate2));
@@ -272,19 +269,18 @@ public class FengshuiCalculator {
     public String calculateScore() {
 
         int compatibilityScore = calculateCompatibilityScore(user1stembranch, user2stembranch);
-
         return getCompatibilityResult(compatibilityScore);
     }
 
     public static void main(String[] args) {
-        Calendar myCalendar = new GregorianCalendar(2002, 12, 3);
+        Calendar myCalendar = new GregorianCalendar(1981, 3, 15);
         Date myDate = myCalendar.getTime();
 
-        Calendar myCalendar2 = new GregorianCalendar(2000, 1, 7);
+        Calendar myCalendar2 = new GregorianCalendar(1999, 7, 25);
         Date myDate2 = myCalendar2.getTime();
 
         FengshuiCalculator calculator = new FengshuiCalculator(myDate, myDate2);
-        System.out.println(calculator.calculateScore());
+        calculator.calculateScore();
     }
 
 }

@@ -3,9 +3,11 @@
 ### Current TODOs
 - In order of priority; same number = same priority
 - lower priority might rely on the ones with higher priority
-#### 1. Signup Page [DONE]
+#### Signup Page [DONE]
+#### Login Page [DONE]
+
 #### 2. Preferences Page [Kimi]
-- Add input boxes and dropdowns for other attributes (refer to figma and chore diagram in README.md)
+- Add preferredGender and preferredAge
 - Connect those new input attributes to database
 #### 3. Matches Entity [Yoli]
 - Add a new Matches Entity
@@ -21,9 +23,9 @@
 - UI
 - oh my, so many things I don't even know...
 #### 5. Fengshui Page [Claire]
-- Connect Kimi's godly algorithms
+- Compatibility: Connect Kimi's godly algorithms
 - UI
-#### 5. Edit Profile Page
+#### 5. Edit Profile Page [Claire]
 #### 6. Clean up
 - clean up UI
 - delete irrelevant files & comments

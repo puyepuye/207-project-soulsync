@@ -37,7 +37,6 @@ public class CompatibilityCalculator {
             }
             i--;
         }
-
-        return (curScore/28);
+        return (int) ((curScore/28.0) * 100);
     }
 }
