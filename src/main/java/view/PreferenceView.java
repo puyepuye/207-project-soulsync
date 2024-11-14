@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +12,6 @@ import javax.swing.*;
 import interface_adapter.preferences.PreferencesController;
 import interface_adapter.preferences.PreferencesState;
 import interface_adapter.preferences.PreferencesViewModel;
-import interface_adapter.swipe.SwipeState;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
@@ -212,7 +210,7 @@ public class PreferenceView extends JPanel  {
     }
 
     // Method to get tag color based on tag name
-    private Color getTagColor(String tag) {
+    public static Color getTagColor(String tag) {
         switch (tag) {
             case "Night Owl":
                 return new Color(255, 149, 120);
