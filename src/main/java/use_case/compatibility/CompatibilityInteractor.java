@@ -38,7 +38,6 @@ public class CompatibilityInteractor implements CompatibilityInputBoundary  {
         else {
             final User user = userDataAccessObject.get(compatibilityInputData.getUsername());
             List<String> matchedUsers = user.getMatched();
-            System.out.println(matchedUsers);
             final CompatibilityOutputData compatibilityOutputData = new CompatibilityOutputData(user.getUsername(), false);
             compatibilityPresenter.prepareSuccessView(compatibilityOutputData);
             return matchedUsers.toArray(new String[0]);

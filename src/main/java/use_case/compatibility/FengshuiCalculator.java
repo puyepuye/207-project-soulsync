@@ -61,11 +61,8 @@ public class FengshuiCalculator {
 
 
         user1stembranch.addAll(calculateYearStems(userDate1));
-        System.out.println(calculateYearStems(userDate1));
         user1stembranch.addAll(calculateMonthStems(userDate1));
-        System.out.println(calculateMonthStems(userDate1));
         user1stembranch.addAll(calculateDayStems(userDate1));
-        System.out.println(calculateDayStems(userDate1));
 
         user2stembranch.addAll(calculateYearStems(userDate2));
         user2stembranch.addAll(calculateMonthStems(userDate2));

@@ -132,9 +132,6 @@ public class CompatibilityView extends JPanel implements PropertyChangeListener 
         Date selectedUserDate = compatibilityController.getUserDOB(selectedUser);
 
         FengshuiCalculator fengshuiCalculator = new FengshuiCalculator(currentUserDate, selectedUserDate);
-        System.out.println(currentUserDate);
-        System.out.println(selectedUserDate);
-        System.out.println("View" + fengshuiCalculator.calculateScore());
         fengshuiText.setText(fengshuiCalculator.calculateScore());
     }
 
@@ -149,9 +146,6 @@ public class CompatibilityView extends JPanel implements PropertyChangeListener 
 
         CompatibilityCalculator compatibilityCalculator = new CompatibilityCalculator(currentUserPrefereces,
                 selectedUserPreferences);
-        System.out.println(currentUserPrefereces);
-        System.out.println(selectedUserPreferences);
-        System.out.println("View" + compatibilityCalculator.calculate());
         compatibilityPercentage.setText(String.format("%d%%", compatibilityCalculator.calculate()));
     }
 
