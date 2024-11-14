@@ -11,20 +11,15 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.navbar.NavbarController;
 import interface_adapter.swipe.SwipeController;
 import interface_adapter.swipe.SwipeState;
 import interface_adapter.swipe.SwipeViewModel;
-import use_case.swipe.SwipeInputData;
 
 /**
- * The View for the Signup Use Case.
+ * The View for the Swipe Use Case.
  */
 public class SwipeView extends JPanel implements PropertyChangeListener {
     private final String viewName = "swipe";
@@ -92,6 +87,7 @@ public class SwipeView extends JPanel implements PropertyChangeListener {
         profilePanel.setLayout(new BoxLayout(profilePanel, BoxLayout.Y_AXIS));
         profilePanel.add(profileName);
         profilePanel.add(profileBio);
+        profilePanel.add(profileTag);  // Added tag label
         profilePanel.add(buttons);
 
         this.add(profilePanel, BorderLayout.CENTER);
@@ -105,6 +101,7 @@ public class SwipeView extends JPanel implements PropertyChangeListener {
         final SwipeState state = (SwipeState) evt.getNewValue();
 
         if (evt.getPropertyName().equals("state")) {
+            // Fetch profile data and update the UI
             profileName.setText(state.getProfileName());
             profileBio.setText(state.getProfileBio());
             profileTag.setText(state.getProfileTags());
@@ -119,4 +116,3 @@ public class SwipeView extends JPanel implements PropertyChangeListener {
         return viewName;
     }
 }
-

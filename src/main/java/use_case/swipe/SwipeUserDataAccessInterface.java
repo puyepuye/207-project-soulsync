@@ -13,4 +13,13 @@ public interface SwipeUserDataAccessInterface {
      * @param like whether liked/not
      */
     void updateLike(User user, User userSwipedOn, boolean like);
+
+    /**
+     * Get the user.
+     *
+     * @param username the user to get
+     * @return User
+     */
+    User get(String username);
+
 }
