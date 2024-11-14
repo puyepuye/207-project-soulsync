@@ -8,6 +8,7 @@ import javax.swing.WindowConstants;
 
 import data_access.InMemoryUserDataAccessObject;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.compatibility.CompatibilityViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
@@ -55,6 +56,7 @@ public class MainWithInMemory {
         final SwipeViewModel swipeViewModel = new SwipeViewModel();
         final SignupViewModel signupViewModel = new SignupViewModel();
         final PreferencesViewModel preferencesViewModel = new PreferencesViewModel();
+        final CompatibilityViewModel compatibilityViewModel = new CompatibilityViewModel();
 
         // TODO Task 1.1 in a copy of this file, change this line to use the in-memory DAO.
         final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
@@ -64,7 +66,7 @@ public class MainWithInMemory {
         views.add(signupView, signupView.getViewName());
 
         final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel,
-                swipeViewModel, signupViewModel, userDataAccessObject);
+                swipeViewModel, signupViewModel, compatibilityViewModel, userDataAccessObject);
         views.add(loginView, loginView.getViewName());
 
         final LoggedInView loggedInView = ChangePasswordUseCaseFactory.create(viewManagerModel,
