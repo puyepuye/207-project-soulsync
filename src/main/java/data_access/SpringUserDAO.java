@@ -1,99 +1,52 @@
 package data_access;
 
-import data_access.repository.UserRepo;
+import data_access.repository.CustomUserRepository;
 import entity.CommonUser;
 import entity.User;
-import entity.mackeys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import use_case.change_password.ChangePasswordUserDataAccessInterface;
-import use_case.compatibility.CompatibilityUserDataAccessInterface;
-import use_case.login.LoginUserDataAccessInterface;
-import use_case.preferences.PreferenceUserDataAccessInterface;
-import use_case.signup.SignupUserDataAccessInterface;
-import use_case.swipe.SwipeUserDataAccessInterface;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication
 @EnableMongoRepositories
-public class SpringUserDAO  {
+public class SpringUserDAO implements CommandLineRunner {
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
-    UserRepo userRepo;
+    CustomUserRepository customUserRepository;
 
     //@Override
-    public void changePassword(User user) {
-        CommonUser optionalUser = userRepo.findByusername(user.getUsername());
-
-        if (optionalUser != null) {
-
-            // Create a new CommonUser instance with the updated password
-            CommonUser updatedUser = new CommonUser(
-                    optionalUser.getUsername(),
-                    user.getPassword(),
-                    optionalUser.getImage(),
-                    optionalUser.getFullname(),
-                    optionalUser.getLocation(),
-                    optionalUser.getGender(),
-                    optionalUser.getPreferredGender(),
-                    optionalUser.getDateOfBirth(),
-                    optionalUser.getPreferredAge(),
-                    optionalUser.getBio(),
-                    optionalUser.getPreferences(),
-                    optionalUser.getTags(),
-                    optionalUser.getMatched(),
-                    optionalUser.getSwipedRight(),
-                    optionalUser.getSwipedLeft(),
-                    optionalUser.getSwipedRightOn()
-            );
-
-            userRepo.save((CommonUser) updatedUser);  // Save the updated user
-        }
-
-    }
-
-    //@Override
-    public User get(String username) {
-        return (User) userRepo.findByusername(username);
-    }
-
-    //@Override
-    public void updatePreference(User user) {
-
-    }
-
-    //@Override
-    public void setCurrentUser(String name) {
-
-    }
-
-    //@Override
-    public String getCurrentUser() {
-        return "";
-    }
-
-    //@Override
-    public boolean existsByName(String username) {
-        return userRepo.findByusername(username) != null;
-    }
-
-
-    //@Override
-    public void updateLike(User user, User userSwipedOn, boolean like) {
-
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(SpringUserDAO.class, args);
-
-
+        System.out.println("Himom");
     }
 
 
 
-    public void run(String... args) throws Exception {
-        System.out.println(userRepo.findAll());
+    public void run(String... args) {
+
+        // Unit test
+        System.out.println("Himom");
+        System.out.println(customUserRepository.get("bob"));
+        ArrayList<String> preference = new ArrayList<>();
+        preference.add("bob");
+        Map<String, Integer> map = new HashMap<>();
+        Map<String, Boolean> pref = new HashMap<>();
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add("blessed");
+        CommonUser newUser = new CommonUser("hughjazz","42069","...","Hugh Jass",
+                "Saskatchewan", "male", preference , new Date(2021, 12,2),
+                map, "I like turtles", pref, tags,null,null,null, null);
+        customUserRepository.saveUser(newUser);
+        System.out.println(customUserRepository.get("hughjazz"));
+
     }
 
 }
