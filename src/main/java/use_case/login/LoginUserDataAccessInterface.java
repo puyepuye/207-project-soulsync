@@ -18,7 +18,7 @@ public interface LoginUserDataAccessInterface {
      * Saves the user.
      * @param user the user to save
      */
-    void save(User user);
+    void saveUser(User user);
 
     /**
      * Returns the user with the given username.

@@ -27,7 +27,7 @@ public class CommonUserFactory implements UserFactory {
                        ArrayList<String> swipedRight,
                        ArrayList<String> swipedLeft,
                        ArrayList<String> swipedRightOn) {
-        return new sampleCollection(userName, password, image, fullName, location, gender, preferredGender,
+        return new CommonUser(userName, password, image, fullName, location, gender, preferredGender,
                 dateOfBirth, preferredAge, bio, preferences, tags, matched, swipedRight, swipedLeft, swipedRightOn);
     }
 }

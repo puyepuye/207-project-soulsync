@@ -4,11 +4,8 @@ import entity.User;
 import entity.UserFactory;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The Signup Interactor.
@@ -65,7 +62,7 @@ public class SignupInteractor implements SignupInputBoundary {
                     new ArrayList<>() {{}},
                     new ArrayList<>() {{}}
             );
-            userDataAccessObject.save(user);
+            userDataAccessObject.saveUser(user);
 
             final SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), user.getUsername(), user.getImage(),
                     user.getLocation(), user.getGender(), user.getDateOfBirth(), false);
