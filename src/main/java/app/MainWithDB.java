@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import data_access.DBUserDataAccessObject;
+import data_access.SpringUserDAO;
 import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
@@ -15,6 +16,11 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.navbar.NavbarViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.swipe.SwipeViewModel;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import use_case.preferences.PreferenceUserDataAccessInterface;
 import interface_adapter.signup.SignupViewModel;
 import view.*;
@@ -22,6 +28,8 @@ import view.*;
 /**
  * The version of Main with an external database used to persist user data.
  */
+
+
 public class MainWithDB {
 
     /**
