@@ -20,12 +20,11 @@ public class MongoDB {
         MongoDatabase db = client.getDatabase("sampleDB");
         MongoCollection<Document> col = db.getCollection("sampleCollection");
         MongoCollection<Document> col2 = db.getCollection("matchesCollection");
-
         // Initialize Cloudinary uploader
         CloudinaryUploader cloudinaryUploader = new CloudinaryUploader();
 
         // Upload image to Cloudinary & get URL
-        File imageFile = new File("/Users/user/Desktop/Images/Plushie.png");
+        File imageFile = new File("src/main/resources/static/Plushie.png");
         String imageUrl = cloudinaryUploader.uploadImage(imageFile);
 
         // Example insert to test that it shows up in sampleCollection
@@ -34,7 +33,7 @@ public class MongoDB {
         Document sampleDoc3 = new Document("_id", UUID.randomUUID().toString()).append("preference", "Hot Men");
         Document sampleDoc4 = new Document("_id", UUID.randomUUID().toString()).append("preferredAge", "Mature");
 
-        col.drop();  // Clears existing documents before inserting new entries
+//        col.drop();  // Clears existing documents before inserting new entries
         col.insertOne(sampleDoc);
         col.insertOne(sampleDoc2);
         col.insertOne(sampleDoc3);
