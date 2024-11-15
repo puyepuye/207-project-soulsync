@@ -5,6 +5,7 @@ import entity.User;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class CompatibilityInteractor implements CompatibilityInputBoundary  {
     private final CompatibilityUserDataAccessInterface userDataAccessObject;
@@ -23,7 +24,6 @@ public class CompatibilityInteractor implements CompatibilityInputBoundary  {
         }
         else {
             final User user = userDataAccessObject.get(compatibilityInputData.getUsername());
-            System.out.println(user.getDateOfBirth());
             final CompatibilityOutputData compatibilityOutputData = new CompatibilityOutputData(user.getUsername(), false);
             compatibilityPresenter.prepareSuccessView(compatibilityOutputData);
         }
@@ -38,7 +38,6 @@ public class CompatibilityInteractor implements CompatibilityInputBoundary  {
         else {
             final User user = userDataAccessObject.get(compatibilityInputData.getUsername());
             List<String> matchedUsers = user.getMatched();
-            System.out.println(matchedUsers);
             final CompatibilityOutputData compatibilityOutputData = new CompatibilityOutputData(user.getUsername(), false);
             compatibilityPresenter.prepareSuccessView(compatibilityOutputData);
             return matchedUsers.toArray(new String[0]);
@@ -49,6 +48,12 @@ public class CompatibilityInteractor implements CompatibilityInputBoundary  {
     public Date getUserDOB(CompatibilityInputData compatibilityInputData) {
         final User user = userDataAccessObject.get(compatibilityInputData.getUsername());
         return user.getDateOfBirth();
+    }
+
+    @Override
+    public Map<String, Boolean> getUserPreferences(CompatibilityInputData compatibilityInputData) {
+        final User user = userDataAccessObject.get(compatibilityInputData.getUsername());
+        return user.getPreferences();
     }
 
 }
