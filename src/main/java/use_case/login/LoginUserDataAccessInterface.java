@@ -1,11 +1,12 @@
 package use_case.login;
 
+import data_access.repository.CustomUserRepository;
 import entity.User;
 
 /**
  * DAO for the Login Use Case.
  */
-public interface LoginUserDataAccessInterface {
+public interface LoginUserDataAccessInterface extends CustomUserRepository {
 
     /**
      * Checks if the given username exists.
@@ -19,6 +20,11 @@ public interface LoginUserDataAccessInterface {
      * @param user the user to save
      */
     void saveUser(User user);
+
+    @Override
+    default void changePassword(User user) {
+
+    }
 
     /**
      * Returns the user with the given username.
