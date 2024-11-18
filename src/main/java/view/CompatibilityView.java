@@ -4,6 +4,7 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
+import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -94,8 +95,8 @@ public class CompatibilityView extends JPanel implements PropertyChangeListener 
         compatibilityResult.setFont(new Font("SansSerif", Font.PLAIN, 18));
         compatibilityPanel.add(compatibilityResult);
 
-        compatibilityPercentage = new JLabel();
-        compatibilityPercentage.setFont(new Font("SansSerif", Font.BOLD, 12));
+        compatibilityPercentage = new JLabel("", SwingConstants.CENTER);
+        compatibilityPercentage.setFont(new Font("SansSerif", Font.BOLD, 24));
         compatibilityPanel.add(compatibilityPercentage);
 
         // Add sections to main content panel
@@ -113,6 +114,7 @@ public class CompatibilityView extends JPanel implements PropertyChangeListener 
         fengshuiDropdown.addActionListener(e -> updateCompatibilityResult(fengshuiDropdown, fengshuiResult));
         fengshuiDropdown.addActionListener(e -> updateFengshuiScore(fengshuiDropdown, fengshuiText));
         compatibilityDropdown.addActionListener(e -> updateCompatibilityResult(compatibilityDropdown, compatibilityResult));
+        compatibilityDropdown.addActionListener(e -> updateCompatibilityScore(compatibilityDropdown, compatibilityPercentage));
     }
 
     private void updateCompatibilityResult(JComboBox<String> dropdown, JLabel resultLabel) {
@@ -128,28 +130,24 @@ public class CompatibilityView extends JPanel implements PropertyChangeListener 
 
         Date currentUserDate = compatibilityController.getUserDOB(currentUser);
         Date selectedUserDate = compatibilityController.getUserDOB(selectedUser);
-        System.out.println(currentUserDate);
-        System.out.println(selectedUserDate);
 
         FengshuiCalculator fengshuiCalculator = new FengshuiCalculator(currentUserDate, selectedUserDate);
-
         fengshuiText.setText(fengshuiCalculator.calculateScore());
     }
 
-//    private void updateCompatibilityScore(JComboBox<String> dropdown, JLabel compatibilityPercentage) {
-//
-//        final CompatibilityState state = compatibilityViewModel.getState();
-//        String currentUser = state.getUsername();
-//        String selectedUser = (String) dropdown.getSelectedItem();
-//
-//        Date currentUserDate = compatibilityController.getUserDOB(currentUser);
-//        Date selectedUserDate = compatibilityController.getUserDOB(selectedUser);
-//        System.out.println(currentUserDate);
-//        System.out.println(selectedUserDate);
-//
-//        CompatibilityCalculator compatibilityCalculator = new CompatibilityCalculator(currentUserDate, selectedUserDate);
-//
-//        fengshuiPercentage.setText(String.format("%d%%", fengshuiCalculator.calculateScore()));
+    private void updateCompatibilityScore(JComboBox<String> dropdown, JLabel compatibilityPercentage) {
+
+        final CompatibilityState state = compatibilityViewModel.getState();
+        String currentUser = state.getUsername();
+        String selectedUser = (String) dropdown.getSelectedItem();
+
+        Map<String, Boolean> currentUserPrefereces = compatibilityController.getUserPreferences(currentUser);
+        Map<String, Boolean> selectedUserPreferences = compatibilityController.getUserPreferences(selectedUser);
+
+        CompatibilityCalculator compatibilityCalculator = new CompatibilityCalculator(currentUserPrefereces,
+                selectedUserPreferences);
+        compatibilityPercentage.setText(String.format("%d%%", compatibilityCalculator.calculate()));
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

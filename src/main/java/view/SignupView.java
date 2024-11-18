@@ -333,4 +333,5 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     public String getViewName() {
         return viewName;
     }
+
 }
