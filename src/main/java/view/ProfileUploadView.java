@@ -22,7 +22,7 @@ public class ProfileUploadView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // UI Components
+        // UI Componentss
         JButton selectImageButton = new JButton("Select Image");
         JButton saveButton = new JButton("Save");
         imageLabel = new JLabel();
