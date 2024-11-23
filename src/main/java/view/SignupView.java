@@ -1,30 +1,19 @@
 package view;
 
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupState;
@@ -49,11 +38,14 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final JComboBox<String> countryComboBox = new JComboBox<>(SignupViewModel.COUNTRIES);
     private final JComboBox<String> cityComboBox = new JComboBox<>(SignupViewModel.CITIES);
 
+    private String profileImageUrl = null; // Variable to store the uploaded image URL
+
     // Replacing JTextField with JDatePickerImpl
     private final JDatePickerImpl dobDatePicker;
     private final JButton signUp;
     private final JButton cancel;
     private final JButton toLogin;
+    private final JButton uploadProfileButton;
 
     public SignupView(SignupController controller, SignupViewModel signupViewModel) {
 
@@ -72,6 +64,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 new JLabel(SignupViewModel.PASSWORD_LABEL), passwordInputField);
         final LabelTextPanel repeatPasswordInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.REPEAT_PASSWORD_LABEL), repeatPasswordInputField);
+
         // Initialize JDatePicker
         UtilDateModel model = new UtilDateModel();
         Properties p = new Properties();
@@ -100,24 +93,34 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         cancel = new JButton(SignupViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
 
+        // Profile Upload Button
+        uploadProfileButton = new JButton("Upload Profile Photo");
+        uploadProfileButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        uploadProfileButton.addActionListener(e -> openProfileUploadView());
+
         signUp.addActionListener(
-                // This creates an anonymous subclass of ActionListener and instantiates it.
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(signUp)) {
-                            final SignupState currentState = signupViewModel.getState();
+                            if (profileImageUrl == null || profileImageUrl.isEmpty()) {
+                                JOptionPane.showMessageDialog(null, "Please upload a profile photo before signing up.",
+                                        "Missing Photo", JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
 
+                            final SignupState currentState = signupViewModel.getState();
                             signupController.execute(
                                     currentState.getFullname(),
                                     currentState.getUsername(),
                                     currentState.getPassword(),
                                     currentState.getRepeatPassword(),
-                                    currentState.getImage(),
+                                    profileImageUrl, // Pass the uploaded image URL
                                     currentState.getLocation(),
                                     currentState.getGender(),
                                     currentState.getDateOfBirth()
                             );
 
+                            JOptionPane.showMessageDialog(null, "Signup successful!\nProfile Image URL: " + profileImageUrl);
                         }
                     }
                 }
@@ -154,6 +157,8 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.add(genderDropdown);
         this.add(countryDropdown);
         this.add(cityDropDown);
+        this.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
+        this.add(uploadProfileButton);
         this.add(buttons);
     }
 
@@ -316,6 +321,25 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         });
     }
 
+    private void openProfileUploadView() {
+        SwingUtilities.invokeLater(() -> {
+            ProfileUploadView uploadView = new ProfileUploadView();
+            uploadView.setVisible(true);
+
+            // Retrieve the uploaded image URL
+            uploadView.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                    String uploadedUrl = uploadView.getUploadedImageUrl();
+                    if (uploadedUrl != null) {
+                        profileImageUrl = uploadedUrl;
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No image uploaded.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
+        });
+    }
 
     @Override
     public void actionPerformed(ActionEvent evt) {

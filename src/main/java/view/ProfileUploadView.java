@@ -15,11 +15,12 @@ import javax.imageio.ImageIO;
 public class ProfileUploadView extends JFrame {
     private JLabel imageLabel;
     private File selectedFile;
+    private String uploadedImageUrl;
 
     public ProfileUploadView() {
         setTitle("Change Profile Photo");
         setSize(400, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         // UI Components
@@ -70,10 +71,11 @@ public class ProfileUploadView extends JFrame {
         if (selectedFile != null) {
             // Initialize CloudinaryUploader and upload image
             CloudinaryUploader uploader = new CloudinaryUploader();
-            String imageUrl = uploader.uploadImage(selectedFile);
+            uploadedImageUrl = uploader.uploadImage(selectedFile);
 
-            if (imageUrl != null) {
-                System.out.println("Uploaded Image URL: " + imageUrl);
+            if (uploadedImageUrl != null) {
+                System.out.println("Uploaded Image URL: " + uploadedImageUrl);
+                JOptionPane.showMessageDialog(this, "Image uploaded successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 // Pass the image URL to SignUpView or other components here
             } else {
                 JOptionPane.showMessageDialog(this, "Image upload failed", "Error", JOptionPane.ERROR_MESSAGE);
@@ -81,6 +83,10 @@ public class ProfileUploadView extends JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "No image selected", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+    }
+
+    public String getUploadedImageUrl() {
+        return uploadedImageUrl;
     }
 
     // Correct image orientation via EXIF data
