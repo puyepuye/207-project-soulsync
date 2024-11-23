@@ -25,7 +25,7 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface {
 
     public ChatDataAccessObject() {
         Dotenv dotenv = Dotenv.load();
-        apiKey = dotenv.get("SEND_BIRD_API_KEY");
+        apiKey = dotenv.get("SENDBIRD_API_KEY");
         appID = dotenv.get("SENDBIRD_APP_ID");
         API_ENDPOINT = "https://api-" + appID + ".sendbird.com/v3/";
     }
