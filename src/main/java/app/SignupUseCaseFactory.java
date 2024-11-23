@@ -1,5 +1,6 @@
 package app;
 
+import data_access.ChatDataAccessObject;
 import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
@@ -8,6 +9,7 @@ import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import use_case.chat.ChatDataAccessInterface;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
@@ -54,9 +56,10 @@ public final class SignupUseCaseFactory {
                                                                               loginViewModel, preferencesViewModel);
 
         final UserFactory userFactory = new CommonUserFactory();
+        final ChatDataAccessObject chatDataAccessObject = new ChatDataAccessObject();
 
         final SignupInputBoundary userSignupInteractor = new SignupInteractor(
-                userDataAccessObject, signupOutputBoundary, userFactory);
+                userDataAccessObject, signupOutputBoundary, userFactory, chatDataAccessObject);
 
         return new SignupController(userSignupInteractor);
     }

@@ -4,6 +4,9 @@ import org.bson.types.ObjectId;
 
 import java.util.Date;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document("matchesCollection")
 public class CommonMatches {
 
     private final ObjectId userAId;

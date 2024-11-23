@@ -1,5 +1,6 @@
 package use_case.login;
 
+
 import entity.User;
 
 /**
@@ -18,7 +19,12 @@ public interface LoginUserDataAccessInterface {
      * Saves the user.
      * @param user the user to save
      */
-    void save(User user);
+    void saveUser(User user);
+
+
+    default void changePassword(User user) {
+
+    }
 
     /**
      * Returns the user with the given username.

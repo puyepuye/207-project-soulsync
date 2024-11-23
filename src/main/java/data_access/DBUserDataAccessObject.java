@@ -96,8 +96,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return userCollection.find(query).first() != null;
     }
 
-    @Override
-    public void save(User user) {
+
+    public void saveUser(User user) {
         Document userDoc = new Document("username", user.getUsername())
                 .append(PASSWORD, user.getPassword())
                 .append("image", user.getImage())

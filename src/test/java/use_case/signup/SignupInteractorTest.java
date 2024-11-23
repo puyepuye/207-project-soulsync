@@ -6,8 +6,6 @@ import entity.User;
 import entity.UserFactory;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
-
 import static org.junit.Assert.*;
 
 
@@ -78,7 +76,7 @@ public class SignupInteractorTest {
         // Add Paul to the repo so that when we check later they already exist
         UserFactory factory = new CommonUserFactory();
         User user = factory.create("Paul", "pwd");
-        userRepository.save(user);
+        userRepository.saveUser(user);
 
         // This creates a presenter that tests whether the test case is as we expect.
         SignupOutputBoundary failurePresenter = new SignupOutputBoundary() {
