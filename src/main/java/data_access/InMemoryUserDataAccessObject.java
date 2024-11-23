@@ -26,7 +26,7 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     }
 
     @Override
-    public void save(User user) {
+    public void saveUser(User user) {
         users.put(user.getUsername(), user);
         //users.put(user.getFullName(), user);
     }

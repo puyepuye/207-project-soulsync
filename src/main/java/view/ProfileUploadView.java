@@ -18,12 +18,12 @@ public class ProfileUploadView extends JFrame {
     private String uploadedImageUrl;
 
     public ProfileUploadView() {
-        setTitle("Change Profile Photo");
+        setTitle("Change Profile Picture");
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // UI Components
+        // UI Componentss
         JButton selectImageButton = new JButton("Select Image");
         JButton saveButton = new JButton("Save");
         imageLabel = new JLabel();
