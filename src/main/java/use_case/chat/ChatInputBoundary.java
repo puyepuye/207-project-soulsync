@@ -1,10 +1,14 @@
 package use_case.chat;
 
-public interface ChatInputBoundary {
-    /**
-     * Executes the chat use case.
-     * @param chatInputData the input data
-     */
-    void execute(ChatInputData chatInputData);
+import entity.ChatMessage;
 
+import java.util.List;
+
+public interface ChatInputBoundary {
+
+    List<ChatMessage> getAllMessages(ChatInputData chatInputData);
+
+    void sendMessage(ChatInputData chatInputData);
+
+    void switchToChatList();
 }

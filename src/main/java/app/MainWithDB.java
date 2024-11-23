@@ -8,9 +8,6 @@ import javax.swing.WindowConstants;
 
 import data_access.DBUserDataAccessObject;
 import data_access.SpringUserDAO;
-import data_access.repository.CustomMatchesRepository;
-import data_access.repository.CustomUserRepository;
-import data_access.repository.CustomUserRepositoryImpl;
 import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
@@ -19,15 +16,9 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.navbar.NavbarViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.swipe.SwipeViewModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.compatibility.CompatibilityUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
@@ -41,24 +32,16 @@ import view.*;
  * The version of Main with an external database used to persist user data.
  */
 
-@SpringBootApplication
-@EnableMongoRepositories
+
 public class MainWithDB {
 
-    @SuppressWarnings("SpringJavaAutowiringInspection")
-    @Autowired
-    CustomUserRepositoryImpl customUserRepository;
-
-    @Autowired
-    CustomMatchesRepository customMatchesRepository;
 
     public static void main(String[] args) {
-        ApplicationContext contexto = new SpringApplicationBuilder(SpringUserDAO.class)
-                .web(WebApplicationType.NONE)
+        new SpringApplicationBuilder(SpringUserDAO.class)
+                .web(WebApplicationType.SERVLET)
                 .headless(false)
                 .bannerMode(Banner.Mode.OFF)
                 .run(args);
-        System.out.println("Himom");
     }
     /**
      * The main method for starting the program with an external database used to persist user data.
@@ -94,8 +77,7 @@ public class MainWithDB {
         final NavbarViewModel navbarViewModel = new NavbarViewModel();
         final CompatibilityViewModel compatibilityViewModel = new CompatibilityViewModel();
 
-        //final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
-        final CustomUserRepositoryImpl userDataAccessObject = customUserRepository;
+        final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
         final SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel,
                                                                   signupViewModel, preferencesViewModel, userDataAccessObject);
         views.add(signupView, signupView.getViewName());

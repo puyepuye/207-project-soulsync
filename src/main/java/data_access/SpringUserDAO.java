@@ -1,9 +1,6 @@
 package data_access;
 
 import app.*;
-import data_access.repository.CustomMatchesRepository;
-import data_access.repository.CustomUserRepository;
-import entity.CommonUser;
 import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
@@ -13,80 +10,44 @@ import interface_adapter.navbar.NavbarViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.swipe.SwipeViewModel;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import view.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @SpringBootApplication
 @EnableMongoRepositories
 public class SpringUserDAO implements CommandLineRunner {
 
-    @SuppressWarnings("SpringJavaAutowiringInspection")
-    @Autowired
-    CustomUserRepository customUserRepository;
-
-    @Autowired
-    CustomMatchesRepository customMatchesRepository;
 
     //@Override
 
     public static void main(String[] args) {
-        ApplicationContext contexto = new SpringApplicationBuilder(SpringUserDAO.class)
-                .web(WebApplicationType.NONE)
+    new SpringApplicationBuilder(SpringUserDAO.class)
+                .web(WebApplicationType.SERVLET)
                 .headless(false)
-                .bannerMode(Banner.Mode.OFF)
                 .run(args);
-        //SpringApplication.run(SpringUserDAO.class, args);
-        System.out.println("Himom");
+        //SpringApplication.run(SpringUserDAO.class, args); System.out.println("Himom");
     }
 
 
 
     public void run(String... args) {
-
-        // Unit test
-        // System.out.println(customUserRepository.get("bob"));    // Tests getting
-//        System.out.println(customUserRepository.get("hughjazz").getPassword());
-//        ArrayList<String> preference = new ArrayList<>();
-//        preference.add("bob");
-//        Map<String, Integer> map = new HashMap<>();
-//        Map<String, Boolean> pref = new HashMap<>();
-//        ArrayList<String> tags = new ArrayList<>();
-//        tags.add("blessed");
-//        CommonUser newUser = new CommonUser("hughjazz","newPassword","...","Hugh Jass",
-//                "Saskatchewan", "male", preference , new Date(2021, 12,2),
-//                map, "I like turtles", pref, tags,null,null,null, null);
-//
-//        customUserRepository.changePassword(newUser);
-//        System.out.println(customUserRepository.get("hughjazz").getPassword());
-//        ObjectId userA = new ObjectId("60b8d6c2f123456789abcdef");
-//        ObjectId userB = new ObjectId("60b8d6c2f123456789abcdee");
-//        System.out.println(customMatchesRepository.getMatch(userA, userB));
-//
-//        ObjectId userC = new ObjectId("696969696blanlanla");
-//        ObjectId userD = new ObjectId("420420240lololol");
-//        CommonMatches cm = new CommonMatches(userC, userD, new Date(2021,12,11), true);
-//        customMatchesRepository.saveMatch(cm);
-
-
-
-
-
-
         // Claire's stuff
         final JFrame application = new JFrame("Login Example");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -155,4 +116,33 @@ public class SpringUserDAO implements CommandLineRunner {
         application.setVisible(true);
     }
 
+}
+
+@RestController
+class Controller {
+    public String convertMillisToDate(long millis) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        Date date = new Date(millis);
+        return sdf.format(date);
+    }
+
+    @PostMapping("/")
+    public void receiveMessages(@RequestBody String body) throws JSONException {
+        JSONObject json = new JSONObject(body);
+
+        // Access the "payload" object
+        JSONObject payload = json.getJSONObject("payload");
+
+        // Retrieve "message" and "created_at" values
+        String message = payload.getString("message");
+        String createdAt = convertMillisToDate(payload.getLong("created_at"));
+        String senderUsername = json.getJSONObject("sender").getString("user_id");
+
+        System.out.println("message : " + message);
+        System.out.println("createdAt : " + createdAt);
+        System.out.println("senderUsername : " + senderUsername);
+
+
+        //notificationService.processNotification(message);
+    }
 }
