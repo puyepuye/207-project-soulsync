@@ -3,16 +3,19 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.net.URL;
+import javax.imageio.ImageIO;
 
 public class ImagePanel extends JPanel {
     private BufferedImage image;
 
-    public ImagePanel(String imagePath) {
+    // Constructor to load image from URL
+    public ImagePanel(String imageUrl) {
         try {
-            this.image = ImageIO.read(new File(imagePath));
+            // Load the image from the URL
+            URL url = new URL(imageUrl);
+            this.image = ImageIO.read(url);  // Read the image from the URL
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,7 +42,7 @@ public class ImagePanel extends JPanel {
             int x = (panelWidth - scaledWidth) / 2;
             int y = (panelHeight - scaledHeight) / 2;
 
-            // Draw the scaled and cropped image
+            // Draw the scaled image, centered within the panel
             g.drawImage(image, x, y, scaledWidth, scaledHeight, this);
         }
     }

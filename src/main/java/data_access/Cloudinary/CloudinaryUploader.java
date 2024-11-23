@@ -35,7 +35,7 @@ public class CloudinaryUploader {
         ));
     }
 
-    // Initialize Cloudinary
+//     Initialize Cloudinary
 //    public static final Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
 //            "cloud_name", CLOUD_NAME,
 //            "cloudinary_api_key", CLOUDINARY_API_KEY,
