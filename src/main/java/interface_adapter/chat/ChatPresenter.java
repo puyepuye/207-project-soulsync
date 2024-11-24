@@ -42,8 +42,7 @@ public class ChatPresenter implements ChatOutputBoundary {
 
     @Override
     public void switchToChatList() {
-        // TODO: make it change to the chat list view
-        viewManagerModel.setState("hi");
+        viewManagerModel.setState(chatListViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 }
