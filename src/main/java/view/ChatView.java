@@ -1,11 +1,13 @@
 package view;
 
 import data_access.ChatDataAccessObject;
+import entity.ChatChannel;
 import entity.ChatMessage;
 import interface_adapter.chat.ChatController;
 import interface_adapter.chat.ChatState;
 import interface_adapter.chat.ChatViewModel;
 import interface_adapter.chat.MessageEventManager;
+import interface_adapter.listchat.ListChatState;
 import use_case.chat.ChatInputData;
 
 import javax.swing.*;
@@ -15,21 +17,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class ChatView extends JPanel implements ActionListener, PropertyChangeListener {
     private JPanel chat;
     private JTextField textField;
     private final ChatController chatController;
-    private final ChatViewModel chatViewModel;
+    private ChatViewModel chatViewModel;
     private final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
     private final String name = "chat";
 
     public ChatView(ChatController chatController, ChatViewModel chatViewModel) {
         this.chatController = chatController;
         this.chatViewModel = chatViewModel;
-
+        this.chatViewModel.addPropertyChangeListener(this);
         this.setBackground(new Color(255, 162, 176));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         // Profile part
@@ -105,7 +109,13 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        // Handle property changes if necessary
+        System.out.println("propertyChange: " + evt.getPropertyName());
+        if (evt.getPropertyName().equals("state")) {
+            final ChatState state = (ChatState) evt.getNewValue();
+            System.out.println("chat url " + state.getChatURL());
+
+
+        }
     }
 
     public JPanel newMessage(String message) {

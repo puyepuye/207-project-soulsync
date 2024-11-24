@@ -1,6 +1,7 @@
 package interface_adapter.listchat;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.chat.ChatState;
 import interface_adapter.chat.ChatViewModel;
 import use_case.listchat.ListChatOutputBoundary;
 
@@ -19,14 +20,21 @@ public class ListChatPresenter implements ListChatOutputBoundary {
 
 
     @Override
-    public void prepareSuccessView() {
-        listChatViewModel.firePropertyChanged("username");
-    }
-
-    @Override
     public void enterChat(String chatURL) {
+
+        final String currUser = listChatViewModel.getState().getUsername();
+        System.out.println("current user" + currUser    );
+        final ChatState chatState = chatViewModel.getState();
+        System.out.println("chat url " + chatURL);
+        chatState.setChatURL(chatURL);
+        chatState.setCurrUser(currUser);
+        this.chatViewModel.setState(chatState);
+
         viewManagerModel.setState(chatViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
+
+
+        this.chatViewModel.firePropertyChanged();
     }
 
 

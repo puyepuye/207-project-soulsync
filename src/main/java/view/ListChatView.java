@@ -29,8 +29,6 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
         this.listChatController = listChatController;
         this.navbarController = navbarController;
         this.listChatViewModel.addPropertyChangeListener(this);
-//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        this.setTitle("ListChat");
 
         // Use a consistent background color for the frame
         this.setBackground(new Color(255, 162, 176));
