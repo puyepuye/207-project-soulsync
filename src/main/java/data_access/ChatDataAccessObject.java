@@ -1,10 +1,12 @@
 package data_access;
 
+import entity.ChatChannel;
 import entity.ChatMessage;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import use_case.chat.ChatDataAccessInterface;
+import use_case.listchat.ListChatDataAccessInterface;
 
 import java.io.IOException;
 import java.net.URI;
@@ -17,7 +19,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatDataAccessObject  implements ChatDataAccessInterface {
+public class ChatDataAccessObject  implements ChatDataAccessInterface,
+                                    ListChatDataAccessInterface {
     private final String apiKey;
     private final String appID;
     private final String TOKEN_HEADER = "Api-token";
@@ -25,7 +28,7 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface {
 
     public ChatDataAccessObject() {
         Dotenv dotenv = Dotenv.load();
-        apiKey = dotenv.get("SEND_BIRD_API_KEY");
+        apiKey = dotenv.get("SENDBIRD_API_KEY");
         appID = dotenv.get("SENDBIRD_APP_ID");
         API_ENDPOINT = "https://api-" + appID + ".sendbird.com/v3/";
     }
@@ -65,7 +68,7 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface {
      *
      * Creates a SendBird with url being "{user_id1}_{user_id2}_chat"
      */
-    public void CreateSendBirdChat(String user_id1, String user_id2){
+    public void createChat(String user_id1, String user_id2){
         List<String> chatUsers = new ArrayList<>();
         chatUsers.add(user_id1);
         chatUsers.add(user_id2);
@@ -87,12 +90,15 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface {
 
     }
 
+
+
     /**
      * Returns the URL of all the chats that this user is a part of.
      * @param username
      * @return a list of URLs of chats that contains that username
      */
-    private List<String> getAllChats(String username) throws IOException, InterruptedException {
+    @Override
+    public ArrayList<ChatChannel> getAllChats(String username) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest getRequest = HttpRequest.newBuilder()
                 .uri(URI.create(API_ENDPOINT+ "open_channels?url_contains=" + username))
@@ -174,8 +180,8 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface {
         return result;
     }
 
-    private List<String> extractChatURLFromJSON(JSONObject inputJSON) {
-        List<String> result = new ArrayList<>();
+    private ArrayList<ChatChannel> extractChatURLFromJSON(JSONObject inputJSON) {
+        ArrayList<ChatChannel> result = new ArrayList<>();
         // Check if the "channels" key exists
         if (inputJSON.has("channels")) {
             JSONArray channels = inputJSON.getJSONArray("channels");
@@ -183,11 +189,13 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface {
             // Iterate over the array of channels
             for (int i = 0; i < channels.length(); i++) {
                 JSONObject channel = channels.getJSONObject(i);
-
                 // Add the channel_url to the list
-                if (channel.has("channel_url")) {
-                    result.add(channel.getString("channel_url"));
-                }
+                String url = channel.getString("channel_url");
+                String user1 = url.split("_")[0];
+                String user2 = url.split("_")[0];
+                String lastMessage = getAllMessages(url).get(0).getMessage();
+                result.add(new ChatChannel(url, user1, user2, lastMessage));
+
             }
         }
         return result;
@@ -207,5 +215,11 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface {
         } catch (InterruptedException | IOException e) {
             System.out.println("Something went wrong, couldn't get a ");
         }
+    }
+
+    public static void main(String[] args) {
+        ChatDataAccessObject cDAO = new ChatDataAccessObject();
+        cDAO.createChat("gg", "poppy12");
+
     }
 }

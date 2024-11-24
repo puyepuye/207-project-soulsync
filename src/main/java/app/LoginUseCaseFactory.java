@@ -2,6 +2,7 @@ package app;
 
 import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
@@ -40,10 +41,11 @@ public final class LoginUseCaseFactory {
             SwipeViewModel swipeViewModel,
             SignupViewModel signupViewModel,
             CompatibilityViewModel compatibilityViewModel,
-            LoginUserDataAccessInterface userDataAccessObject) {
+            LoginUserDataAccessInterface userDataAccessObject,
+            ListChatViewModel listChatViewModel) {
 
         final LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, swipeViewModel,
-                signupViewModel, compatibilityViewModel, userDataAccessObject);
+                signupViewModel, compatibilityViewModel, userDataAccessObject, listChatViewModel);
         return new LoginView(loginViewModel, loginController);
 
     }
@@ -54,11 +56,12 @@ public final class LoginUseCaseFactory {
             SwipeViewModel swipeViewModel,
             SignupViewModel signupViewModel,
             CompatibilityViewModel compatibilityViewModel,
-            LoginUserDataAccessInterface userDataAccessObject) {
+            LoginUserDataAccessInterface userDataAccessObject,
+            ListChatViewModel listChatViewModel) {
 
         // Notice how we pass this method's parameters to the Presenter.
         final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, swipeViewModel,
-                loginViewModel, signupViewModel, compatibilityViewModel);
+                loginViewModel, signupViewModel, compatibilityViewModel, listChatViewModel);
         final LoginInputBoundary loginInteractor = new LoginInteractor(
                 userDataAccessObject, loginOutputBoundary);
 

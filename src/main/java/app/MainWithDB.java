@@ -6,11 +6,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import data_access.ChatDataAccessObject;
 import data_access.DBUserDataAccessObject;
 import data_access.SpringUserDAO;
 import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.chat.ChatViewModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.navbar.NavbarViewModel;
@@ -18,6 +21,7 @@ import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.swipe.SwipeViewModel;
 import org.springframework.boot.Banner;
 import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.compatibility.CompatibilityUserDataAccessInterface;
@@ -32,12 +36,12 @@ import view.*;
  * The version of Main with an external database used to persist user data.
  */
 
-
+@SpringBootApplication
 public class MainWithDB {
 
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(SpringUserDAO.class)
+        new SpringApplicationBuilder(MainWithDB.class)
                 .web(WebApplicationType.SERVLET)
                 .headless(false)
                 .bannerMode(Banner.Mode.OFF)
@@ -76,14 +80,16 @@ public class MainWithDB {
         final SwipeViewModel swipeViewModel = new SwipeViewModel();
         final NavbarViewModel navbarViewModel = new NavbarViewModel();
         final CompatibilityViewModel compatibilityViewModel = new CompatibilityViewModel();
+        final ListChatViewModel listChatViewModel = new ListChatViewModel();
 
         final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
+        final ChatDataAccessObject chatDataAccessObject = new ChatDataAccessObject();
         final SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel,
                                                                   signupViewModel, preferencesViewModel, userDataAccessObject);
         views.add(signupView, signupView.getViewName());
 
         final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, swipeViewModel,
-                signupViewModel, compatibilityViewModel,userDataAccessObject);
+                signupViewModel, compatibilityViewModel,userDataAccessObject, listChatViewModel);
         views.add(loginView, loginView.getViewName());
 
         final LoggedInView loggedInView = ChangePasswordUseCaseFactory.create(viewManagerModel,
@@ -96,19 +102,23 @@ public class MainWithDB {
         views.add(preferenceView, preferenceView.getViewName());
 
         final NavBarView navBarView = NavbarUseCaseFactory.create(viewManagerModel,
-                swipeViewModel, navbarViewModel, compatibilityViewModel);
+                swipeViewModel, navbarViewModel, compatibilityViewModel, listChatViewModel);
 
         views.add(navBarView, navBarView.getViewName());
 
         final SwipeView swipeView = SwipeUseCaseFactory.create(viewManagerModel,
-                swipeViewModel, navbarViewModel, compatibilityViewModel, userDataAccessObject);
+                swipeViewModel, navbarViewModel, compatibilityViewModel, userDataAccessObject, listChatViewModel);
 
         views.add(swipeView, swipeView.getViewName());
 
         final CompatibilityView compatibilityView = CompatibilityUseCaseFactory.create(viewManagerModel,
-                compatibilityViewModel, navbarViewModel, swipeViewModel, userDataAccessObject);
+                compatibilityViewModel, navbarViewModel, swipeViewModel, userDataAccessObject, listChatViewModel);
 
         views.add(compatibilityView, compatibilityView.getViewName());
+        final ListChatView listChatView = ListChatUseCaseFactory.create(viewManagerModel,
+                listChatViewModel,new ChatViewModel(), chatDataAccessObject, navbarViewModel,
+                swipeViewModel, compatibilityViewModel);
+        views.add(listChatView, listChatView.getViewName());
 
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();

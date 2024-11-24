@@ -3,7 +3,9 @@ package data_access;
 import app.*;
 import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.chat.ChatViewModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.navbar.NavbarViewModel;
@@ -23,6 +25,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import use_case.listchat.ListChatDataAccessInterface;
 import view.*;
 
 import javax.swing.*;
@@ -73,15 +76,17 @@ public class SpringUserDAO implements CommandLineRunner {
         final SwipeViewModel swipeViewModel = new SwipeViewModel();
         final NavbarViewModel navbarViewModel = new NavbarViewModel();
         final CompatibilityViewModel compatibilityViewModel = new CompatibilityViewModel();
+        final ListChatViewModel listChatViewModel = new ListChatViewModel();
 
         final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
+        final ChatDataAccessObject chatDataAccessObject = new ChatDataAccessObject();
 
         final SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel,
                 signupViewModel, preferencesViewModel, userDataAccessObject);
         views.add(signupView, signupView.getViewName());
 
         final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, swipeViewModel,
-                signupViewModel, compatibilityViewModel, userDataAccessObject);
+                signupViewModel, compatibilityViewModel, userDataAccessObject, listChatViewModel);
         views.add(loginView, loginView.getViewName());
 
         final LoggedInView loggedInView = ChangePasswordUseCaseFactory.create(viewManagerModel,
@@ -94,19 +99,23 @@ public class SpringUserDAO implements CommandLineRunner {
         views.add(preferenceView, preferenceView.getViewName());
 
         final NavBarView navBarView = NavbarUseCaseFactory.create(viewManagerModel,
-                swipeViewModel, navbarViewModel, compatibilityViewModel);
+                swipeViewModel, navbarViewModel, compatibilityViewModel, listChatViewModel);
 
         views.add(navBarView, navBarView.getViewName());
 
         final SwipeView swipeView = SwipeUseCaseFactory.create(viewManagerModel,
-                swipeViewModel, navbarViewModel, compatibilityViewModel, userDataAccessObject);
+                swipeViewModel, navbarViewModel, compatibilityViewModel, userDataAccessObject, listChatViewModel);
 
         views.add(swipeView, swipeView.getViewName());
 
         final CompatibilityView compatibilityView = CompatibilityUseCaseFactory.create(viewManagerModel,
-                compatibilityViewModel, navbarViewModel, swipeViewModel, userDataAccessObject);
+                compatibilityViewModel, navbarViewModel, swipeViewModel, userDataAccessObject, listChatViewModel);
 
         views.add(compatibilityView, compatibilityView.getViewName());
+
+        final ListChatView listChatView = ListChatUseCaseFactory.create(viewManagerModel,
+                listChatViewModel,new ChatViewModel(), chatDataAccessObject, navbarViewModel, swipeViewModel, compatibilityViewModel);
+        views.add(listChatView, listChatView.getViewName());
 
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();

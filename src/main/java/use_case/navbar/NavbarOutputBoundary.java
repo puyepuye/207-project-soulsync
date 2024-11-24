@@ -25,4 +25,9 @@ public interface NavbarOutputBoundary {
      * Executes the switch to compatibility view use case.
      */
     void switchToCompatibilityView();
+
+    /**
+     * Executes the switch to the user chat page.
+     */
+    void switchToListChatView();
 }

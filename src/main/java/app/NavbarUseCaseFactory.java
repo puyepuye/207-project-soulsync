@@ -4,6 +4,7 @@ import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -44,10 +45,12 @@ public final class NavbarUseCaseFactory {
             ViewManagerModel viewManagerModel,
             SwipeViewModel swipeViewModel,
             NavbarViewModel navBarViewModel,
-            CompatibilityViewModel compatibilityViewModel) {
+            CompatibilityViewModel compatibilityViewModel,
+            ListChatViewModel listChatViewModel) {
 
         final NavbarController navBarController =
-                createNavbarUseCase(viewManagerModel, swipeViewModel, navBarViewModel, compatibilityViewModel);
+                createNavbarUseCase(viewManagerModel, swipeViewModel, navBarViewModel,
+                        compatibilityViewModel, listChatViewModel);
 
         return new NavBarView(navBarController);
 
@@ -57,11 +60,12 @@ public final class NavbarUseCaseFactory {
             ViewManagerModel viewManagerModel,
             SwipeViewModel swipeViewModel,
             NavbarViewModel navBarViewModel,
-            CompatibilityViewModel compatibilityViewModel) {
+            CompatibilityViewModel compatibilityViewModel,
+            ListChatViewModel listChatViewModel) {
 
         // Notice how we pass this method's parameters to the Presenter.
         final NavbarOutputBoundary navBarOutputBoundary = new NavbarPresenter(navBarViewModel,
-                viewManagerModel, swipeViewModel, compatibilityViewModel);
+                viewManagerModel, swipeViewModel, compatibilityViewModel, listChatViewModel);
         final NavbarInputBoundary navBarInteractor = new NavbarInteractor(navBarOutputBoundary);
 
         return new NavbarController(navBarInteractor);
