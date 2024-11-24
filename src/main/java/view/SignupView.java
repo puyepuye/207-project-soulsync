@@ -19,8 +19,8 @@ import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
 
-import java.util.Properties;
-import java.util.Date;
+import java.util.*;
+import java.util.List;
 
 /**
  * The View for the Signup Use Case.
@@ -46,6 +46,8 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final JButton cancel;
     private final JButton toLogin;
     private final JButton uploadProfileButton;
+    private final JPanel preferredGenderPanel;
+    private final JComboBox<String> preferredAgeComboBox;
 
     public SignupView(SignupController controller, SignupViewModel signupViewModel) {
 
@@ -85,6 +87,26 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         final LabelDropdownPanel cityDropDown = new LabelDropdownPanel(
                 new JLabel(SignupViewModel.CITY_LABEL), cityComboBox);
 
+        // Create a JPanel for holding the checkboxes
+        preferredGenderPanel = new JPanel();
+        preferredGenderPanel.setLayout(new GridLayout(0, 1)); // One checkbox per row
+
+        // Create checkboxes
+        JCheckBox option1 = new JCheckBox("Female");
+        JCheckBox option2 = new JCheckBox("Male");
+        JCheckBox option3 = new JCheckBox("Non-Binary");
+        JCheckBox option4 = new JCheckBox("Other");
+
+        // Add checkboxes to the panel
+        preferredGenderPanel.add(option1);
+        preferredGenderPanel.add(option2);
+        preferredGenderPanel.add(option3);
+        preferredGenderPanel.add(option4);
+
+        // Create a JComboBox with the age ranges
+        preferredAgeComboBox = new JComboBox<>(SignupViewModel.preferredAgeRanges);
+        preferredAgeComboBox.setSelectedIndex(0); // Default selection
+
         final JPanel buttons = new JPanel();
         toLogin = new JButton(SignupViewModel.TO_LOGIN_BUTTON_LABEL);
         buttons.add(toLogin);
@@ -121,7 +143,9 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                                     profileImageUrl, // Pass the uploaded image URL
                                     currentState.getLocation(),
                                     currentState.getGender(),
-                                    currentState.getDateOfBirth()
+                                    currentState.getDateOfBirth(),
+                                    currentState.getPreferredGender(),
+                                    currentState.getPreferredAge()
                             );
 
                             JOptionPane.showMessageDialog(null, "Signup successful!\nProfile Image URL: " + profileImageUrl);
@@ -149,6 +173,8 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         addGenderListener();
         addLocationListener();
         addFullNameListener();
+        addPreferredGenderListener();
+        addPreferredAgeListener();
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -160,6 +186,8 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.add(dobDatePicker);
         this.add(genderDropdown);
         this.add(countryDropdown);
+        this.add(preferredGenderPanel);
+        this.add(preferredAgeComboBox);
         this.add(cityDropDown);
         this.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
         this.add(uploadProfileButton);
@@ -323,6 +351,85 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 signupViewModel.setState(currentState);
             }
         });
+    }
+
+    private void addPreferredGenderListener() {
+        for (Component component : preferredGenderPanel.getComponents()) {
+            if (component instanceof JCheckBox) {
+                JCheckBox checkBox = (JCheckBox) component;
+
+                // Add a listener to detect state changes
+                checkBox.addItemListener(e -> {
+                    if (e.getStateChange() == ItemEvent.SELECTED || e.getStateChange() == ItemEvent.DESELECTED) {
+                        // Get all selected checkboxes and print them
+                        List<String> selectedCheckBoxes = getSelectedCheckBoxes(preferredGenderPanel);
+                        System.out.println("Selected checkboxes: " + selectedCheckBoxes);
+
+                        // Optionally update the state with the selected checkboxes
+                        final SignupState currentState = signupViewModel.getState();
+                        currentState.setPreferredGender(selectedCheckBoxes);
+                        System.out.println(currentState.getPreferredGender());
+                        signupViewModel.setState(currentState);
+                    }
+                });
+            }
+        }
+    }
+
+    private List<String> getSelectedCheckBoxes(JPanel panel) {
+        List<String> selectedItems = new ArrayList<>();
+
+        // Iterate through all components in the panel
+        for (Component component : panel.getComponents()) {
+            if (component instanceof JCheckBox) {
+                JCheckBox checkBox = (JCheckBox) component;
+                if (checkBox.isSelected()) {
+                    selectedItems.add(checkBox.getText()); // Add the text of the selected checkbox
+                }
+            }
+        }
+
+        return selectedItems;
+    }
+
+
+
+    private void addPreferredAgeListener() {
+        preferredAgeComboBox.addActionListener(e -> {
+            String selectedRange = (String) preferredAgeComboBox.getSelectedItem();
+            System.out.println("Selected Age Range: " + selectedRange);
+
+            // Parse the range into a HashMap if needed
+            HashMap<String, Integer> preferredAgeRange = parseAgeRange(selectedRange);
+            if (preferredAgeRange != null) {
+                System.out.println("Parsed Range: " + preferredAgeRange);
+                final SignupState currentState = signupViewModel.getState();
+                currentState.setPreferredAge(preferredAgeRange);
+                System.out.println(currentState.getPreferredAge());
+                signupViewModel.setState(currentState);
+            }
+        });
+        // Update state with selected values (removing trailing comma and space)
+    }
+
+    /**
+     * Parses the selected age range string into a HashMap with "min" and "max".
+     * Returns null for "70+" since it doesn't have an upper limit.
+     *
+     * @param ageRange The age range string (e.g., "18-30" or "70+").
+     * @return A HashMap with "min" and "max" values for the range.
+     */
+    private HashMap<String, Integer> parseAgeRange(String ageRange) {
+        HashMap<String, Integer> rangeMap = new HashMap<>();
+        if (ageRange.contains("-")) {
+            String[] parts = ageRange.split("-");
+            rangeMap.put("min", Integer.parseInt(parts[0]));
+            rangeMap.put("max", Integer.parseInt(parts[1]));
+        } else if (ageRange.endsWith("+")) {
+            rangeMap.put("min", Integer.parseInt(ageRange.replace("+", "")));
+            rangeMap.put("max", Integer.MAX_VALUE); // Represent no upper limit
+        }
+        return rangeMap;
     }
 
     private void openProfileUploadView() {
