@@ -18,20 +18,20 @@ import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class ChatView extends JFrame implements ActionListener, PropertyChangeListener {
+public class ChatView extends JPanel implements ActionListener, PropertyChangeListener {
     private JPanel chat;
     private JTextField textField;
     private final ChatController chatController;
     private final ChatViewModel chatViewModel;
     private final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+    private final String name = "chat";
 
     public ChatView(ChatController chatController, ChatViewModel chatViewModel) {
         this.chatController = chatController;
         this.chatViewModel = chatViewModel;
 
-        this.setTitle("Chat");
         this.setBackground(new Color(255, 162, 176));
-        this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         // Profile part
         JPanel profile = new JPanel();
         profile.add(new JLabel("Name:"));
@@ -80,7 +80,6 @@ public class ChatView extends JFrame implements ActionListener, PropertyChangeLi
         });
 
         this.setSize(400, 600);
-        this.setVisible(true);
     }
 
     @Override
@@ -132,6 +131,9 @@ public class ChatView extends JFrame implements ActionListener, PropertyChangeLi
         return panel;
     }
 
+    public String getName(){
+        return name;
+    }
     public static void main(String[] args) {
 
     }

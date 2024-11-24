@@ -40,7 +40,7 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
         chatLists = new JPanel();
         chatLists.setLayout(new BoxLayout(chatLists, BoxLayout.Y_AXIS));
         chatLists.setBackground(new Color(255, 220, 227)); // Pink background
-        chatLists.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Remove default padding
+        chatLists.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0)); // Remove default padding
         chatLists.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Wrap chatLists in a JScrollPane
@@ -68,10 +68,11 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
         // Create the panel for the chat
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS)); // Horizontal layout
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0)); // Remove padding
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 0));
         panel.setPreferredSize(new Dimension(400, 70));
         panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 70)); // Stretch to fit parent width
         panel.setBackground(new Color(255, 220, 227)); // Dark red for visibility
+        panel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 
         // Add profile picture (image from URL)
         JLabel profilePicture = new JLabel();
@@ -84,6 +85,9 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
         this.add(navBarView, BorderLayout.PAGE_END);
         try {
             // Load image from URL
+            if (pfpURL.equals("")){
+                pfpURL = "https://static.wikia.nocookie.net/vgost/images/5/56/Rick_Astley.jpg/revision/latest?cb=20220705002743";
+            }
             URL imgUrl = new URL(pfpURL);
             Image image = ImageIO.read(imgUrl).getScaledInstance(60, 60, Image.SCALE_SMOOTH); // Scale image
             profilePicture.setIcon(new ImageIcon(image));
@@ -100,10 +104,10 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
         panel.add(profilePicture);
 
         // Message box inside the chat panel
-        JLabel usernameLabel = new JLabel(username);
-        JLabel lastMessageLabel = new JLabel(chatURL);
-        usernameLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Set font for username
-        lastMessageLabel.setFont(new Font("Arial", Font.PLAIN, 12)); // Set font for last message
+        JLabel lastMsgSection = new JLabel(lastMessage);
+        JLabel userNameSection = new JLabel(username);
+        lastMsgSection.setFont(new Font("Arial", Font.BOLD, 14)); // Set font for username
+        userNameSection.setFont(new Font("Arial", Font.PLAIN, 12)); // Set font for last message
 
         JPanel messageBox = new JPanel();
         messageBox.setLayout(new BoxLayout(messageBox, BoxLayout.Y_AXIS));
@@ -112,10 +116,20 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
         messageBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60)); // Stretch message box width
         messageBox.setBackground(new Color(255, 220, 227)); // Green for testing
         messageBox.putClientProperty("URL", chatURL);
+        // Add a MouseListener to handle clicks
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Retrieve the channel URL from the panel
+                String channelUrl = (String) messageBox.getClientProperty("URL");
+                System.out.println("Navigating to channel: " + channelUrl);
+                listChatController.enterChat(channelUrl);
 
-        messageBox.add(usernameLabel);
+            }
+        });
+        messageBox.add(lastMsgSection);
         messageBox.add(Box.createRigidArea(new Dimension(0, 5))); // Add a 5-pixel vertical gap
-        messageBox.add(lastMessageLabel);
+        messageBox.add(userNameSection);
 
         // Add the message box to the panel
         panel.add(messageBox);
@@ -139,6 +153,7 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
                     String channelUser = "";
                     if (channel.getUser1Id().equals(state.getUsername())){channelUser = channel.getUser1Id();}
                     else{channelUser = channel.getUser2Id();}
+                    System.out.println(channel.getChannelURL());
                     addChatToList(channel.getChannelURL(), "", channelUser, channel.getLastMessage());
                 }
             } catch (IOException | InterruptedException e) {

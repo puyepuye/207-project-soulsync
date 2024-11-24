@@ -77,6 +77,7 @@ public class SpringUserDAO implements CommandLineRunner {
         final NavbarViewModel navbarViewModel = new NavbarViewModel();
         final CompatibilityViewModel compatibilityViewModel = new CompatibilityViewModel();
         final ListChatViewModel listChatViewModel = new ListChatViewModel();
+        final ChatViewModel chatViewModel = new ChatViewModel();
 
         final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
         final ChatDataAccessObject chatDataAccessObject = new ChatDataAccessObject();
@@ -116,6 +117,11 @@ public class SpringUserDAO implements CommandLineRunner {
         final ListChatView listChatView = ListChatUseCaseFactory.create(viewManagerModel,
                 listChatViewModel,new ChatViewModel(), chatDataAccessObject, navbarViewModel, swipeViewModel, compatibilityViewModel);
         views.add(listChatView, listChatView.getViewName());
+
+        final ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatViewModel,
+                listChatViewModel, chatDataAccessObject);
+        System.out.println(chatView.getName());
+        views.add(chatView, chatView.getName());
 
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();

@@ -28,4 +28,6 @@ public class ListChatPresenter implements ListChatOutputBoundary {
         viewManagerModel.setState(chatViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
+
+
 }

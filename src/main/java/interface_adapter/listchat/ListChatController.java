@@ -22,4 +22,8 @@ public class ListChatController {
     public ArrayList<ChatChannel> getAllChats(String username) throws IOException, InterruptedException {
         return listChatInputInteractor.getAllChats(username);
     }
+
+    public void enterChat(String chatURL){
+        listChatInputInteractor.enterChat(chatURL);
+    }
 }
