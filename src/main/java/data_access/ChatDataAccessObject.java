@@ -193,7 +193,15 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
                 String url = channel.getString("channel_url");
                 String user1 = url.split("_")[0];
                 String user2 = url.split("_")[0];
-                String lastMessage = getAllMessages(url).get(0).getMessage();
+                List<ChatMessage> allMessages = getAllMessages(url);
+                String lastMessage;
+                if (allMessages.isEmpty()) {
+                    lastMessage = "Say 'hi!' or something, just don't be weird";
+                }
+                else{
+
+                    lastMessage = getAllMessages(url).get(0).getMessage();
+                }
                 result.add(new ChatChannel(url, user1, user2, lastMessage));
 
             }
@@ -219,7 +227,7 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
 
     public static void main(String[] args) {
         ChatDataAccessObject cDAO = new ChatDataAccessObject();
-        cDAO.createChat("gg", "poppy12");
+        cDAO.createChat("tete", "poppy12");
 
     }
 }
