@@ -10,7 +10,9 @@ import use_case.chat.ChatInputBoundary;
 import use_case.chat.ChatInputData;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ChatController {
 
@@ -56,12 +58,14 @@ public class ChatController {
     }
 
 
-    // TODO: add a button to switch to leave to all messages page
 
     public void switchToChatList() {
         chatUseCaseInteractor.switchToChatList();
     }
 
+    public List<ChatMessage> getAllMessages(String chatURL) {
+        return chatUseCaseInteractor.getAllMessages(chatURL);
+    }
 
 
 

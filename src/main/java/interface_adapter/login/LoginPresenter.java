@@ -2,6 +2,7 @@ package interface_adapter.login;
 
 import interface_adapter.ViewManagerModel;
 import interface_adapter.chat.ChatState;
+import interface_adapter.chat.ChatViewModel;
 import interface_adapter.compatibility.CompatibilityState;
 import interface_adapter.compatibility.CompatibilityViewModel;
 import interface_adapter.listchat.ListChatState;
@@ -58,6 +59,8 @@ public class LoginPresenter implements LoginOutputBoundary {
         listChatState.setUsername(response.getUsername());
         this.listChatViewModel.setState(listChatState);
         this.listChatViewModel.firePropertyChanged();
+
+
 
     }
 

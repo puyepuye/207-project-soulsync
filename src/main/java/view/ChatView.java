@@ -97,7 +97,7 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         String message = textField.getText();
             if (!message.trim().isEmpty()) {
                 ChatState chatState = chatViewModel.getState();
-                chat.add(newMessage(message));
+                newMessage(message, "send");
                 chat.revalidate();
                 chat.repaint();
                 textField.setText("");
@@ -123,33 +123,52 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         System.out.println("propertyChange: " + evt.getPropertyName());
         if (evt.getPropertyName().equals("state")) {
             final ChatState state = (ChatState) evt.getNewValue();
+
             System.out.println("chat url " + state.getChatURL());
+            String chatURL = state.getChatURL();
+            String currUser = state.getCurrUser();
+
+            ArrayList<ChatMessage> chatMessages = (ArrayList<ChatMessage>) chatController.getAllMessages(chatURL);
+
+            for (ChatMessage chatMessage : chatMessages) {
+                if (chatMessage.getSender().equals(currUser)) {
+                    newMessage(chatMessage.getMessage(), "send");
+                }
+                else{
+                    newMessage(chatMessage.getMessage(), "receive");
+                }
+            }
 
 
         }
     }
 
-    private JPanel newMessage(String message) {
+    public void newMessage(String message, String state) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         panel.setBackground(new Color(255, 220, 227));
 
         // Add horizontal glue to push the message to the right
-        panel.add(Box.createHorizontalGlue());
+        if (!state.equals("receive")){
+            panel.add(Box.createHorizontalGlue());
+        }
 
         // Message box
         JPanel messageBox = new JPanel();
-        messageBox.setLayout(new FlowLayout(FlowLayout.LEFT));
+        messageBox.setLayout(new FlowLayout(FlowLayout.RIGHT));
         messageBox.setPreferredSize(new Dimension((int) (this.getWidth() * 0.3), 40)); // 30% of width
         messageBox.setMaximumSize(new Dimension((int) (this.getWidth() * 0.3), 40));
         messageBox.setBackground(new Color(255, 162, 176));
 
         JLabel text = new JLabel(message);
         messageBox.add(text);
-
         panel.add(messageBox);
-        return panel;
+        if (state.equals("receive")){
+            panel.add(Box.createHorizontalGlue());
+        }
+        chat.add(panel);
+//        chat.add(timestamp);
     }
 
     private JButton createNavButton(String text) {

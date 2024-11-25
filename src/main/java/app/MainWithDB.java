@@ -8,7 +8,6 @@ import javax.swing.WindowConstants;
 
 import data_access.ChatDataAccessObject;
 import data_access.DBUserDataAccessObject;
-import data_access.SpringUserDAO;
 import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.chat.ChatViewModel;
@@ -19,18 +18,11 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.navbar.NavbarViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.swipe.SwipeViewModel;
-import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import use_case.change_password.ChangePasswordUserDataAccessInterface;
-import use_case.compatibility.CompatibilityUserDataAccessInterface;
-import use_case.login.LoginUserDataAccessInterface;
-import use_case.preferences.PreferenceUserDataAccessInterface;
 import interface_adapter.signup.SignupViewModel;
-import use_case.signup.SignupUserDataAccessInterface;
-import use_case.swipe.SwipeUserDataAccessInterface;
 import view.*;
 
 /**
@@ -119,7 +111,7 @@ public class MainWithDB implements CommandLineRunner {
         views.add(compatibilityView, compatibilityView.getViewName());
 
         final ListChatView listChatView = ListChatUseCaseFactory.create(viewManagerModel,
-                listChatViewModel,new ChatViewModel(), chatDataAccessObject, navbarViewModel, swipeViewModel, compatibilityViewModel);
+                listChatViewModel,chatViewModel, chatDataAccessObject, navbarViewModel, swipeViewModel, compatibilityViewModel);
         views.add(listChatView, listChatView.getViewName());
 
         final ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatViewModel,
