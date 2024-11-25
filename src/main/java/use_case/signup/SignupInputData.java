@@ -1,6 +1,8 @@
 package use_case.signup;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * The Input Data for the Signup Use Case.
@@ -15,9 +17,12 @@ public class SignupInputData {
     private final String location;
     private final String gender;
     private final Date dateOfBirth;
+    private final List<String> preferredGender;
+    private final HashMap<String, Integer> preferredAge;
 
     public SignupInputData(String fullname, String username, String password, String image, String repeatPassword,
-                           String location, String gender, Date dateOfBirth) {
+                           String location, String gender, Date dateOfBirth, List<String> preferredGender,
+                           HashMap<String, Integer> preferredAge) {
         this.fullname = fullname;
         this.username = username;
         this.password = password;
@@ -26,6 +31,8 @@ public class SignupInputData {
         this.location = location;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
+        this.preferredGender = preferredGender;
+        this.preferredAge = preferredAge;
     }
 
     public String getImage() {
@@ -58,4 +65,8 @@ public class SignupInputData {
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
+
+    public List<String> getPreferredGender() { return preferredGender; }
+
+    public HashMap<String, Integer> getPreferredAge() { return preferredAge; }
 }

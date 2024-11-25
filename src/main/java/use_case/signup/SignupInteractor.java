@@ -48,16 +48,15 @@ public class SignupInteractor implements SignupInputBoundary {
             userPresenter.prepareFailView("Please choose your country and city.");
         }
         else {
-
             final User user =  userFactory.create(signupInputData.getUsername(),
                     signupInputData.getPassword(),
                     signupInputData.getImage(),
                     signupInputData.getFullname(),
                     signupInputData.getLocation(),
                     signupInputData.getGender(),
-                    new ArrayList<>() {{}},
+                    signupInputData.getPreferredGender(),
                     signupInputData.getDateOfBirth(),
-                    new HashMap<>() {{put("min", 18); put("max", 99);}},
+                    signupInputData.getPreferredAge(),
                     "",
                     new HashMap<>() {{}},
                     new ArrayList<>() {{}},
@@ -66,11 +65,12 @@ public class SignupInteractor implements SignupInputBoundary {
                     new ArrayList<>() {{}},
                     new ArrayList<>() {{}}
             );
+            System.out.println(user.getPreferredAge());
+            System.out.println(user.getPreferredGender());
             userDataAccessObject.saveUser(user);
             chatDataAccessObject.createChatUser(signupInputData.getUsername(), signupInputData.getFullname(), signupInputData.getImage());
-
             final SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), user.getUsername(), user.getImage(),
-                    user.getLocation(), user.getGender(), user.getDateOfBirth(), false);
+                    user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
 
             //final SignupOutputData signupOutputData = new SignupOutputData(user.getFullName(), false);
 
