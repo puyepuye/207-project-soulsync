@@ -20,6 +20,7 @@ import interface_adapter.navbar.NavbarViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.swipe.SwipeViewModel;
 import org.springframework.boot.Banner;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -37,14 +38,13 @@ import view.*;
  */
 
 @SpringBootApplication
-public class MainWithDB {
+public class MainWithDB implements CommandLineRunner {
 
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(MainWithDB.class)
                 .web(WebApplicationType.SERVLET)
                 .headless(false)
-                .bannerMode(Banner.Mode.OFF)
                 .run(args);
     }
     /**
@@ -55,7 +55,7 @@ public class MainWithDB {
         // Build the main program window, the main panel containing the
         // various cards, and the layout, and stitch them together.
 
-        // The main application window.
+        // Claire's stuff
         final JFrame application = new JFrame("Login Example");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,19 +81,21 @@ public class MainWithDB {
         final NavbarViewModel navbarViewModel = new NavbarViewModel();
         final CompatibilityViewModel compatibilityViewModel = new CompatibilityViewModel();
         final ListChatViewModel listChatViewModel = new ListChatViewModel();
+        final ChatViewModel chatViewModel = new ChatViewModel();
 
         final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
         final ChatDataAccessObject chatDataAccessObject = new ChatDataAccessObject();
+
         final SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel,
-                                                                  signupViewModel, preferencesViewModel, userDataAccessObject);
+                signupViewModel, preferencesViewModel, userDataAccessObject);
         views.add(signupView, signupView.getViewName());
 
         final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, swipeViewModel,
-                signupViewModel, compatibilityViewModel,userDataAccessObject, listChatViewModel);
+                signupViewModel, compatibilityViewModel, userDataAccessObject, listChatViewModel);
         views.add(loginView, loginView.getViewName());
 
         final LoggedInView loggedInView = ChangePasswordUseCaseFactory.create(viewManagerModel,
-                                                                              loggedInViewModel, userDataAccessObject);
+                loggedInViewModel, userDataAccessObject);
         views.add(loggedInView, loggedInView.getViewName());
 
         final PreferenceView preferenceView = PreferenceUseCaseFactory.create(viewManagerModel,
@@ -115,10 +117,15 @@ public class MainWithDB {
                 compatibilityViewModel, navbarViewModel, swipeViewModel, userDataAccessObject, listChatViewModel);
 
         views.add(compatibilityView, compatibilityView.getViewName());
+
         final ListChatView listChatView = ListChatUseCaseFactory.create(viewManagerModel,
-                listChatViewModel,new ChatViewModel(), chatDataAccessObject, navbarViewModel,
-                swipeViewModel, compatibilityViewModel);
+                listChatViewModel,new ChatViewModel(), chatDataAccessObject, navbarViewModel, swipeViewModel, compatibilityViewModel);
         views.add(listChatView, listChatView.getViewName());
+
+        final ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatViewModel,
+                listChatViewModel, chatDataAccessObject);
+        System.out.println(chatView.getName());
+        views.add(chatView, chatView.getName());
 
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();
@@ -126,6 +133,5 @@ public class MainWithDB {
         application.pack();
         application.setSize(400, 600);
         application.setVisible(true);
-
     }
 }
