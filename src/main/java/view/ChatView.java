@@ -29,7 +29,8 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
     private ChatViewModel chatViewModel;
     private final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
     private final String name = "chat";
-
+    private String currentUser;
+    private String chatURL;
     public ChatView(ChatController chatController, ChatViewModel chatViewModel) {
         this.chatController = chatController;
         this.chatViewModel = chatViewModel;
@@ -76,17 +77,23 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         this.add(scrollPane);  // Add scroll pane containing chat area
         this.add(bottom);
 
-        // Add a message listener
-//        MessageEventManager.getInstance().addPropertyChangeListener(evt -> {
-//            if ("message".equals(evt.getPropertyName())) {
-//                SwingUtilities.invokeLater(() -> {
-//                    String newMessage = (String) evt.getNewValue();
-//                    chat.add(newMessage(newMessage));
-//                    chat.revalidate();
-//                    chat.repaint();
-//                });
-//            }
-//        });
+//         Add a message listener
+        MessageEventManager.getInstance().addPropertyChangeListener(evt -> {
+            if ("message".equals(evt.getPropertyName())) {
+                SwingUtilities.invokeLater(() -> {
+                    ChatMessage newMessage = (ChatMessage) evt.getNewValue();
+                    if (newMessage.getChatURL().equals(chatURL)){
+                        if (!newMessage.getSender().equals(currentUser)) {
+                            newMessage(newMessage.getMessage(), "receive");
+                        }
+                    }
+
+
+                    chat.revalidate();
+                    chat.repaint();
+                });
+            }
+        });
 
         this.setSize(400, 600);
     }
@@ -123,14 +130,17 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         System.out.println("propertyChange: " + evt.getPropertyName());
         if (evt.getPropertyName().equals("state")) {
             final ChatState state = (ChatState) evt.getNewValue();
-
+            chat.removeAll();
             System.out.println("chat url " + state.getChatURL());
-            String chatURL = state.getChatURL();
+            chatURL = state.getChatURL();
             String currUser = state.getCurrUser();
+            System.out.println("currUser " + currUser);
+            currentUser = currUser;
 
             ArrayList<ChatMessage> chatMessages = (ArrayList<ChatMessage>) chatController.getAllMessages(chatURL);
 
             for (ChatMessage chatMessage : chatMessages) {
+                System.out.println(chatMessage.getSender());
                 if (chatMessage.getSender().equals(currUser)) {
                     newMessage(chatMessage.getMessage(), "send");
                 }

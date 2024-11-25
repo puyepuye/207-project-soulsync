@@ -2,9 +2,14 @@ package data_access;
 
 import entity.ChatChannel;
 import entity.ChatMessage;
+import interface_adapter.chat.MessageEventManager;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import use_case.chat.ChatDataAccessInterface;
 import use_case.listchat.ListChatDataAccessInterface;
 
@@ -13,10 +18,12 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ChatDataAccessObject  implements ChatDataAccessInterface,
@@ -173,7 +180,7 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
             JSONObject messageObj = messages.getJSONObject(i);
             String message = messageObj.getString("message");
             String timestamp = formatter.format(Instant.ofEpochMilli(messageObj.getLong("created_at")));
-            String sender = messageObj.getJSONObject("user").getString("nickname");
+            String sender = messageObj.getJSONObject("user").getString("user_id");
             result.add(new ChatMessage(sender, message, timestamp));
 
         }
@@ -199,8 +206,7 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
                     lastMessage = "Say 'hi!' or something, just don't be weird";
                 }
                 else{
-
-                    lastMessage = getAllMessages(url).get(0).getMessage();
+                    lastMessage = allMessages.get(allMessages.size()-1).getMessage();
                 }
                 result.add(new ChatChannel(url, user1, user2, lastMessage));
 
@@ -222,6 +228,38 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
 
         } catch (InterruptedException | IOException e) {
             System.out.println("Something went wrong, couldn't get a ");
+        }
+    }
+
+    private String convertMillisToDate(long millis) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        Date date = new Date(millis);
+        return sdf.format(date);
+    }
+    @RestController
+    class Controller {
+        private final MessageEventManager eventManager = MessageEventManager.getInstance();
+        private ChatMessage previousMessage = new ChatMessage(null, null, null);
+        @PostMapping("/")
+        public void receiveMessages(@RequestBody String body) throws JSONException {
+            JSONObject json = new JSONObject(body);
+
+            // Access the "payload" object
+            JSONObject payload = json.getJSONObject("payload");
+
+            // Retrieve "message" and "created_at" values
+            String message = payload.getString("message");
+            String createdAt = convertMillisToDate(payload.getLong("created_at"));
+            String user = payload.getJSONObject("sender").getString("nickname");
+            String channelURL =  json.getJSONObject("channel").getString("channel_url");
+            // Print the values
+            System.out.println("Message: " + message);
+            System.out.println("Created at: " + createdAt);
+            System.out.println("Sent by: " + user);
+
+            ChatMessage newMessage = new ChatMessage(user, message, createdAt, channelURL);
+            eventManager.setNewMessage(previousMessage, newMessage);
+            previousMessage = newMessage;
         }
     }
 

@@ -147,6 +147,7 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
             System.out.println("current user " + state.getUsername());
             try {
                 ArrayList<ChatChannel> channels =  listChatController.getAllChats(state.getUsername());
+                chatLists.removeAll();
                 for (ChatChannel channel: channels){
                     String channelUser = "";
                     if (channel.getUser1Id().equals(state.getUsername())){channelUser = channel.getUser1Id();}

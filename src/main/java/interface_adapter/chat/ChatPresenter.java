@@ -2,6 +2,7 @@ package interface_adapter.chat;
 
 import entity.ChatMessage;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.listchat.ListChatState;
 import interface_adapter.listchat.ListChatViewModel;
 import use_case.chat.ChatOutputBoundary;
 
@@ -11,7 +12,7 @@ public class ChatPresenter implements ChatOutputBoundary {
 
     private final ChatViewModel chatViewModel;
     private final ViewManagerModel viewManagerModel;
-    private final ListChatViewModel chatListViewModel;
+    private final ListChatViewModel listChatViewModel;
 
 
     public ChatPresenter(ViewManagerModel viewManagerModel,
@@ -19,7 +20,7 @@ public class ChatPresenter implements ChatOutputBoundary {
                          ListChatViewModel listChatViewModel) {
         this.chatViewModel = chatViewModel;
         this.viewManagerModel = viewManagerModel;
-        this.chatListViewModel = listChatViewModel;
+        this.listChatViewModel = listChatViewModel;
     }
 
     public void messageSent(ChatMessage chatMessage) {
@@ -42,7 +43,10 @@ public class ChatPresenter implements ChatOutputBoundary {
 
     @Override
     public void switchToChatList() {
-        viewManagerModel.setState(chatListViewModel.getViewName());
+        final ListChatState listChatState = listChatViewModel.getState();
+        this.listChatViewModel.setState(listChatState);
+        this.listChatViewModel.firePropertyChanged();
+        viewManagerModel.setState(listChatViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 }
