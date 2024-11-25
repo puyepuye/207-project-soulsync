@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import use_case.chat.ChatDataAccessInterface;
 import use_case.listchat.ListChatDataAccessInterface;
@@ -231,37 +232,7 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
         }
     }
 
-    private String convertMillisToDate(long millis) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        Date date = new Date(millis);
-        return sdf.format(date);
-    }
-    @RestController
-    class Controller {
-        private final MessageEventManager eventManager = MessageEventManager.getInstance();
-        private ChatMessage previousMessage = new ChatMessage(null, null, null);
-        @PostMapping("/")
-        public void receiveMessages(@RequestBody String body) throws JSONException {
-            JSONObject json = new JSONObject(body);
 
-            // Access the "payload" object
-            JSONObject payload = json.getJSONObject("payload");
-
-            // Retrieve "message" and "created_at" values
-            String message = payload.getString("message");
-            String createdAt = convertMillisToDate(payload.getLong("created_at"));
-            String user = payload.getJSONObject("sender").getString("nickname");
-            String channelURL =  json.getJSONObject("channel").getString("channel_url");
-            // Print the values
-            System.out.println("Message: " + message);
-            System.out.println("Created at: " + createdAt);
-            System.out.println("Sent by: " + user);
-
-            ChatMessage newMessage = new ChatMessage(user, message, createdAt, channelURL);
-            eventManager.setNewMessage(previousMessage, newMessage);
-            previousMessage = newMessage;
-        }
-    }
 
     public static void main(String[] args) {
         ChatDataAccessObject cDAO = new ChatDataAccessObject();

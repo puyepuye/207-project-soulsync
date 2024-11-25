@@ -69,7 +69,7 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
         panel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 0));
         panel.setPreferredSize(new Dimension(400, 70));
         panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 70)); // Stretch to fit parent width
-        panel.setBackground(new Color(255, 220, 227)); // Dark red for visibility
+        panel.setBackground(new Color(255, 240, 245)); // Dark red for visibility
         panel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 
         // Add profile picture (image from URL)
@@ -112,7 +112,7 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
         messageBox.setBorder(new EmptyBorder(10, 10, 10, 10));
         messageBox.setPreferredSize(new Dimension(350, 60));
         messageBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60)); // Stretch message box width
-        messageBox.setBackground(new Color(255, 220, 227)); // Green for testing
+        messageBox.setBackground(new Color(255, 240, 245)); // Green for testing
         messageBox.putClientProperty("URL", chatURL);
         // Add a MouseListener to handle clicks
         panel.addMouseListener(new MouseAdapter() {

@@ -15,6 +15,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -31,6 +33,7 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
     private final String name = "chat";
     private String currentUser;
     private String chatURL;
+    private JScrollPane scrollPane;
     public ChatView(ChatController chatController, ChatViewModel chatViewModel) {
         this.chatController = chatController;
         this.chatViewModel = chatViewModel;
@@ -52,7 +55,7 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         chat.setBorder(new EmptyBorder(10, 20, 10, 20));
         chat.setBackground(new Color(255, 220, 227));
 
-        JScrollPane scrollPane = new JScrollPane(chat);
+        scrollPane = new JScrollPane(chat);
         scrollPane.setPreferredSize(new Dimension(400, 300));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -62,7 +65,7 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         bottom.setLayout(new FlowLayout());
         bottom.setBackground(Color.WHITE);
         textField = new JTextField(24);
-        textField.setBackground(new Color(255, 162, 176));
+        textField.setBackground(new Color(255, 220, 227));
         textField.addActionListener(this);
         JButton sendButton = new JButton("send");
         sendButton.setMaximumSize(new Dimension(400, 40));
@@ -160,26 +163,46 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         panel.setBackground(new Color(255, 220, 227));
 
         // Add horizontal glue to push the message to the right
-        if (!state.equals("receive")){
+        if (!state.equals("receive")) {
             panel.add(Box.createHorizontalGlue());
         }
 
         // Message box
         JPanel messageBox = new JPanel();
-        messageBox.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        messageBox.setPreferredSize(new Dimension((int) (this.getWidth() * 0.3), 40)); // 30% of width
-        messageBox.setMaximumSize(new Dimension((int) (this.getWidth() * 0.3), 40));
+        messageBox.setLayout(new FlowLayout(FlowLayout.LEFT));
         messageBox.setBackground(new Color(255, 162, 176));
 
-        JLabel text = new JLabel(message);
+        // Text area for the message (word wrapping enabled)
+        JTextArea text = new JTextArea(message);
+        text.setLineWrap(true);  // Enable word wrap
+        text.setWrapStyleWord(true);  // Wrap at word boundaries
+        text.setEditable(false);  // Non-editable
+        text.setOpaque(false);  // Transparent background to match the panel
+        text.setBorder(BorderFactory.createEmptyBorder());
+
+        // Calculate dimensions based on message length
+        int maxWidth = (int) (this.getWidth() * 0.3); // 30% of width
+        text.setSize(new Dimension(maxWidth, Short.MAX_VALUE)); // Temporary size to compute preferred size
+        text.setFont(new Font("Arial", Font.PLAIN, 14)); // Set font for consistent sizing
+        text.setMaximumSize(new Dimension(maxWidth, 100));
+        // Use preferred size for dynamic height
+        Dimension preferredSize = text.getPreferredSize();
+        text.setPreferredSize(new Dimension(Math.min(maxWidth, preferredSize.width), preferredSize.height));
+
         messageBox.add(text);
         panel.add(messageBox);
-        if (state.equals("receive")){
+
+        if (state.equals("receive")) {
             panel.add(Box.createHorizontalGlue());
         }
+
+        JScrollBar sb = scrollPane.getVerticalScrollBar();
+        sb.setValue( sb.getMaximum() );
         chat.add(panel);
-//        chat.add(timestamp);
+        chat.revalidate();
+        chat.repaint();
     }
+
 
     private JButton createNavButton(String text) {
         JButton button = new JButton(text);

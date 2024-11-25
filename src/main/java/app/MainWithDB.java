@@ -1,6 +1,8 @@
 package app;
 
 import java.awt.CardLayout;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -8,9 +10,11 @@ import javax.swing.WindowConstants;
 
 import data_access.ChatDataAccessObject;
 import data_access.DBUserDataAccessObject;
+import entity.ChatMessage;
 import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.chat.ChatViewModel;
+import interface_adapter.chat.MessageEventManager;
 import interface_adapter.compatibility.CompatibilityViewModel;
 import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
@@ -18,11 +22,17 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.navbar.NavbarViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.swipe.SwipeViewModel;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import interface_adapter.signup.SignupViewModel;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import view.*;
 
 /**
@@ -127,3 +137,36 @@ public class MainWithDB implements CommandLineRunner {
         application.setVisible(true);
     }
 }
+@RestController
+class Controller {
+    private final MessageEventManager eventManager = MessageEventManager.getInstance();
+    private ChatMessage previousMessage = new ChatMessage(null, null, null);
+    @PostMapping("/")
+    public void receiveMessages(@RequestBody String body) throws JSONException {
+        JSONObject json = new JSONObject(body);
+
+        // Access the "payload" object
+        JSONObject payload = json.getJSONObject("payload");
+
+        // Retrieve "message" and "created_at" values
+        String message = payload.getString("message");
+        String createdAt = convertMillisToDate(payload.getLong("created_at"));
+        String user = json.getJSONObject("sender").getString("user_id");
+        String channelURL =  json.getJSONObject("channel").getString("channel_url");
+        // Print the values
+        System.out.println("Message: " + message);
+        System.out.println("Created at: " + createdAt);
+        System.out.println("Sent by: " + user);
+
+        ChatMessage newMessage = new ChatMessage(user, message, createdAt, channelURL);
+        eventManager.setNewMessage(previousMessage, newMessage);
+        previousMessage = newMessage;
+    }
+
+    private String convertMillisToDate(long millis) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        Date date = new Date(millis);
+        return sdf.format(date);
+    }
+}
+
