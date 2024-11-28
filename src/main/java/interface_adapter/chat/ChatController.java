@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 import use_case.chat.ChatInputBoundary;
 import use_case.chat.ChatInputData;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,3 +46,4 @@ public class ChatController {
 
 
 }
+

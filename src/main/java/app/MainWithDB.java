@@ -1,6 +1,11 @@
 package app;
 
 import java.awt.CardLayout;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -8,10 +13,21 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import data_access.ChatDataAccessObject;
-import data_access.DBUserDataAccessObject;
-import entity.ChatMessage;
-import entity.CommonUserFactory;
+import org.json.JSONObject;
+import org.json.JSONException;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import interface_adapter.signup.SignupViewModel;
+
 import interface_adapter.ViewManagerModel;
 import interface_adapter.chat.ChatViewModel;
 import interface_adapter.chat.MessageEventManager;
@@ -22,26 +38,21 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.navbar.NavbarViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.swipe.SwipeViewModel;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import interface_adapter.signup.SignupViewModel;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import data_access.ChatDataAccessObject;
+import data_access.DBUserDataAccessObject;
+import entity.ChatMessage;
+import entity.CommonUserFactory;
 import view.*;
 
 /**
  * The version of Main with an external database used to persist user data.
  */
 
+@SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity", "checkstyle:AnnotationUseStyle"})
+@ComponentScan(basePackages = {"interface_adapter.chat"})
 @SpringBootApplication
 public class MainWithDB implements CommandLineRunner {
-
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(MainWithDB.class)
@@ -121,7 +132,8 @@ public class MainWithDB implements CommandLineRunner {
         views.add(compatibilityView, compatibilityView.getViewName());
 
         final ListChatView listChatView = ListChatUseCaseFactory.create(viewManagerModel,
-                listChatViewModel,chatViewModel, chatDataAccessObject, navbarViewModel, swipeViewModel, compatibilityViewModel);
+                listChatViewModel, chatViewModel, chatDataAccessObject,
+                navbarViewModel, swipeViewModel, compatibilityViewModel);
         views.add(listChatView, listChatView.getViewName());
 
         final ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatViewModel,
@@ -133,40 +145,9 @@ public class MainWithDB implements CommandLineRunner {
         viewManagerModel.firePropertyChanged();
 
         application.pack();
-        application.setSize(400, 600);
+        final int height = 600;
+        final int width = 400;
+        application.setSize(width, height);
         application.setVisible(true);
     }
 }
-@RestController
-class Controller {
-    private final MessageEventManager eventManager = MessageEventManager.getInstance();
-    private ChatMessage previousMessage = new ChatMessage(null, null, null);
-    @PostMapping("/")
-    public void receiveMessages(@RequestBody String body) throws JSONException {
-        JSONObject json = new JSONObject(body);
-
-        // Access the "payload" object
-        JSONObject payload = json.getJSONObject("payload");
-
-        // Retrieve "message" and "created_at" values
-        String message = payload.getString("message");
-        String createdAt = convertMillisToDate(payload.getLong("created_at"));
-        String user = json.getJSONObject("sender").getString("user_id");
-        String channelURL =  json.getJSONObject("channel").getString("channel_url");
-        // Print the values
-        System.out.println("Message: " + message);
-        System.out.println("Created at: " + createdAt);
-        System.out.println("Sent by: " + user);
-
-        ChatMessage newMessage = new ChatMessage(user, message, createdAt, channelURL);
-        eventManager.setNewMessage(previousMessage, newMessage);
-        previousMessage = newMessage;
-    }
-
-    private String convertMillisToDate(long millis) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        Date date = new Date(millis);
-        return sdf.format(date);
-    }
-}
-

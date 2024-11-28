@@ -2,29 +2,20 @@ package data_access;
 
 import entity.ChatChannel;
 import entity.ChatMessage;
-import interface_adapter.chat.MessageEventManager;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import use_case.chat.ChatDataAccessInterface;
 import use_case.listchat.ListChatDataAccessInterface;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ChatDataAccessObject  implements ChatDataAccessInterface,
@@ -71,19 +62,19 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
     }
 
     /**
-     * @param user_id1
-     * @param user_id2
+     * @param userId1 1st user
+     * @param userId2 2nd user
      *
      * Creates a SendBird with url being "{user_id1}_{user_id2}_chat"
      */
-    public void createChat(String user_id1, String user_id2){
+    public void createChat(String userId1, String userId2){
         List<String> chatUsers = new ArrayList<>();
-        chatUsers.add(user_id1);
-        chatUsers.add(user_id2);
+        chatUsers.add(userId1);
+        chatUsers.add(userId2);
         JSONObject requestBody = new JSONObject();
 
-        requestBody.put("name", user_id1 + "_" + user_id2 + "_chat"); // name of chat
-        requestBody.put("channel_url", user_id1 + "_" + user_id2 + "_chat"); // url of chat
+        requestBody.put("name", userId1 + "_" + userId2 + "_chat"); // name of chat
+        requestBody.put("channel_url", userId1 + "_" + userId2 + "_chat"); // url of chat
         requestBody.put("operator_ids", chatUsers); // the 2 users involved in a chat
 
         // build request
@@ -102,7 +93,7 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
 
     /**
      * Returns the URL of all the chats that this user is a part of.
-     * @param username
+     * @param username the user_id stored in sendbird of the user we want to get the chat logs of
      * @return a list of URLs of chats that contains that username
      */
     @Override
@@ -234,9 +225,18 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
 
 
 
-    public static void main(String[] args) {
-        ChatDataAccessObject cDAO = new ChatDataAccessObject();
-        cDAO.createChat("tete", "poppy12");
+    public static void main(String[] args) throws IOException, InterruptedException {
+//        ChatDataAccessObject cDAO = new ChatDataAccessObject();
+//        cDAO.createChat("tete", "poppy12");
+        HttpRequest postRequest = HttpRequest.newBuilder()
+                .uri(URI.create("https://70a4-138-51-79-15.ngrok-free.app/"))    //TODO: add endpoint
+                .header("Content-Type", "application/json; charset=utf8")
+                .POST(HttpRequest.BodyPublishers.ofString("hi mom"))
+                .build();
+        System.out.println("sent messge");
+        HttpClient client = HttpClient.newHttpClient();
+        HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response);
 
     }
 }

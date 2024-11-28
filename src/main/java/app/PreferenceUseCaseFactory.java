@@ -24,14 +24,14 @@ public final class PreferenceUseCaseFactory {
 
     }
 
-
     public static PreferenceView create(
             ViewManagerModel viewManagerModel,
             PreferencesViewModel preferencesViewModel,
             SwipeViewModel swipeViewModel,
             PreferenceUserDataAccessInterface userDataAccessObject) {
 
-        final PreferencesController preferencesController = createPreferenceUseCase(viewManagerModel,  preferencesViewModel, swipeViewModel, userDataAccessObject);
+        final PreferencesController preferencesController = createPreferenceUseCase(viewManagerModel,
+                preferencesViewModel, swipeViewModel, userDataAccessObject);
         return new PreferenceView(preferencesViewModel, preferencesController);
     }
 
@@ -42,7 +42,8 @@ public final class PreferenceUseCaseFactory {
             PreferenceUserDataAccessInterface userDataAccessObject) {
 
         // Notice how we pass this method's parameters to the Presenter.
-        final PreferenceOutputBoundary preferenceOutputBoundary = new PreferencesPresenter(viewManagerModel,  preferencesViewModel, swipeViewModel);
+        final PreferenceOutputBoundary preferenceOutputBoundary = new PreferencesPresenter(viewManagerModel,
+                preferencesViewModel, swipeViewModel);
 
         final UserFactory userFactory = new CommonUserFactory();
 

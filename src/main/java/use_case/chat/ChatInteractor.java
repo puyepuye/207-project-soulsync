@@ -14,8 +14,8 @@ public class ChatInteractor implements ChatInputBoundary{
     }
 
     @Override
-    public List<ChatMessage> getAllMessages(String chatURL) {
-        return chatDataAccessObject.getAllMessages(chatURL);
+    public List<ChatMessage> getAllMessages(String chatUrl) {
+        return chatDataAccessObject.getAllMessages(chatUrl);
     }
 
     @Override
