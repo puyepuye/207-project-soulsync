@@ -5,8 +5,8 @@ import entity.ChatMessage;
 import interface_adapter.chat.ChatPresenter;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-
+import java.util.ArrayList;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class ChatInteractorTest {
@@ -14,7 +14,7 @@ public class ChatInteractorTest {
     private ChatDataAccessObject dao;
     private ChatInteractor interactor;
     private ChatPresenter presenter;
-    private ChatMessage message = new ChatMessage("bob", "Hi alice",
+    private final ChatMessage message = new ChatMessage("bob", "Hi alice",
             "dd-MM-yyyy HH:mm", "bob_alice_chat");
 
     @Before
@@ -35,11 +35,18 @@ public class ChatInteractorTest {
 
     @Test  //Checks that this will correctly return a list of all messages in a channel
     public void getChatMessagesTest() {
+        String chatUrl = "bob_alice_chat";
+        ArrayList<ChatMessage> expectedMessages = new ArrayList<>();
+        expectedMessages.add(message);
+        when(dao.getAllMessages(chatUrl)).thenReturn(expectedMessages);
+        ArrayList<ChatMessage> actualMessages = (ArrayList<ChatMessage>) interactor.getAllMessages(chatUrl);
+        assertEquals(expectedMessages, actualMessages);
 
     }
 
-    @Test
+    @Test  // Checks that it calls the right view switch method.
     public void switchToChatListTest() {
-
+        interactor.switchToChatList();
+        verify(presenter, times(1)).switchToChatList();
     }
 }
