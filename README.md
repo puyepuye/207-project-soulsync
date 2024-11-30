@@ -3,7 +3,7 @@
 A dating app created in Java as the final project for the course, CSC207 Software Design, during the fall 2024 semester the university of Toronto. This app allows users to create an account, find matches and chat with like minded people! (cause Toronto is a really big city and it's hard to meet people)
 
 ## Table of Contents:
-[Features](## Features:)
+[Features](#Features:)
 
 ## Features:
 - Users can create an account with their personal information and start matching with other users
