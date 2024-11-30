@@ -2,6 +2,9 @@
 ### CSC207 Fall 2024 Course Final Project
 A dating app created in Java as the final project for the course, CSC207 Software Design, during the fall 2024 semester the university of Toronto. This app allows users to create an account, find matches and chat with like minded people! (cause Toronto is a really big city and it's hard to meet people)
 
+## Table of Contents:
+
+
 ## Features:
 - Users can create an account with their personal information and start matching with other users
 - Users can select other users to match with Tinder swipe style
@@ -28,6 +31,7 @@ PASSWORD={YOUR MONGODB PASSWORD}
 9. Copy the client URLs and paste it line by line into `clientUrls.txt`
 10. Run the app from `MainwithDB.java` and enjoy!
 
+## Usage guide: #TODO
     
 ## 🌟 Contributors
 1. **Yi-An Chu** (Kimi)
@@ -47,6 +51,7 @@ When making contributions, please follow the commit message conventions below to
 - `feat:` - Use for new features.
 - `chore:` - Use for maintenance tasks (e.g., updating dependencies, configuration changes).
 
+## Feedback #TODO
 
 ## Notes for connecting pages
 1. After implementing view must add to MainWithDB set up with UseCaseFactory which follows flow:      
