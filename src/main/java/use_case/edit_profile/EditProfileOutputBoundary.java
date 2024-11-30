@@ -19,4 +19,5 @@ public interface EditProfileOutputBoundary {
      */
     void prepareFailView(String errorMessage);
 
+    void switchToSwipeView();
 }

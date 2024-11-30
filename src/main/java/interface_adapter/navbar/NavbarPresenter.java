@@ -28,7 +28,7 @@ public class NavbarPresenter implements NavbarOutputBoundary {
                            SwipeViewModel swipeViewModel,
                            CompatibilityViewModel compatibilityViewModel,
                            EditProfileViewModel editProfileViewModel,
-                           CompatibilityViewModel compatibilityViewModel, ListChatViewModel listChatViewModel) {
+                           ListChatViewModel listChatViewModel) {
         this.navbarViewModel = navbarViewModel;
         this.viewManagerModel = viewManagerModel;
         this.swipeViewModel = swipeViewModel;

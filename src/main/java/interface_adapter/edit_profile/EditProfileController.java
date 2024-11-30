@@ -13,10 +13,10 @@ import java.util.List;
  */
 public class EditProfileController {
 
-    private final EditProfileInputBoundary userSignupUseCaseInteractor;
+    private final EditProfileInputBoundary userEditProfileUseCaseInteractor;
 
     public EditProfileController(EditProfileInputBoundary userSignupUseCaseInteractor) {
-        this.userSignupUseCaseInteractor = userSignupUseCaseInteractor;
+        this.userEditProfileUseCaseInteractor = userSignupUseCaseInteractor;
     }
 
     /**
@@ -38,10 +38,14 @@ public class EditProfileController {
         final EditProfileInputData editProfileInputData = new EditProfileInputData(
                 fullname, username, password1, image, password2, location, gender, dateOfBirth, preferredGender, preferredAge);
         try {
-            userSignupUseCaseInteractor.execute(editProfileInputData);
+            userEditProfileUseCaseInteractor.execute(editProfileInputData);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void switchToSwipeView() {
+        userEditProfileUseCaseInteractor.switchToSwipeView();
     }
 
 }

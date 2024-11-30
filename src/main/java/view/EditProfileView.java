@@ -41,7 +41,7 @@ public class EditProfileView extends JPanel implements ActionListener, PropertyC
 
     // Replacing JTextField with JDatePickerImpl
     private final JDatePickerImpl dobDatePicker;
-    private final JButton signUp;
+    private final JButton updateProfile;
     private final JButton cancel;
     private final JButton uploadProfileButton;
     private final JPanel preferredGenderPanel;
@@ -103,8 +103,8 @@ public class EditProfileView extends JPanel implements ActionListener, PropertyC
         preferredAgeComboBox.setSelectedIndex(0); // Default selection
 
         final JPanel buttons = new JPanel();
-        signUp = new JButton(EditProfileViewModel.SIGNUP_BUTTON_LABEL);
-        buttons.add(signUp);
+        updateProfile = new JButton("Update Profile");
+        buttons.add(updateProfile);
         cancel = new JButton(EditProfileViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
 
@@ -113,10 +113,10 @@ public class EditProfileView extends JPanel implements ActionListener, PropertyC
         uploadProfileButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         uploadProfileButton.addActionListener(e -> openProfileUploadView());
 
-        signUp.addActionListener(
+        updateProfile.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(signUp)) {
+                        if (evt.getSource().equals(updateProfile)) {
 
                             final EditProfileState currentState = editProfileViewModel.getState();
                             if (profileImageUrl != null) {
@@ -137,13 +137,21 @@ public class EditProfileView extends JPanel implements ActionListener, PropertyC
                                     currentState.getPreferredAge()
                             );
 
-                            JOptionPane.showMessageDialog(null, "Edit Profile successful!");
                         }
                     }
                 }
         );
 
-//        cancel.addActionListener(this);
+        cancel.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        editProfileController.switchToSwipeView();
+
+                    }
+                }
+
+        );
+
         addPasswordListener();
         addRepeatPasswordListener();
         addDOBListener();

@@ -12,6 +12,7 @@ import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.swipe.SwipeViewModel;
 import use_case.chat.ChatDataAccessInterface;
 import use_case.edit_profile.EditProfileInputBoundary;
 import use_case.edit_profile.EditProfileInteractor;
@@ -44,10 +45,10 @@ public final class EditProfileUseCaseFactory {
      */
     public static EditProfileView create(
             ViewManagerModel viewManagerModel, LoginViewModel loginViewModel,
-            EditProfileViewModel editProfileViewModel, PreferencesViewModel preferencesViewModel, EditProfileUserDataAccessInterface userDataAccessObject) {
+            EditProfileViewModel editProfileViewModel, PreferencesViewModel preferencesViewModel, SwipeViewModel swipeViewModel, EditProfileUserDataAccessInterface userDataAccessObject) {
 
         final EditProfileController editProfileController = createUserEditProfileUseCase(viewManagerModel, editProfileViewModel,
-                loginViewModel, preferencesViewModel, userDataAccessObject);
+                loginViewModel, preferencesViewModel, swipeViewModel, userDataAccessObject);
         return new EditProfileView(editProfileController, editProfileViewModel);
 
     }
@@ -56,12 +57,13 @@ public final class EditProfileUseCaseFactory {
                                                             EditProfileViewModel editProfileViewModel,
                                                             LoginViewModel loginViewModel,
                                                             PreferencesViewModel preferencesViewModel,
+                                                            SwipeViewModel swipeViewModel,
                                                             EditProfileUserDataAccessInterface userDataAccessObject) {
 
         // Notice how we pass this method's parameters to the Presenter.
         final EditProfileOutputBoundary editProfileOutputBoundary = new EditProfilePresenter(viewManagerModel,
                 editProfileViewModel,
-                loginViewModel);
+                loginViewModel, swipeViewModel);
 
         final UserFactory userFactory = new CommonUserFactory();
         final ChatDataAccessObject chatDataAccessObject = new ChatDataAccessObject();

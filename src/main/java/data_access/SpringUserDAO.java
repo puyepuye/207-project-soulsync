@@ -113,7 +113,7 @@ public class SpringUserDAO implements CommandLineRunner {
         views.add(compatibilityView, compatibilityView.getViewName());
 
         final EditProfileView editProfileView = EditProfileUseCaseFactory.create(viewManagerModel,
-                loginViewModel, editProfileViewModel, preferencesViewModel, userDataAccessObject);
+                loginViewModel, editProfileViewModel, preferencesViewModel, swipeViewModel, userDataAccessObject);
 
         views.add(editProfileView, editProfileView.getViewName());
 

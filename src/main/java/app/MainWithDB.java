@@ -110,7 +110,7 @@ public class MainWithDB implements CommandLineRunner {
         final ChatDataAccessObject chatDataAccessObject = new ChatDataAccessObject();
 
         final SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel,
-                                                                  signupViewModel, preferencesViewModel, swipeViewModel, compatibilityViewModel, editProfileViewModel, userDataAccessObject, listChatViewModel);
+                                                                  signupViewModel, preferencesViewModel, swipeViewModel, compatibilityViewModel, editProfileViewModel, userDataAccessObject);
         views.add(signupView, signupView.getViewName());
 
         final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, swipeViewModel,
@@ -142,13 +142,13 @@ public class MainWithDB implements CommandLineRunner {
         views.add(compatibilityView, compatibilityView.getViewName());
 
         final EditProfileView editProfileView = EditProfileUseCaseFactory.create(viewManagerModel,
-                loginViewModel, editProfileViewModel, preferencesViewModel, userDataAccessObject);
+                loginViewModel, editProfileViewModel, preferencesViewModel, swipeViewModel, userDataAccessObject);
 
         views.add(editProfileView, editProfileView.getViewName());
 
         final ListChatView listChatView = ListChatUseCaseFactory.create(viewManagerModel,
                 listChatViewModel, chatViewModel, chatDataAccessObject,
-                navbarViewModel, swipeViewModel, compatibilityViewModel);
+                navbarViewModel, swipeViewModel, compatibilityViewModel, editProfileViewModel);
         views.add(listChatView, listChatView.getViewName());
 
         final ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatViewModel,

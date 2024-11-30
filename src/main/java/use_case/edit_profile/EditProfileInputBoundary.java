@@ -15,4 +15,5 @@ public interface EditProfileInputBoundary {
      */
     void execute(EditProfileInputData editProfileInputData) throws ParseException;
 
+    void switchToSwipeView();
 }

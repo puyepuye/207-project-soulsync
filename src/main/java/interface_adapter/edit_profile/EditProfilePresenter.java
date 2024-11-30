@@ -5,6 +5,7 @@ import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.preferences.PreferencesState;
 import interface_adapter.preferences.PreferencesViewModel;
+import interface_adapter.swipe.SwipeViewModel;
 import use_case.edit_profile.EditProfileOutputBoundary;
 import use_case.edit_profile.EditProfileOutputData;
 
@@ -16,13 +17,16 @@ public class EditProfilePresenter implements EditProfileOutputBoundary {
     private final EditProfileViewModel editProfileViewModel;
     private final LoginViewModel loginViewModel;
     private final ViewManagerModel viewManagerModel;
+    private final SwipeViewModel swipeViewModel;
 
     public EditProfilePresenter(ViewManagerModel viewManagerModel,
-                           EditProfileViewModel editProfileViewModel,
-                           LoginViewModel loginViewModel) {
+                                EditProfileViewModel editProfileViewModel,
+                                LoginViewModel loginViewModel,
+                                SwipeViewModel swipeViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.editProfileViewModel = editProfileViewModel;
         this.loginViewModel = loginViewModel;
+        this.swipeViewModel = swipeViewModel;
     }
 
     @Override
@@ -57,6 +61,12 @@ public class EditProfilePresenter implements EditProfileOutputBoundary {
         editProfileState.setPreferredGenderError(error);
         editProfileState.setPreferredAgeError(error);
         editProfileViewModel.firePropertyChanged();
+    }
+
+    @Override
+    public void switchToSwipeView() {
+        viewManagerModel.setState(swipeViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 
 }

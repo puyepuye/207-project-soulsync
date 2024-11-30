@@ -30,6 +30,10 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
 
     @Override
     public void execute(EditProfileInputData editProfileInputData) throws ParseException {
+        if ((!editProfileInputData.getPassword().isEmpty() || !editProfileInputData.getRepeatPassword().isEmpty()) && !editProfileInputData.getPassword().equals(editProfileInputData.getRepeatPassword())) {
+            JOptionPane.showMessageDialog(null, "Passwords don't match");
+            return;
+        }
         if (editProfileInputData.getImage() != null && editProfileInputData.getImage() != "") {
             final User currentUserInfo = userDataAccessObject.get(editProfileInputData.getUsername());
             final User user =  userFactory.create(currentUserInfo.getUsername(),
@@ -50,13 +54,13 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
                     new ArrayList<>() {{}}
             );
             userDataAccessObject.changeImage(user);
-            chatDataAccessObject.updateProfilePicture(editProfileInputData.getUsername(), editProfileInputData.getImage());
+            chatDataAccessObject.updateProfilePicture(currentUserInfo.getUsername(), editProfileInputData.getImage());
             final EditProfileOutputData editProfileOutputData = new EditProfileOutputData(user.getUsername(), user.getFullname(), user.getPassword(), user.getImage(),
                     user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
 
             userPresenter.prepareSuccessView(editProfileOutputData);
         }
-        if (!editProfileInputData.getPassword().isEmpty() && editProfileInputData.getPassword().equals(editProfileInputData.getRepeatPassword())) {
+        if (!editProfileInputData.getPassword().isEmpty() && !editProfileInputData.getRepeatPassword().isEmpty() && editProfileInputData.getPassword().equals(editProfileInputData.getRepeatPassword())) {
             final User currentUserInfo = userDataAccessObject.get(editProfileInputData.getUsername());
             final User user =  userFactory.create(currentUserInfo.getUsername(),
                     editProfileInputData.getPassword(),
@@ -108,7 +112,7 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
                     new ArrayList<>() {{}}
             );
             userDataAccessObject.changeFullname(user);
-            chatDataAccessObject.updateFullName(editProfileInputData.getUsername(), editProfileInputData.getFullname());
+            chatDataAccessObject.updateFullName(currentUserInfo.getUsername(), editProfileInputData.getFullname());
             final EditProfileOutputData editProfileOutputData = new EditProfileOutputData(user.getUsername(), user.getFullname(), user.getPassword(), user.getImage(),
                     user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
 
@@ -239,6 +243,12 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
 
             userPresenter.prepareSuccessView(editProfileOutputData);
         }
+        JOptionPane.showMessageDialog(null, "Update Profile successful!");
+
     }
 
+    @Override
+    public void switchToSwipeView() {
+        userPresenter.switchToSwipeView();
+    }
 }
