@@ -10,16 +10,24 @@ A dating app created in Java as the final project for the course, CSC207 Softwar
 
 ## Installation
 1. Clone using `git clone https://github.com/puyepuye/207-project-soulsync.git`
-2. In IntelliJ, click on pom.xml -> maven -> reload project
+2. Install ngrok from https://ngrok.com/
 3. Create a .env include the following:
+4. Create a new sendbird account and project here https://sendbird.com/
 ```
-SENDBIRD_API_KEY={your sendbird api key here}
-SENDBIRD_APP_ID={your sendbird app id here}
-MONGODB_URI={url to mongodb cluster, you should find it on your mongodb page}
-USERNAME={your mongodb username}
-PASSWORD={your mongodb password}
+SENDBIRD_API_KEY={YOUR API KEY HERE}
+SENDBIRD_APP_ID={YOUR APP ID HERE}
+MONGODB_URI={URI TO MONGODB CLUSTER}
+USERNAME={YOUR MONGODB USERNAME}
+PASSWORD={YOUR MONGODB PASSWORD}
+```
+5. In IntelliJ, click on pom.xml -> maven -> reload project
+6. You will need to setup one machine as a main server of the app, then tunnel your IP address by running `ngrok http 8080` in your terminal
+7. In your sendbird dashboard, go to app -> chat -> settings -> features -> webhook and set the URl to be the machine you choose to be your server
+8. Run that same line on all the connected clients
+9. Copy the client URLs and paste it line by line into `clientUrls.txt`
+10. Run the app from `MainwithDB.java` and enjoy!
 
-```
+    
 ## 🌟 Contributors
 1. **Yi-An Chu** (Kimi)
 2. **Sataphon Obra** (PF)
