@@ -9,6 +9,7 @@ A dating app created in Java as the final project for the course, CSC207 Softwar
 - After a user has been matched, users can chat with the other matched user in real time.
 
 ## Installation
+As a forewarning, this app is still in the prototyping phase, so the user would be required to manually set up a database on MongdoDB, their own chat app in SendBird's API service, as well as setting up an account for cloudinary. #TODO add cloudinary steps
 1. Clone using `git clone https://github.com/puyepuye/207-project-soulsync.git`
 2. Install ngrok from ngrok.com
 3. Create a .env include the following:
