@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class ChatListInteractorTest {
+public class ListChatInteractorTest {
     private ChatDataAccessObject dao;
     private ListChatInteractor interactor;
     private ListChatPresenter presenter;
@@ -38,7 +38,7 @@ public class ChatListInteractorTest {
     }
 
     @Test
-    public void enterChatTest() throws IOException, InterruptedException {
+    public void enterChatTest() { // Test to make sure that the right methods are being called.
         interactor.enterChat(chatUrl);
         verify(presenter, times(1)).enterChat(chatUrl);
     }
