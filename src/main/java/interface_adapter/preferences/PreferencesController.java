@@ -3,8 +3,11 @@ package interface_adapter.preferences;
 import use_case.login.LoginInputData;
 import use_case.preferences.PreferenceInputBoundary;
 import use_case.preferences.PreferenceInputData;
+import use_case.signup.SignupInputData;
+import use_case.signup.SignupInteractor;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,10 +30,11 @@ public class PreferencesController {
      *                        where the key is the age range type (e.g., "min" or "max")
      *                        and the value is the corresponding age
      */
-    public void execute(String username, List<String> tags, String bio, Map<String, Boolean> preferences,
-                        List<String> preferredGender, Map<String, Integer> preferredAge) {
-        final PreferenceInputData preferenceInputData = new PreferenceInputData(username, tags, bio, preferences, preferredGender, preferredAge);
+    public void execute(String fullname, String username, String password1, String password2,
+                        String image, String location, String gender, Date dateOfBirth, List<String> preferredGender,
+                        HashMap<String, Integer> preferredAge, List<String> tags, String bio, Map<String, Boolean> preferences) {
 
+        final PreferenceInputData preferenceInputData = new PreferenceInputData(fullname, username, password1, image, password2, location, gender, dateOfBirth, preferredGender, preferredAge, tags, bio, preferences);
         preferenceInputBoundary.execute(preferenceInputData);
     }
 
