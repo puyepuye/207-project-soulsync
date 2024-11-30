@@ -61,15 +61,34 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
             String userName = userDoc.getString(USERNAME);
             String password = userDoc.getString(PASSWORD);
 
+            HashMap<String, Integer> preferredAgeMap = null;
+            if (userDoc.get("preferredAge") != null) {
+                Document preferredAgeDoc = (Document) userDoc.get("preferredAge");
+
+                // Initialize the HashMap
+                preferredAgeMap = new HashMap<>();
+
+                // Iterate through the Document and cast values to Integer
+                for (String key : preferredAgeDoc.keySet()) {
+                    Object value = preferredAgeDoc.get(key);
+                    if (value instanceof Integer) {
+                        preferredAgeMap.put(key, (Integer) value);
+                    } else {
+                        // Log or handle unexpected types
+                        System.out.println("Unexpected value type for key " + key + ": " + value.getClass());
+                    }
+                }
+            }
+
             return userFactory.create(userName,
-                    password,
+                    userDoc.getString("password"),
                     userDoc.getString("image"),
                     userDoc.getString("fullName"),
                     userDoc.getString("location"),
                     userDoc.getString("gender"),
                     (List<String>) userDoc.get("preferredGender"),
                     userDoc.getDate("dateOfBirth"),
-                    (HashMap<String, Integer>) userDoc.get("preferredAge"),
+                    preferredAgeMap,
                     userDoc.getString("bio"),
                     (Map<String, Boolean>) userDoc.get("preferences"),
                     (List<String>) userDoc.get("tags"),
