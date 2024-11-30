@@ -6,6 +6,7 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityController;
 import interface_adapter.compatibility.CompatibilityPresenter;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.edit_profile.EditProfileViewModel;
 import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginController;
@@ -54,6 +55,7 @@ public final class CompatibilityUseCaseFactory {
             CompatibilityViewModel compatibilityViewModel,
             NavbarViewModel navbarViewModel,
             SwipeViewModel swipeViewModel,
+            EditProfileViewModel editProfileViewModel,
             CompatibilityUserDataAccessInterface userDataAccessInterface,
             ListChatViewModel listChatViewModel) {
 
@@ -61,7 +63,7 @@ public final class CompatibilityUseCaseFactory {
                 createCompatibilityUseCase(viewManagerModel, compatibilityViewModel, userDataAccessInterface);
 
         final NavbarController navBarController =
-                createNavbarUseCase(viewManagerModel, swipeViewModel, navbarViewModel, compatibilityViewModel, listChatViewModel);
+                createNavbarUseCase(viewManagerModel, swipeViewModel, navbarViewModel, compatibilityViewModel, editProfileViewModel, listChatViewModel);
 
         return new CompatibilityView(compatibilityViewModel, compatibilityController, navBarController);
 

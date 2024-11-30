@@ -1,8 +1,8 @@
 package app;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.chat.ChatViewModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.edit_profile.EditProfileViewModel;
 import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginController;
@@ -15,6 +15,7 @@ import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginUserDataAccessInterface;
 import view.CompatibilityView;
+import view.EditProfileView;
 import view.LoginView;
 
 /**
@@ -42,11 +43,12 @@ public final class LoginUseCaseFactory {
             SwipeViewModel swipeViewModel,
             SignupViewModel signupViewModel,
             CompatibilityViewModel compatibilityViewModel,
+            EditProfileViewModel editProfileViewModel,
             LoginUserDataAccessInterface userDataAccessObject,
             ListChatViewModel listChatViewModel) {
 
         final LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, swipeViewModel,
-                signupViewModel, compatibilityViewModel, userDataAccessObject, listChatViewModel);
+                signupViewModel, compatibilityViewModel, editProfileViewModel, userDataAccessObject, listChatViewModel);
         return new LoginView(loginViewModel, loginController);
 
     }
@@ -57,12 +59,13 @@ public final class LoginUseCaseFactory {
             SwipeViewModel swipeViewModel,
             SignupViewModel signupViewModel,
             CompatibilityViewModel compatibilityViewModel,
+            EditProfileViewModel editProfileViewModel,
             LoginUserDataAccessInterface userDataAccessObject,
             ListChatViewModel listChatViewModel) {
 
         // Notice how we pass this method's parameters to the Presenter.
         final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, swipeViewModel,
-                loginViewModel, signupViewModel, compatibilityViewModel, listChatViewModel);
+                loginViewModel, signupViewModel, compatibilityViewModel, editProfileViewModel, listChatViewModel);
         final LoginInputBoundary loginInteractor = new LoginInteractor(
                 userDataAccessObject, loginOutputBoundary);
 

@@ -28,5 +28,12 @@ public class NavbarController {
         navBarUseCaseInteractor.switchToCompatibilityView();
     }
 
+    /**
+     * Executes the "switch to Edit Profile" Use Case.
+     */
+    public void switchToEditProfileView() {
+        navBarUseCaseInteractor.switchToEditProfileView();
+    }
+
     public void switchToListChatView() {navBarUseCaseInteractor.switchToListChatView();}
 }
