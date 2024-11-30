@@ -10,9 +10,9 @@ A dating app created in Java as the final project for the course, CSC207 Softwar
 
 ## Installation
 1. Clone using `git clone https://github.com/puyepuye/207-project-soulsync.git`
-2. Install ngrok from https://ngrok.com/
+2. Install ngrok from ngrok.com
 3. Create a .env include the following:
-4. Create a new sendbird account and project here https://sendbird.com/
+4. Create a new sendbird account and project here sendbird.com
 ```
 SENDBIRD_API_KEY={YOUR API KEY HERE}
 SENDBIRD_APP_ID={YOUR APP ID HERE}
@@ -34,6 +34,17 @@ PASSWORD={YOUR MONGODB PASSWORD}
 3. **Lapatrada Jaroonjetjumnong (Claire)**
 4. **Kay Zin Thant** (Yolanda)
 5. **Thitiwut Pattanasuttinont** (Mac)
+
+## 📜 Contributing Conventions
+
+When making contributions, please follow the commit message conventions below to keep the project organized and maintainable:
+
+> **Commit Message Format**: `type: message`
+
+### Commit Types
+- `fix:` - Use for bug fixes.
+- `feat:` - Use for new features.
+- `chore:` - Use for maintenance tasks (e.g., updating dependencies, configuration changes).
 
 
 ## Notes for connecting pages
