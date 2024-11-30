@@ -1,141 +1,85 @@
 package use_case.login;
-
-import data_access.InMemoryUserDataAccessObject;
-import entity.CommonUserFactory;
 import entity.User;
-import entity.UserFactory;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
 
 public class LoginInteractorTest {
 
-    @Test
-    public void successTest() {
-        LoginInputData inputData = new LoginInputData("Paul", "password");
-        LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
+    private LoginInteractor loginInteractor;
+    private LoginUserDataAccessInterface mockLoginUserDAI;
+    private LoginOutputBoundary mockLoginOutputBoundary;
 
-        // For the success test, we need to add Paul to the data access repository before we log in.
-        UserFactory factory = new CommonUserFactory();
-        User user = factory.create("Paul", "password");
-        userRepository.saveUser(user);
 
-        // This creates a successPresenter that tests whether the test case is as we expect.
-        LoginOutputBoundary successPresenter = new LoginOutputBoundary() {
-            @Override
-            public void prepareSuccessView(LoginOutputData user) {
-                assertEquals("Paul", user.getUsername());
-            }
+    @BeforeEach
+    public void mockSetUp() {
 
-            @Override
-            public void prepareFailView(String error) {
-                fail("Use case failure is unexpected.");
-            }
+        mockLoginUserDAI = Mockito.mock(LoginUserDataAccessInterface.class);
+        mockLoginOutputBoundary = Mockito.mock(LoginOutputBoundary.class);
+        loginInteractor = new LoginInteractor(mockLoginUserDAI, mockLoginOutputBoundary);
 
-            @Override
-            public void switchToSignupView() {
-                // This is expected
-            }
-        };
-
-        LoginInputBoundary interactor = new LoginInteractor(userRepository, successPresenter);
-        interactor.execute(inputData);
     }
 
     @Test
     public void successUserLoggedInTest() {
-        LoginInputData inputData = new LoginInputData("Paul", "password");
-        LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
 
-        // For the success test, we need to add Paul to the data access repository before we log in.
-        UserFactory factory = new CommonUserFactory();
-        User user = factory.create("Paul", "password");
-        userRepository.saveUser(user);
+        String username = "userExists";
+        String password = "passwordExists";
+        LoginInputData inputData = new LoginInputData(username, password);
 
-        // This creates a successPresenter that tests whether the test case is as we expect.
-        LoginOutputBoundary successPresenter = new LoginOutputBoundary() {
-            @Override
-            public void prepareSuccessView(LoginOutputData user) {
-                assertEquals("Paul", userRepository.getCurrentUser());
-            }
+        User mockUser = Mockito.mock(User.class);
 
-            @Override
-            public void prepareFailView(String error) {
-                fail("Use case failure is unexpected.");
-            }
+        when(mockLoginUserDAI.existsByName(username)).thenReturn(true);
+        when(mockLoginUserDAI.get(username)).thenReturn(mockUser);
+        when(mockUser.getUsername()).thenReturn(username);
+        when(mockUser.getPassword()).thenReturn(password);
 
-            @Override
-            public void switchToSignupView() {
-                // This is expected
-            }
-        };
+        loginInteractor.execute(inputData);
 
-        LoginInputBoundary interactor = new LoginInteractor(userRepository, successPresenter);
-        assertNull(userRepository.getCurrentUser());
-        interactor.execute(inputData);
-    }
-
-    @Test
-    public void failurePasswordMismatchTest() {
-        LoginInputData inputData = new LoginInputData("Paul", "wrong");
-        LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
-
-        // For this failure test, we need to add Paul to the data access repository before we log in, and
-        // the passwords should not match.
-        UserFactory factory = new CommonUserFactory();
-        User user = factory.create("Paul", "password");
-        userRepository.saveUser(user);
-
-        // This creates a presenter that tests whether the test case is as we expect.
-        LoginOutputBoundary failurePresenter = new LoginOutputBoundary() {
-            @Override
-            public void prepareSuccessView(LoginOutputData user) {
-                // this should never be reached since the test case should fail
-                fail("Use case success is unexpected.");
-            }
-
-            @Override
-            public void prepareFailView(String error) {
-                assertEquals("Incorrect password for \"Paul\".", error);
-            }
-
-            @Override
-            public void switchToSignupView() {
-                // This is expected
-            }
-        };
-
-        LoginInputBoundary interactor = new LoginInteractor(userRepository, failurePresenter);
-        interactor.execute(inputData);
+        verify(mockLoginUserDAI).setCurrentUser(username);
+        verify(mockLoginOutputBoundary).prepareSuccessView(any(LoginOutputData.class));
     }
 
     @Test
     public void failureUserDoesNotExistTest() {
-        LoginInputData inputData = new LoginInputData("Paul", "password");
-        LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
 
-        // Add Paul to the repo so that when we check later they already exist
+        String username = "userDoesNotExist";
+        String password = "passwordDoesNotExist";
 
-        // This creates a presenter that tests whether the test case is as we expect.
-        LoginOutputBoundary failurePresenter = new LoginOutputBoundary() {
-            @Override
-            public void prepareSuccessView(LoginOutputData user) {
-                // this should never be reached since the test case should fail
-                fail("Use case success is unexpected.");
-            }
+        LoginInputData inputData = new LoginInputData(username, password);
 
-            @Override
-            public void prepareFailView(String error) {
-                assertEquals("Paul: Account does not exist.", error);
-            }
+        when(mockLoginUserDAI.existsByName(username)).thenReturn(false);
 
-            @Override
-            public void switchToSignupView() {
-                // This is expected
-            }
-        };
+        loginInteractor.execute(inputData);
 
-        LoginInputBoundary interactor = new LoginInteractor(userRepository, failurePresenter);
-        interactor.execute(inputData);
+        verify(mockLoginOutputBoundary).prepareFailView(username + ": Account does not exist.");
     }
+
+    @Test
+    public void failurePasswordMismatchTest() {
+
+        String username = "currentUser";
+        String password = "passwordMismatch";
+        LoginInputData inputData = new LoginInputData(username, password);
+
+        User mockUser = Mockito.mock(User.class);
+
+        when(mockLoginUserDAI.existsByName(username)).thenReturn(true);
+        when(mockLoginUserDAI.get(username)).thenReturn(mockUser);
+        when(mockUser.getPassword()).thenReturn("correctPassword");
+
+        loginInteractor.execute(inputData);
+
+        verify(mockLoginOutputBoundary).prepareFailView("Incorrect password for \"" + username + "\".");
+    }
+
+    @Test
+    public void switchToSignupViewTest() {
+
+        loginInteractor.switchToSignupView();
+
+        verify(mockLoginOutputBoundary).switchToSignupView();
+    }
+
 }
