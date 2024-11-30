@@ -3,9 +3,14 @@
 A dating app created in Java as the final project for the course, CSC207 Software Design, during the fall 2024 semester the university of Toronto. This app allows users to create an account, find matches and chat with like minded people! (cause Toronto is a really big city and it's hard to meet people)
 
 ## Table of Contents:
-[Features](#Features:)
-
-## Features:
+- [Features](#features)
+- [Installation](#installation)
+- [Usage Guide](#usage-guide)
+- [Contributors](#contributors)
+- [Contributing Conventions](#contributing-conventions)
+- [Feedback](#feedback)
+- [License](#license)
+## Features
 - Users can create an account with their personal information and start matching with other users
 - Users can select other users to match with Tinder swipe style
 - Users can be matched based on preferences or through our in house Fengshui compatability calculator!
@@ -31,16 +36,17 @@ PASSWORD={YOUR MONGODB PASSWORD}
 9. Copy the client URLs and paste it line by line into `clientUrls.txt`
 10. Run the app from `MainwithDB.java` and enjoy!
 
-## Usage guide: #TODO
+## Usage guide:
+#TODO
     
-## 🌟 Contributors
+## Contributors
 1. **Yi-An Chu** (Kimi)
 2. **Sataphon Obra** (PF)
 3. **Lapatrada Jaroonjetjumnong (Claire)**
 4. **Kay Zin Thant** (Yolanda)
 5. **Thitiwut Pattanasuttinont** (Mac)
 
-## 📜 Contributing Conventions
+## Contributing Conventions
 
 When making contributions, please follow the commit message conventions below to keep the project organized and maintainable:
 
@@ -51,7 +57,8 @@ When making contributions, please follow the commit message conventions below to
 - `feat:` - Use for new features.
 - `chore:` - Use for maintenance tasks (e.g., updating dependencies, configuration changes).
 
-## Feedback #TODO
+## Feedback 
+#TODO
 
 ## Notes for connecting pages
 1. After implementing view must add to MainWithDB set up with UseCaseFactory which follows flow:      
@@ -65,3 +72,4 @@ When making contributions, please follow the commit message conventions below to
                     currentState.getPassword()
                    );
    ```
+## License
