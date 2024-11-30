@@ -15,5 +15,10 @@ public interface NavbarInputBoundary {
      */
     void switchToCompatibilityView();
 
+    /**
+     * Executes the switch to Edit Profile view use case.
+     */
+    void switchToEditProfileView();
+
     void switchToListChatView();
 }

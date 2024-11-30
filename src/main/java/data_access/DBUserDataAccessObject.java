@@ -17,6 +17,7 @@ import entity.User;
 import entity.UserFactory;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.compatibility.CompatibilityUserDataAccessInterface;
+import use_case.edit_profile.EditProfileUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 import use_case.preferences.PreferenceUserDataAccessInterface;
@@ -30,7 +31,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                                                ChangePasswordUserDataAccessInterface,
                                                PreferenceUserDataAccessInterface,
                                                SwipeUserDataAccessInterface,
-                                               CompatibilityUserDataAccessInterface
+                                               CompatibilityUserDataAccessInterface,
+                                               EditProfileUserDataAccessInterface
 {
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
@@ -149,11 +151,59 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         userCollection.updateOne(query, update);
     }
 
-
     @Override
     public void changePassword(User user) {
         Document query = new Document("username", user.getUsername());
         Document update = new Document("$set", new Document("password", user.getPassword()));
+        userCollection.updateOne(query, update);
+    }
+
+    @Override
+    public void changeImage(User user) {
+        Document query = new Document("username", user.getUsername());
+        Document update = new Document("$set", new Document("image", user.getImage()));
+        userCollection.updateOne(query, update);
+    }
+
+    @Override
+    public void changeFullname(User user) {
+        Document query = new Document("username", user.getUsername());
+        Document update = new Document("$set", new Document("fullName", user.getFullname()));
+        userCollection.updateOne(query, update);
+    }
+
+    @Override
+    public void changeLocation(User user) {
+        Document query = new Document("username", user.getUsername());
+        Document update = new Document("$set", new Document("location", user.getLocation()));
+        userCollection.updateOne(query, update);
+    }
+
+    @Override
+    public void changeGender(User user) {
+        Document query = new Document("username", user.getUsername());
+        Document update = new Document("$set", new Document("gender", user.getGender()));
+        userCollection.updateOne(query, update);
+    }
+
+    @Override
+    public void changePreferredGender(User user) {
+        Document query = new Document("username", user.getUsername());
+        Document update = new Document("$set", new Document("preferredGender", user.getPreferredGender()));
+        userCollection.updateOne(query, update);
+    }
+
+    @Override
+    public void changeDOB(User user) {
+        Document query = new Document("username", user.getUsername());
+        Document update = new Document("$set", new Document("dateOfBirth", user.getDateOfBirth()));
+        userCollection.updateOne(query, update);
+    }
+
+    @Override
+    public void changePreferredAge(User user) {
+        Document query = new Document("username", user.getUsername());
+        Document update = new Document("$set", new Document("preferredAge", user.getPreferredAge()));
         userCollection.updateOne(query, update);
     }
 

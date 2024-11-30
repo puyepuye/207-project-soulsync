@@ -1,83 +1,56 @@
-package app;
+package data_access;
 
-import java.awt.CardLayout;
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-
-import data_access.ChatDataAccessObject;
-import data_access.DBUserDataAccessObject;
-import data_access.SpringUserDAO;
+import app.*;
 import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.chat.ChatViewModel;
-import interface_adapter.listchat.ListChatViewModel;
-import org.json.JSONObject;
-import org.json.JSONException;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import interface_adapter.signup.SignupViewModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
 import interface_adapter.edit_profile.EditProfileViewModel;
-
+import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.navbar.NavbarViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
-import interface_adapter.swipe.SwipeViewModel;
-import org.springframework.boot.Banner;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import use_case.change_password.ChangePasswordUserDataAccessInterface;
-import use_case.compatibility.CompatibilityUserDataAccessInterface;
-import use_case.login.LoginUserDataAccessInterface;
-import use_case.preferences.PreferenceUserDataAccessInterface;
 import interface_adapter.signup.SignupViewModel;
-import use_case.signup.SignupUserDataAccessInterface;
-import use_case.swipe.SwipeUserDataAccessInterface;
+import interface_adapter.swipe.SwipeViewModel;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ApplicationContext;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import view.*;
 
-/**
- * The version of Main with an external database used to persist user data.
- */
+import javax.swing.*;
+import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-@SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity", "checkstyle:AnnotationUseStyle"})
-@ComponentScan(basePackages = {"interface_adapter.chat"})
 @SpringBootApplication
-public class MainWithDB implements CommandLineRunner {
+@EnableMongoRepositories
+public class SpringUserDAO implements CommandLineRunner {
+
+
+    //@Override
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(MainWithDB.class)
+    new SpringApplicationBuilder(SpringUserDAO.class)
                 .web(WebApplicationType.SERVLET)
                 .headless(false)
                 .run(args);
+        //SpringApplication.run(SpringUserDAO.class, args); System.out.println("Himom");
     }
-    /**
-     * The main method for starting the program with an external database used to persist user data.
-     * @param args input to main
-     */
-    public void run(String... args) {
-        // Build the main program window, the main panel containing the
-        // various cards, and the layout, and stitch them together.
 
-        // The main application window.
+
+
+    public void run(String... args) {
+        // Claire's stuff
         final JFrame application = new JFrame("Login Example");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,13 +77,11 @@ public class MainWithDB implements CommandLineRunner {
         final CompatibilityViewModel compatibilityViewModel = new CompatibilityViewModel();
         final EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
         final ListChatViewModel listChatViewModel = new ListChatViewModel();
-        final ChatViewModel chatViewModel = new ChatViewModel();
 
         final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
-        final ChatDataAccessObject chatDataAccessObject = new ChatDataAccessObject();
 
         final SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel,
-                                                                  signupViewModel, preferencesViewModel, swipeViewModel, compatibilityViewModel, editProfileViewModel, userDataAccessObject, listChatViewModel);
+                signupViewModel, preferencesViewModel, swipeViewModel, compatibilityViewModel, editProfileViewModel, userDataAccessObject);
         views.add(signupView, signupView.getViewName());
 
         final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, swipeViewModel,
@@ -118,7 +89,7 @@ public class MainWithDB implements CommandLineRunner {
         views.add(loginView, loginView.getViewName());
 
         final LoggedInView loggedInView = ChangePasswordUseCaseFactory.create(viewManagerModel,
-                                                                              loggedInViewModel, userDataAccessObject);
+                loggedInViewModel, userDataAccessObject);
         views.add(loggedInView, loggedInView.getViewName());
 
         final PreferenceView preferenceView = PreferenceUseCaseFactory.create(viewManagerModel,
@@ -146,24 +117,41 @@ public class MainWithDB implements CommandLineRunner {
 
         views.add(editProfileView, editProfileView.getViewName());
 
-        final ListChatView listChatView = ListChatUseCaseFactory.create(viewManagerModel,
-                listChatViewModel, chatViewModel, chatDataAccessObject,
-                navbarViewModel, swipeViewModel, compatibilityViewModel);
-        views.add(listChatView, listChatView.getViewName());
-
-        final ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatViewModel,
-                listChatViewModel, chatDataAccessObject);
-        System.out.println(chatView.getName());
-        views.add(chatView, chatView.getName());
-
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();
 
         application.pack();
-        final int height = 600;
-        final int width = 400;
-        application.setSize(width, height);
+        application.setSize(400, 600);
         application.setVisible(true);
+    }
 
+}
+
+@RestController
+class Controller {
+    public String convertMillisToDate(long millis) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        Date date = new Date(millis);
+        return sdf.format(date);
+    }
+
+    @PostMapping("/")
+    public void receiveMessages(@RequestBody String body) throws JSONException {
+        JSONObject json = new JSONObject(body);
+
+        // Access the "payload" object
+        JSONObject payload = json.getJSONObject("payload");
+
+        // Retrieve "message" and "created_at" values
+        String message = payload.getString("message");
+        String createdAt = convertMillisToDate(payload.getLong("created_at"));
+        String senderUsername = json.getJSONObject("sender").getString("user_id");
+
+        System.out.println("message : " + message);
+        System.out.println("createdAt : " + createdAt);
+        System.out.println("senderUsername : " + senderUsername);
+
+
+        //notificationService.processNotification(message);
     }
 }
