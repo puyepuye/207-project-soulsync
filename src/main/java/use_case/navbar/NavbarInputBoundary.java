@@ -14,4 +14,6 @@ public interface NavbarInputBoundary {
      * Executes the switch to Compatibiblity view use case.
      */
     void switchToCompatibilityView();
+
+    void switchToListChatView();
 }
