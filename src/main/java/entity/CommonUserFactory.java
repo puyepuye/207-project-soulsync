@@ -1,9 +1,6 @@
 package entity;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Factory for creating CommonUser objects.
@@ -19,7 +16,7 @@ public class CommonUserFactory implements UserFactory {
                        String gender,
                        List<String> preferredGender,
                        Date dateOfBirth,
-                       Map<String, Integer> preferredAge,
+                       HashMap<String, Integer> preferredAge,
                        String bio,
                        Map<String, Boolean> preferences,
                        List<String> tags,

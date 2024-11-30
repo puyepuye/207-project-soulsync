@@ -1,9 +1,6 @@
 package entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A simple implementation of the User interface.
@@ -21,7 +18,7 @@ public class CommonUser implements User {
     private final String gender;
     private final List<String> preferredGender;
     private final Date dateOfBirth;
-    private final Map<String, Integer> preferredAge;
+    private final HashMap<String, Integer> preferredAge;
     private final String bio;
     private final Map<String, Boolean> preferences;
     private final List<String> tags;
@@ -31,7 +28,7 @@ public class CommonUser implements User {
     private ArrayList<String> swipedRightOn;
 
     public CommonUser(String userName, String password, String image, String fullname, String location, String gender,
-                      List<String> preferredGender, Date dateOfBirth, Map<String, Integer> preferredAge, String bio,
+                      List<String> preferredGender, Date dateOfBirth, HashMap<String, Integer> preferredAge, String bio,
                       Map<String, Boolean> preferences, List<String> tags, List<String> matched,
                       ArrayList<String> swipedRight, ArrayList<String> swipedLeft, ArrayList<String> swipedRightOn) {
         super();
@@ -82,7 +79,7 @@ public class CommonUser implements User {
     }
 
     @Override
-    public Map<String, Integer> getPreferredAge() { return preferredAge; }
+    public HashMap<String, Integer> getPreferredAge() { return preferredAge; }
 
     @Override
     public List<String> getPreferredGender() { return preferredGender; }

@@ -34,6 +34,14 @@ public class SignupPresenter implements SignupOutputBoundary {
         final PreferencesState preferencesState = preferencesViewModel.getState();
 //        loginState.setUsername(response.getUsername());
         preferencesState.setUsername(response.getUsername());
+        preferencesState.setFullName(response.getFullName());
+        preferencesState.setPassword(response.getPassword());
+        preferencesState.setImage(response.getImage());
+        preferencesState.setDateOfBirth(response.getDateOfBirth());
+        preferencesState.setGender(response.getGender());
+        preferencesState.setLocation(response.getLocation());
+        preferencesState.setPreferredGender(response.getPreferredGender());
+        preferencesState.setPreferredAge(response.getPreferredAge());
         this.preferencesViewModel.setState(preferencesState);
         this.preferencesViewModel.firePropertyChanged();
 
@@ -53,6 +61,8 @@ public class SignupPresenter implements SignupOutputBoundary {
         signupState.setDateOfBirthError(error);
         signupState.setGenderError(error);
         signupState.setLocationError(error);
+        signupState.setPreferredGenderError(error);
+        signupState.setPreferredAgeError(error);
         signupViewModel.firePropertyChanged();
     }
 

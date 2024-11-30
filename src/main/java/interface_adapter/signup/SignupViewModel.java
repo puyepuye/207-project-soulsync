@@ -25,6 +25,15 @@ public class SignupViewModel extends ViewModel<SignupState> {
     public static final String[] GENDERS = {"Select Gender", "Male", "Female", "Non-Binary", "Other"};
     public static final String[] COUNTRIES = {"Select Country", "Canada", "Myanmar", "Taiwan", "Thailand"};
     public static final String[] CITIES = {"Select City", "Toronto", "Yangon", "Taipei", "Bangkok"};
+    // Define the age ranges
+    public static final String[] preferredAgeRanges = {
+            "18-30",
+            "31-40",
+            "41-50",
+            "51-60",
+            "61-70",
+            "70+"
+    };
 
     public SignupViewModel() {
         super("sign up");
