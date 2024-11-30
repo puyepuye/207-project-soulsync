@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,7 @@ import javax.swing.*;
 import interface_adapter.preferences.PreferencesController;
 import interface_adapter.preferences.PreferencesState;
 import interface_adapter.preferences.PreferencesViewModel;
+import interface_adapter.signup.SignupState;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
@@ -19,7 +22,7 @@ import javax.swing.text.PlainDocument;
 /**
  * The View for when the user signs up and moves to choosing dating preferences within the program.
  */
-public class PreferenceView extends JPanel  {
+public class PreferenceView extends JPanel{
     private final String viewName = "preferences";
     private PreferencesViewModel preferencesViewModel;
     private PreferencesController preferencesController;
@@ -359,12 +362,19 @@ public class PreferenceView extends JPanel  {
         preferencesViewModel.setState(currentState);
 
         preferencesController.execute(
+                currentState.getFullname(),
                 currentState.getUsername(),
+                currentState.getPassword(),
+                currentState.getRepeatPassword(),
+                currentState.getImage(),
+                currentState.getLocation(),
+                currentState.getGender(),
+                currentState.getDateOfBirth(),
+                currentState.getPreferredGender(),
+                currentState.getPreferredAge(),
                 currentState.getTags(),
                 currentState.getBio(),
-                currentState.getPreferences(),
-                currentState.getPreferredGender(),
-                currentState.getPreferredAge()
+                currentState.getPreferences()
         );
 
         JOptionPane.showMessageDialog(this, "Profile saved successfully!",

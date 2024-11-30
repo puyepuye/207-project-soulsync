@@ -1,6 +1,7 @@
 package interface_adapter.preferences;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.swipe.SwipeViewModel;
 import use_case.preferences.PreferenceOutputBoundary;
@@ -43,6 +44,11 @@ public class PreferencesPresenter implements PreferenceOutputBoundary {
     @Override
     public void prepareFailView(String error) {
         final PreferencesState preferencesState = preferencesViewModel.getState();
+        preferencesState.setTagsError(error);
+        preferencesState.setBioError(error);
+        preferencesState.setPreferencesError(error);
+
+//        preferencesState.firePropertyChanged();
         preferencesViewModel.firePropertyChanged();
     }
 

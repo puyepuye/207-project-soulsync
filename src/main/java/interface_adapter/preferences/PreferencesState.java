@@ -1,6 +1,7 @@
 package interface_adapter.preferences;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import java.util.Map;
  */
 public class PreferencesState {
     private String username = "";
+    private String usernameError = "";
     private String password = "";
     private String repeatPassword = "";
     private String image = "";
@@ -24,11 +26,12 @@ public class PreferencesState {
     private String preferencesError;
     private List<String> preferredGender;
     private String preferredGenderError;
-    private Map<String, Integer> preferredAge;
+    private HashMap<String, Integer> preferredAge;
     private String preferredAgeError;
 
     public String getFullname() { return fullName; }
     public String getUsername() { return username; }
+    public String getUsernameError() { return usernameError; }
     public String getPassword() { return password; }
     public String getRepeatPassword() { return repeatPassword; }
     public String getImage() { return image; }
@@ -68,7 +71,7 @@ public class PreferencesState {
         return preferredGenderError;
     }
 
-    public Map<String, Integer> getPreferredAge() {
+    public HashMap<String, Integer> getPreferredAge() {
         return preferredAge;
     }
 
@@ -80,9 +83,19 @@ public class PreferencesState {
 
     public void setUsername(String username) { this.username = username; }
 
+    public void setPassword(String password) { this.password = password; }
+
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
+
+    public void setImage(String image) { this.image = image; }
+
+    public void setLocation(String location) { this.location = location; }
+
+    public void setGender(String gender) { this.gender = gender; }
+
+    public void setDateOfBirth(Date dateOfBirth) { this.dateOfBirth = dateOfBirth; }
 
     public void setTags(List<String> tags) {
         this.tags = tags;
@@ -116,7 +129,7 @@ public class PreferencesState {
         this.preferredGenderError = preferredGenderError;
     }
 
-    public void setPreferredAge(Map<String, Integer> preferredAge) {
+    public void setPreferredAge(HashMap<String, Integer> preferredAge) {
         this.preferredAge = preferredAge;
     }
 

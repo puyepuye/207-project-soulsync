@@ -1,5 +1,7 @@
 package use_case.preferences;
 
+import use_case.signup.SignupInputData;
+
 /**
  * Input Boundary for actions which are related to signing up.
  */

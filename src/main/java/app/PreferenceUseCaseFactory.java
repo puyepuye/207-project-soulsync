@@ -12,6 +12,8 @@ import use_case.preferences.PreferenceInputBoundary;
 import use_case.preferences.PreferenceOutputBoundary;
 import use_case.preferences.PreferenceUserDataAccessInterface;
 import use_case.preferences.PreferenceInteractor;
+import use_case.signup.SignupInputData;
+import use_case.signup.SignupInteractor;
 import view.PreferenceView;
 
 /**

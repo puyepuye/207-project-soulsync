@@ -26,6 +26,8 @@ public class SignupState {
     private String dateOfBirthError;
     private List<String> preferredGender;
     private HashMap<String, Integer> preferredAge;
+    private String preferredAgeError;
+    private String preferredGenderError;
 
     public String getUsername() {
         return username;
@@ -158,6 +160,14 @@ public class SignupState {
     public void setPreferredGender(List<String> preferredGender) { this.preferredGender = preferredGender; }
 
     public void setPreferredAge(HashMap<String, Integer> preferredAge) { this.preferredAge = preferredAge; }
+
+    public void setPreferredGenderError(String preferredGenderError) {
+        this.preferredGenderError = preferredGenderError;
+    }
+
+    public void setPreferredAgeError(String preferredAgeError) {
+        this.preferredAgeError = preferredAgeError;
+    }
 
     @Override
     public String toString() {

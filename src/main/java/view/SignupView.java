@@ -140,7 +140,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                                     currentState.getUsername(),
                                     currentState.getPassword(),
                                     currentState.getRepeatPassword(),
-                                    profileImageUrl, // Pass the uploaded image URL
+                                    currentState.getImage(), // Pass the uploaded image URL
                                     currentState.getLocation(),
                                     currentState.getGender(),
                                     currentState.getDateOfBirth(),

@@ -28,18 +28,15 @@ public class PreferenceInteractor implements PreferenceInputBoundary {
         System.out.println("Preferred Gender: " + preferenceInputData.getPreferredGender());
         System.out.println("Preferred Age: " + preferenceInputData.getPreferredAge());
 
-        final User currentUserInfo = userDataAccessObject.get(preferenceInputData.getUsername());
-        System.out.println(currentUserInfo.getDateOfBirth());
-
-        final User user =  userFactory.create(currentUserInfo.getUsername(),
-                currentUserInfo.getPassword(),
-                currentUserInfo.getImage(),
-                currentUserInfo.getFullname(),
-                currentUserInfo.getLocation(),
-                currentUserInfo.getGender(),
-                currentUserInfo.getPreferredGender(),
-                currentUserInfo.getDateOfBirth(),
-                currentUserInfo.getPreferredAge(),
+        final User user =  userFactory.create(preferenceInputData.getUsername(),
+                preferenceInputData.getPassword(),
+                preferenceInputData.getImage(),
+                preferenceInputData.getFullname(),
+                preferenceInputData.getLocation(),
+                preferenceInputData.getGender(),
+                preferenceInputData.getPreferredGender(),
+                preferenceInputData.getDateOfBirth(),
+                preferenceInputData.getPreferredAge(),
                 preferenceInputData.getBio(),
                 preferenceInputData.getPreferences(),
                 preferenceInputData.getTags(),
@@ -48,6 +45,7 @@ public class PreferenceInteractor implements PreferenceInputBoundary {
                 new ArrayList<>() {{}},
                 new ArrayList<>() {{}}
         );
+        userDataAccessObject.saveUser(user);
 
         userDataAccessObject.updatePreference(user);
 

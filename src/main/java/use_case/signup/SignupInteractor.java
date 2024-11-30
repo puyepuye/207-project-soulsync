@@ -47,6 +47,12 @@ public class SignupInteractor implements SignupInputBoundary {
         else if (signupInputData.getLocation().isEmpty() || signupInputData.getLocation().contains("Select")) {
             userPresenter.prepareFailView("Please choose your country and city.");
         }
+        else if (signupInputData.getPreferredAge() == null) {
+            userPresenter.prepareFailView("Please choose your preferred match's age range.");
+        }
+        else if (signupInputData.getPreferredGender() == null) {
+            userPresenter.prepareFailView("Please choose your preferred match's gender.");
+        }
         else {
             final User user =  userFactory.create(signupInputData.getUsername(),
                     signupInputData.getPassword(),
@@ -67,12 +73,12 @@ public class SignupInteractor implements SignupInputBoundary {
             );
             System.out.println(user.getPreferredAge());
             System.out.println(user.getPreferredGender());
-            userDataAccessObject.saveUser(user);
+//            userDataAccessObject.saveUser(user);
             chatDataAccessObject.createChatUser(signupInputData.getUsername(), signupInputData.getFullname(), signupInputData.getImage());
-            final SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), user.getUsername(), user.getImage(),
+            final SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), user.getFullname(), user.getPassword(), user.getImage(),
                     user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
 
-            //final SignupOutputData signupOutputData = new SignupOutputData(user.getFullName(), false);
+//            final SignupOutputData signupOutputData = new SignupOutputData(user.getFullName(), false);
 
             userPresenter.prepareSuccessView(signupOutputData);
         }
