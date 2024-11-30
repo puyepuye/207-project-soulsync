@@ -9,7 +9,17 @@ A dating app created in Java as the final project for the course, CSC207 Softwar
 - After a user has been matched, users can chat with the other matched user in real time.
 
 ## Installation
-1. Clone 
+1. Clone using `git clone https://github.com/puyepuye/207-project-soulsync.git`
+2. In IntelliJ, click on pom.xml -> maven -> reload project
+3. Create a .env include the following:
+```
+SENDBIRD_API_KEY={your sendbird api key here}
+SENDBIRD_APP_ID={your sendbird app id here}
+MONGODB_URI={url to mongodb cluster, you should find it on your mongodb page}
+USERNAME={your mongodb username}
+PASSWORD={your mongodb password}
+
+```
 ## 🌟 Contributors
 1. **Yi-An Chu** (Kimi)
 2. **Sataphon Obra** (PF)
