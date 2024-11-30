@@ -58,7 +58,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     public User get(String username) {
         Document query = new Document("username", username);
         Document userDoc = userCollection.find(query).first();
-
         if (userDoc != null) {
             String userName = userDoc.getString(USERNAME);
             String password = userDoc.getString(PASSWORD);
@@ -81,9 +80,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                     }
                 }
             }
-
             return userFactory.create(userName,
-                    userDoc.getString("password"),
+                    password,
                     userDoc.getString("image"),
                     userDoc.getString("fullName"),
                     userDoc.getString("location"),
@@ -120,7 +118,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
     public void saveUser(User user) {
         Document userDoc = new Document("username", user.getUsername())
-                .append(PASSWORD, user.getPassword())
+                .append("password", user.getPassword())
                 .append("image", user.getImage())
                 .append("fullName", user.getFullname())
                 .append("location", user.getLocation())

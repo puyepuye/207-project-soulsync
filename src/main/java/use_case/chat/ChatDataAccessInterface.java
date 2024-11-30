@@ -12,4 +12,7 @@ public interface ChatDataAccessInterface {
 
     List<ChatMessage> getAllMessages(String chatURL);
 
+    void updateProfilePicture(String username, String image);
+
+    void updateFullName(String username, String fullname);
 }

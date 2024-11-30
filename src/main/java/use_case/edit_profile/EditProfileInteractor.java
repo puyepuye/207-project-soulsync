@@ -30,7 +30,7 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
 
     @Override
     public void execute(EditProfileInputData editProfileInputData) throws ParseException {
-        if (editProfileInputData.getImage() != null || editProfileInputData.getImage() != "") {
+        if (editProfileInputData.getImage() != null && editProfileInputData.getImage() != "") {
             final User currentUserInfo = userDataAccessObject.get(editProfileInputData.getUsername());
             final User user =  userFactory.create(currentUserInfo.getUsername(),
                     currentUserInfo.getPassword(),
@@ -50,13 +50,13 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
                     new ArrayList<>() {{}}
             );
             userDataAccessObject.changeImage(user);
-            chatDataAccessObject.createChatUser(editProfileInputData.getUsername(), currentUserInfo.getFullname(), editProfileInputData.getImage());
+            chatDataAccessObject.updateProfilePicture(editProfileInputData.getUsername(), editProfileInputData.getImage());
             final EditProfileOutputData editProfileOutputData = new EditProfileOutputData(user.getUsername(), user.getFullname(), user.getPassword(), user.getImage(),
                     user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
 
             userPresenter.prepareSuccessView(editProfileOutputData);
         }
-        if (editProfileInputData.getPassword().equals(editProfileInputData.getRepeatPassword())) {
+        if (!editProfileInputData.getPassword().isEmpty() && editProfileInputData.getPassword().equals(editProfileInputData.getRepeatPassword())) {
             final User currentUserInfo = userDataAccessObject.get(editProfileInputData.getUsername());
             final User user =  userFactory.create(currentUserInfo.getUsername(),
                     editProfileInputData.getPassword(),
@@ -76,7 +76,6 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
                     new ArrayList<>() {{}}
             );
             userDataAccessObject.changePassword(user);
-            chatDataAccessObject.createChatUser(editProfileInputData.getUsername(), currentUserInfo.getFullname(), currentUserInfo.getImage());
             final EditProfileOutputData editProfileOutputData = new EditProfileOutputData(user.getUsername(), user.getFullname(), user.getPassword(), user.getImage(),
                     user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
 
@@ -86,6 +85,11 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
             final User currentUserInfo = userDataAccessObject.get(editProfileInputData.getUsername());
             System.out.println(currentUserInfo.getUsername());
             System.out.println(currentUserInfo.getPassword());
+            System.out.println(currentUserInfo.getFullname());
+            System.out.println(currentUserInfo.getLocation());
+            System.out.println(currentUserInfo.getGender());
+            System.out.println(currentUserInfo.getPreferredGender());
+            System.out.println(currentUserInfo.getDateOfBirth());
             final User user =  userFactory.create(currentUserInfo.getUsername(),
                     currentUserInfo.getPassword(),
                     currentUserInfo.getImage(),
@@ -104,7 +108,7 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
                     new ArrayList<>() {{}}
             );
             userDataAccessObject.changeFullname(user);
-            chatDataAccessObject.createChatUser(editProfileInputData.getUsername(), editProfileInputData.getFullname(), currentUserInfo.getImage());
+            chatDataAccessObject.updateFullName(editProfileInputData.getUsername(), editProfileInputData.getFullname());
             final EditProfileOutputData editProfileOutputData = new EditProfileOutputData(user.getUsername(), user.getFullname(), user.getPassword(), user.getImage(),
                     user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
 
@@ -130,13 +134,12 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
                     new ArrayList<>() {{}}
             );
             userDataAccessObject.changeDOB(user);
-            chatDataAccessObject.createChatUser(editProfileInputData.getUsername(), currentUserInfo.getFullname(), currentUserInfo.getImage());
             final EditProfileOutputData editProfileOutputData = new EditProfileOutputData(user.getUsername(), user.getFullname(), user.getPassword(), user.getImage(),
                     user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
 
             userPresenter.prepareSuccessView(editProfileOutputData);
         }
-        if (!editProfileInputData.getGender().isEmpty() || !editProfileInputData.getGender().equals("Select Gender")) {
+        if (!editProfileInputData.getGender().isEmpty() && !editProfileInputData.getGender().equals("Select Gender")) {
             final User currentUserInfo = userDataAccessObject.get(editProfileInputData.getUsername());
             final User user =  userFactory.create(currentUserInfo.getUsername(),
                     currentUserInfo.getPassword(),
@@ -156,13 +159,12 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
                     new ArrayList<>() {{}}
             );
             userDataAccessObject.changeGender(user);
-            chatDataAccessObject.createChatUser(editProfileInputData.getUsername(), currentUserInfo.getFullname(), currentUserInfo.getImage());
             final EditProfileOutputData editProfileOutputData = new EditProfileOutputData(user.getUsername(), user.getFullname(), user.getPassword(), user.getImage(),
                     user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
 
             userPresenter.prepareSuccessView(editProfileOutputData);
         }
-        if (!editProfileInputData.getLocation().isEmpty() || !editProfileInputData.getLocation().contains("Select")) {
+        if (!editProfileInputData.getLocation().isEmpty() && !editProfileInputData.getLocation().contains("Select")) {
             final User currentUserInfo = userDataAccessObject.get(editProfileInputData.getUsername());
             final User user =  userFactory.create(currentUserInfo.getUsername(),
                     currentUserInfo.getPassword(),
@@ -182,7 +184,6 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
                     new ArrayList<>() {{}}
             );
             userDataAccessObject.changeLocation(user);
-            chatDataAccessObject.createChatUser(editProfileInputData.getUsername(), currentUserInfo.getFullname(), currentUserInfo.getImage());
             final EditProfileOutputData editProfileOutputData = new EditProfileOutputData(user.getUsername(), user.getFullname(), user.getPassword(), user.getImage(),
                     user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
 
@@ -208,7 +209,6 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
                     new ArrayList<>() {{}}
             );
             userDataAccessObject.changePreferredAge(user);
-            chatDataAccessObject.createChatUser(editProfileInputData.getUsername(), currentUserInfo.getFullname(), currentUserInfo.getImage());
             final EditProfileOutputData editProfileOutputData = new EditProfileOutputData(user.getUsername(), user.getFullname(), user.getPassword(), user.getImage(),
                     user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
 
@@ -234,7 +234,6 @@ public class EditProfileInteractor implements EditProfileInputBoundary {
                     new ArrayList<>() {{}}
             );
             userDataAccessObject.changePreferredGender(user);
-            chatDataAccessObject.createChatUser(editProfileInputData.getUsername(), currentUserInfo.getFullname(), currentUserInfo.getImage());
             final EditProfileOutputData editProfileOutputData = new EditProfileOutputData(user.getUsername(), user.getFullname(), user.getPassword(), user.getImage(),
                     user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
 
