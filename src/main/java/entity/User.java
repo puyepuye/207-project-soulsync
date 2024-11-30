@@ -1,9 +1,6 @@
 package entity;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The representation of a user in our program.
@@ -62,7 +59,7 @@ public interface User {
      * Returns the preferredAge of the user.
      * @return the preferredAge of the user.
      */
-    Map<String, Integer> getPreferredAge();
+    HashMap<String, Integer> getPreferredAge();
 
     /**
      * Returns the bio of the user.

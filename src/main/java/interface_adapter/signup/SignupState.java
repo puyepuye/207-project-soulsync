@@ -1,8 +1,8 @@
 package interface_adapter.signup;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * The state for the Signup View Model.
@@ -24,6 +24,10 @@ public class SignupState {
     private String genderError;
     private Date dateOfBirth;
     private String dateOfBirthError;
+    private List<String> preferredGender;
+    private HashMap<String, Integer> preferredAge;
+    private String preferredAgeError;
+    private String preferredGenderError;
 
     public String getUsername() {
         return username;
@@ -89,6 +93,10 @@ public class SignupState {
         return dateOfBirthError;
     }
 
+    public List<String> getPreferredGender() { return preferredGender; }
+
+    public HashMap<String, Integer> getPreferredAge() { return preferredAge; }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -148,6 +156,18 @@ public class SignupState {
     public void setDateOfBirth(Date dateOfBirth) { this.dateOfBirth = dateOfBirth; }
 
     public void setDateOfBirthError(String dateOfBirthError) { this.dateOfBirthError = dateOfBirthError; }
+
+    public void setPreferredGender(List<String> preferredGender) { this.preferredGender = preferredGender; }
+
+    public void setPreferredAge(HashMap<String, Integer> preferredAge) { this.preferredAge = preferredAge; }
+
+    public void setPreferredGenderError(String preferredGenderError) {
+        this.preferredGenderError = preferredGenderError;
+    }
+
+    public void setPreferredAgeError(String preferredAgeError) {
+        this.preferredAgeError = preferredAgeError;
+    }
 
     @Override
     public String toString() {

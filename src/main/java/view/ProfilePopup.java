@@ -2,8 +2,11 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Date;
 import java.util.List;
+
+import java.net.URL;
 
 public class ProfilePopup {
 
@@ -46,9 +49,9 @@ public class ProfilePopup {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Image panel
-        ImagePanel imagePanel = new ImagePanel(image);
-        imagePanel.setPreferredSize(new Dimension(330, 200));
-        mainPanel.add(imagePanel);
+        ImagePanel imagePanel = new ImagePanel(image);  // Pass the image string (path or URL) to ImagePanel
+        imagePanel.setPreferredSize(new Dimension(330, 200)); // Set image panel size
+        mainPanel.add(imagePanel);  // Add the image panel to the main panel
 
         // Panel for name, age, and location with left alignment
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -131,5 +134,21 @@ public class ProfilePopup {
             age--;
         }
         return age;
+    }
+
+//     Main function to test the profile dialog
+    public static void main(String[] args) {
+        // Sample data
+        String image = "http://res.cloudinary.com/dvf7ebgzz/image/upload/v1731963858/azdspzv2ttkqqj7y2yka.jpg";
+        // Replace with actual image path
+        String fullName = "John Doe";
+        String location = "New York, USA";
+        String gender = "Male";
+        Date dateOfBirth = new Date(90, 5, 15); // June 15, 1990
+        String bio = "I am a software developer who loves coding, traveling, and gaming.";
+        List<String> tags = List.of("Tech Enthusiast", "Gamer", "Travel");
+
+        // Show the profile dialog with sample data
+        showProfileDialog(image, fullName, location, gender, dateOfBirth, bio, tags);
     }
 }
