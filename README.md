@@ -3,7 +3,7 @@
 A dating app created in Java as the final project for the course, CSC207 Software Design, during the fall 2024 semester the university of Toronto. This app allows users to create an account, find matches and chat with like minded people! (cause Toronto is a really big city and it's hard to meet people)
 
 ## Table of Contents:
-
+[Features](## Features:)
 
 ## Features:
 - Users can create an account with their personal information and start matching with other users
@@ -14,9 +14,9 @@ A dating app created in Java as the final project for the course, CSC207 Softwar
 ## Installation
 As a forewarning, this app is still in the prototyping phase, so the user would be required to manually set up a database on MongdoDB, their own chat app in SendBird's API service, as well as setting up an account for cloudinary. #TODO add cloudinary steps
 1. Clone using `git clone https://github.com/puyepuye/207-project-soulsync.git`
-2. Install ngrok from ngrok.com
+2. Install ngrok from [here](https://ngrok.com)
 3. Create a .env include the following:
-4. Create a new sendbird account and project here sendbird.com
+4. Create a new sendbird account and project here [here](https://sendbird.com)
 ```
 SENDBIRD_API_KEY={YOUR API KEY HERE}
 SENDBIRD_APP_ID={YOUR APP ID HERE}
