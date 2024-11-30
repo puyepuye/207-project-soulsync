@@ -1,46 +1,63 @@
 package app;
 
 import java.awt.CardLayout;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import data_access.DBUserDataAccessObject;
-import data_access.SpringUserDAO;
-import entity.CommonUserFactory;
+import org.json.JSONObject;
+import org.json.JSONException;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import interface_adapter.signup.SignupViewModel;
+
 import interface_adapter.ViewManagerModel;
+import interface_adapter.chat.ChatViewModel;
+import interface_adapter.chat.MessageEventManager;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.navbar.NavbarViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.swipe.SwipeViewModel;
-import org.springframework.boot.Banner;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import use_case.change_password.ChangePasswordUserDataAccessInterface;
-import use_case.compatibility.CompatibilityUserDataAccessInterface;
-import use_case.login.LoginUserDataAccessInterface;
-import use_case.preferences.PreferenceUserDataAccessInterface;
-import interface_adapter.signup.SignupViewModel;
-import use_case.signup.SignupUserDataAccessInterface;
-import use_case.swipe.SwipeUserDataAccessInterface;
+
+import data_access.ChatDataAccessObject;
+import data_access.DBUserDataAccessObject;
+import entity.ChatMessage;
+import entity.CommonUserFactory;
 import view.*;
 
 /**
  * The version of Main with an external database used to persist user data.
  */
 
-
-public class MainWithDB {
-
+@SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity", "checkstyle:AnnotationUseStyle"})
+@ComponentScan(basePackages = {"interface_adapter.chat"})
+@SpringBootApplication
+public class MainWithDB implements CommandLineRunner {
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(SpringUserDAO.class)
+        new SpringApplicationBuilder(MainWithDB.class)
                 .web(WebApplicationType.SERVLET)
                 .headless(false)
-                .bannerMode(Banner.Mode.OFF)
                 .run(args);
     }
     /**
@@ -51,7 +68,7 @@ public class MainWithDB {
         // Build the main program window, the main panel containing the
         // various cards, and the layout, and stitch them together.
 
-        // The main application window.
+        // Claire's stuff
         final JFrame application = new JFrame("Login Example");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -76,18 +93,22 @@ public class MainWithDB {
         final SwipeViewModel swipeViewModel = new SwipeViewModel();
         final NavbarViewModel navbarViewModel = new NavbarViewModel();
         final CompatibilityViewModel compatibilityViewModel = new CompatibilityViewModel();
+        final ListChatViewModel listChatViewModel = new ListChatViewModel();
+        final ChatViewModel chatViewModel = new ChatViewModel();
 
         final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
+        final ChatDataAccessObject chatDataAccessObject = new ChatDataAccessObject();
+
         final SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel,
-                                                                  signupViewModel, preferencesViewModel, userDataAccessObject);
+                signupViewModel, preferencesViewModel, userDataAccessObject);
         views.add(signupView, signupView.getViewName());
 
         final LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, swipeViewModel,
-                signupViewModel, compatibilityViewModel,userDataAccessObject);
+                signupViewModel, compatibilityViewModel, userDataAccessObject, listChatViewModel);
         views.add(loginView, loginView.getViewName());
 
         final LoggedInView loggedInView = ChangePasswordUseCaseFactory.create(viewManagerModel,
-                                                                              loggedInViewModel, userDataAccessObject);
+                loggedInViewModel, userDataAccessObject);
         views.add(loggedInView, loggedInView.getViewName());
 
         final PreferenceView preferenceView = PreferenceUseCaseFactory.create(viewManagerModel,
@@ -96,26 +117,37 @@ public class MainWithDB {
         views.add(preferenceView, preferenceView.getViewName());
 
         final NavBarView navBarView = NavbarUseCaseFactory.create(viewManagerModel,
-                swipeViewModel, navbarViewModel, compatibilityViewModel);
+                swipeViewModel, navbarViewModel, compatibilityViewModel, listChatViewModel);
 
         views.add(navBarView, navBarView.getViewName());
 
         final SwipeView swipeView = SwipeUseCaseFactory.create(viewManagerModel,
-                swipeViewModel, navbarViewModel, compatibilityViewModel, userDataAccessObject);
+                swipeViewModel, navbarViewModel, compatibilityViewModel, userDataAccessObject, listChatViewModel);
 
         views.add(swipeView, swipeView.getViewName());
 
         final CompatibilityView compatibilityView = CompatibilityUseCaseFactory.create(viewManagerModel,
-                compatibilityViewModel, navbarViewModel, swipeViewModel, userDataAccessObject);
+                compatibilityViewModel, navbarViewModel, swipeViewModel, userDataAccessObject, listChatViewModel);
 
         views.add(compatibilityView, compatibilityView.getViewName());
+
+        final ListChatView listChatView = ListChatUseCaseFactory.create(viewManagerModel,
+                listChatViewModel, chatViewModel, chatDataAccessObject,
+                navbarViewModel, swipeViewModel, compatibilityViewModel);
+        views.add(listChatView, listChatView.getViewName());
+
+        final ChatView chatView = ChatUseCaseFactory.create(viewManagerModel, chatViewModel,
+                listChatViewModel, chatDataAccessObject);
+        System.out.println(chatView.getName());
+        views.add(chatView, chatView.getName());
 
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();
 
         application.pack();
-        application.setSize(400, 600);
+        final int height = 600;
+        final int width = 400;
+        application.setSize(width, height);
         application.setVisible(true);
-
     }
 }

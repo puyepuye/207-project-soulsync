@@ -22,4 +22,7 @@ public class NavbarInteractor implements NavbarInputBoundary {
     public void switchToCompatibilityView() {
         navbarPresenter.switchToCompatibilityView();
     }
+
+    @Override
+    public void switchToListChatView(){navbarPresenter.switchToListChatView();}
 }

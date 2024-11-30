@@ -2,6 +2,7 @@ package interface_adapter.navbar;
 
 import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.signup.SignupState;
 import interface_adapter.swipe.SwipeViewModel;
 import interface_adapter.swipe.SwipeState;
@@ -18,17 +19,17 @@ public class NavbarPresenter implements NavbarOutputBoundary {
     private final SwipeViewModel swipeViewModel;
     private final ViewManagerModel viewManagerModel;
     private final CompatibilityViewModel compatibilityViewModel;
+    private final ListChatViewModel listChatViewModel;
 
     public NavbarPresenter(NavbarViewModel navbarViewModel,
                            ViewManagerModel viewManagerModel,
                            SwipeViewModel swipeViewModel,
-                           CompatibilityViewModel compatibilityViewModel) {
+                           CompatibilityViewModel compatibilityViewModel, ListChatViewModel listChatViewModel) {
         this.navbarViewModel = navbarViewModel;
         this.viewManagerModel = viewManagerModel;
         this.swipeViewModel = swipeViewModel;
         this.compatibilityViewModel = compatibilityViewModel;
-
-
+        this.listChatViewModel = listChatViewModel;
     }
 
     @Override
@@ -52,6 +53,12 @@ public class NavbarPresenter implements NavbarOutputBoundary {
     @Override
     public void switchToCompatibilityView() {
         viewManagerModel.setState(compatibilityViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+    }
+
+    @Override
+    public void switchToListChatView(){
+        viewManagerModel.setState(listChatViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 }

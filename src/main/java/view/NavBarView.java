@@ -68,6 +68,7 @@ public class NavBarView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Chat button clicked");
+                navbarController.switchToListChatView();
                 // Add logic to switch to the Settings view
             }
         });

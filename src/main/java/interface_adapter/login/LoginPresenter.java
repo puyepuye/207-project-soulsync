@@ -1,8 +1,12 @@
 package interface_adapter.login;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.chat.ChatState;
+import interface_adapter.chat.ChatViewModel;
 import interface_adapter.compatibility.CompatibilityState;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.listchat.ListChatState;
+import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.swipe.SwipeViewModel;
 import interface_adapter.swipe.SwipeState;
@@ -19,17 +23,20 @@ public class LoginPresenter implements LoginOutputBoundary {
     private final SwipeViewModel swipeViewModel;
     private final ViewManagerModel viewManagerModel;
     private final CompatibilityViewModel compatibilityViewModel;
+    private final ListChatViewModel listChatViewModel;
 
     public LoginPresenter(ViewManagerModel viewManagerModel,
                           SwipeViewModel swipeViewModel,
                           LoginViewModel loginViewModel,
                           SignupViewModel signupViewModel,
-                          CompatibilityViewModel compatibilityViewModel) {
+                          CompatibilityViewModel compatibilityViewModel,
+                          ListChatViewModel listChatViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.signupViewModel = signupViewModel;
         this.swipeViewModel = swipeViewModel;
         this.loginViewModel = loginViewModel;
         this.compatibilityViewModel = compatibilityViewModel;
+        this.listChatViewModel = listChatViewModel;
     }
 
     @Override
@@ -47,6 +54,14 @@ public class LoginPresenter implements LoginOutputBoundary {
 
         this.viewManagerModel.setState(swipeViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
+
+        final ListChatState listChatState = listChatViewModel.getState();
+        listChatState.setUsername(response.getUsername());
+        this.listChatViewModel.setState(listChatState);
+        this.listChatViewModel.firePropertyChanged();
+
+
+
     }
 
     @Override

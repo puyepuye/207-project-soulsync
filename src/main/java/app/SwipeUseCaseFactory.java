@@ -4,6 +4,7 @@ import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.navbar.NavbarController;
 import interface_adapter.navbar.NavbarPresenter;
 import interface_adapter.navbar.NavbarViewModel;
@@ -45,13 +46,15 @@ public final class SwipeUseCaseFactory {
             SwipeViewModel swipeViewModel,
             NavbarViewModel navBarViewModel,
             CompatibilityViewModel compatibilityViewModel,
-            SwipeUserDataAccessInterface userDataAccessObject) {
+            SwipeUserDataAccessInterface userDataAccessObject,
+            ListChatViewModel listChatViewModel) {
 
         final SwipeController swipeController =
                 createSwipeUseCase(viewManagerModel, swipeViewModel, userDataAccessObject);
 
         final NavbarController navBarController =
-                createNavbarUseCase(viewManagerModel, swipeViewModel, navBarViewModel, compatibilityViewModel);
+                createNavbarUseCase(viewManagerModel, swipeViewModel, navBarViewModel,
+                        compatibilityViewModel, listChatViewModel);
 
         return new SwipeView(swipeController, swipeViewModel, navBarController);
 

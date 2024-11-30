@@ -27,4 +27,6 @@ public class NavbarController {
     public void switchToCompatibilityView() {
         navBarUseCaseInteractor.switchToCompatibilityView();
     }
+
+    public void switchToListChatView() {navBarUseCaseInteractor.switchToListChatView();}
 }
