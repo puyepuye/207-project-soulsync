@@ -1,50 +1,15 @@
 # 💌 SOULSYNC  
-### CSC207FW24 Course Final Project
+### CSC207 Fall 2024 Course Final Project
+A dating app created in Java as the final project for the course, CSC207 Software Design, during the fall 2024 semester the university of Toronto. This app allows users to create an account, find matches and chat with like minded people! (cause Toronto is a really big city and it's hard to meet people)
 
-## 📜 Contributing Conventions
+## Features:
+- Users can create an account with their personal information and start matching with other users
+- Users can select other users to match with Tinder swipe style
+- Users can be matched based on preferences or through our in house Fengshui compatability calculator!
+- After a user has been matched, users can chat with the other matched user in real time.
 
-When making contributions, please follow the commit message conventions below to keep the project organized and maintainable:
-
-> **Commit Message Format**: `type: message`
-
-### Commit Types
-- `fix:` - Use for bug fixes.
-- `feat:` - Use for new features.
-- `chore:` - Use for maintenance tasks (e.g., updating dependencies, configuration changes).
-
-```mermaid
-erDiagram
-    User {
-        String userName
-        String password
-        String image
-        String fullname
-        String location
-        String gender
-        List preferredGender
-        Date dateOfBirth
-        Map preferredAge
-        String bio
-        Map preferences
-        List tags
-        List matched
-        List swipedRight
-        List swipedLeft
-        List swipedRightOn
-    }
-
-    Matches {
-        ObjectId userAId
-        ObjectId userBId
-        Date matchDate
-        Boolean isActive
-    }
-
-    User ||--o{ Matches : "has matched with"
-    Matches ||--|| User : "involves"
-
-```
-
+## Installation
+1. Clone 
 ## 🌟 Contributors
 1. **Yi-An Chu** (Kimi)
 2. **Sataphon Obra** (PF)
