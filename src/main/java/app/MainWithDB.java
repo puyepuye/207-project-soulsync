@@ -78,7 +78,7 @@ public class MainWithDB implements CommandLineRunner {
         // various cards, and the layout, and stitch them together.
 
         // The main application window.
-        final JFrame application = new JFrame("Login Example");
+        final JFrame application = new JFrame("SoulSync 2024");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         final CardLayout cardLayout = new CardLayout();

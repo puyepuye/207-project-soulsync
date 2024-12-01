@@ -47,6 +47,10 @@ public class EditProfileView extends JPanel implements ActionListener, PropertyC
     private final JPanel preferredGenderPanel;
     private final JComboBox<String> preferredAgeComboBox;
 
+    // Gradient Colors
+    private final Color topColor = Color.decode("#FFEFF1"); // Light pink
+    private final Color bottomColor = Color.decode("#FFC2C9");
+
     public EditProfileView(EditProfileController controller, EditProfileViewModel editProfileViewModel) {
         this.editProfileController = controller;
         this.editProfileViewModel = editProfileViewModel;
@@ -70,21 +74,31 @@ public class EditProfileView extends JPanel implements ActionListener, PropertyC
         p.put("text.year", "Year");
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
         dobDatePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        dobDatePicker.setPreferredSize(new Dimension(200, 30));
 
-        dobDatePicker.setPreferredSize(new java.awt.Dimension(140, 30));
+        JPanel dateOfBirthPanel = new JPanel();
+        dateOfBirthPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        dateOfBirthPanel.add(new JLabel("Date of Birth:"));
+        dateOfBirthPanel.add(dobDatePicker);
 
         final LabelDropdownPanel genderDropdown = new LabelDropdownPanel(
                 new JLabel(EditProfileViewModel.GENDER_LABEL), genderComboBox);
-
         final LabelDropdownPanel countryDropdown = new LabelDropdownPanel(
                 new JLabel(EditProfileViewModel.COUNTRY_LABEL), countryComboBox);
-
         final LabelDropdownPanel cityDropDown = new LabelDropdownPanel(
                 new JLabel(EditProfileViewModel.CITY_LABEL), cityComboBox);
 
+        JPanel preferredGenderContainer = new JPanel();
+        preferredGenderContainer.setPreferredSize(new Dimension(300, 90));
+        preferredGenderContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        final JLabel preferredGenderLabel = new JLabel("Preferred Gender:");
+        preferredGenderLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the label
+        preferredGenderContainer.add(preferredGenderLabel);
+        preferredGenderContainer.add(Box.createRigidArea(new Dimension(0, 10)));
+
         // Create a JPanel for holding the checkboxes
-        preferredGenderPanel = new JPanel();
-        preferredGenderPanel.setLayout(new GridLayout(0, 1)); // One checkbox per row
+        preferredGenderPanel = new JPanel(new GridBagLayout());
 
         // Create checkboxes
         JCheckBox option1 = new JCheckBox("Female");
@@ -92,15 +106,28 @@ public class EditProfileView extends JPanel implements ActionListener, PropertyC
         JCheckBox option3 = new JCheckBox("Non-Binary");
         JCheckBox option4 = new JCheckBox("Other");
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0; // Single column
+        gbc.anchor = GridBagConstraints.CENTER; // Align content to the center
+        gbc.insets = new Insets(0, 10, 0, 10);
+
         // Add checkboxes to the panel
         preferredGenderPanel.add(option1);
         preferredGenderPanel.add(option2);
         preferredGenderPanel.add(option3);
         preferredGenderPanel.add(option4);
 
+        preferredGenderContainer.add(preferredGenderPanel);
+
         // Create a JComboBox with the age ranges
         preferredAgeComboBox = new JComboBox<>(EditProfileViewModel.preferredAgeRanges);
         preferredAgeComboBox.setSelectedIndex(0); // Default selection
+
+        // Create a new LabelDropdownPanel for Preferred Age
+        final LabelDropdownPanel preferredAgeDropdown = new LabelDropdownPanel(
+                new JLabel("Preferred Age:"), preferredAgeComboBox);
+
+        preferredGenderContainer.add(preferredAgeDropdown);
 
         final JPanel buttons = new JPanel();
         updateProfile = new JButton("Update Profile");
@@ -167,14 +194,13 @@ public class EditProfileView extends JPanel implements ActionListener, PropertyC
         this.add(passwordInfo);
         this.add(repeatPasswordInfo);
         this.add(fullNameInfo);
-        this.add(dobDatePicker);
+        this.add(dateOfBirthPanel);
         this.add(genderDropdown);
         this.add(countryDropdown);
-        this.add(preferredGenderPanel);
-        this.add(preferredAgeComboBox);
         this.add(cityDropDown);
-        this.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
+        this.add(preferredGenderContainer);
         this.add(uploadProfileButton);
+        this.add(Box.createRigidArea(new Dimension(0, 10)));
         this.add(buttons);
     }
 
