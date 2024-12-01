@@ -1,5 +1,6 @@
 package data_access;
 
+import entity.Matches;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.*;
@@ -14,7 +15,9 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 import entity.User;
+import entity.Matches;
 import entity.UserFactory;
+import entity.MatchesFactory;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.compatibility.CompatibilityUserDataAccessInterface;
 import use_case.edit_profile.EditProfileUserDataAccessInterface;
@@ -43,6 +46,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String MESSAGE = "message";
     private final UserFactory userFactory;
     private final MongoCollection<Document> userCollection;
+    private final MongoCollection<Document> matchesCollection;
 
     public DBUserDataAccessObject(UserFactory userFactory) {
         this.userFactory = userFactory;
@@ -52,6 +56,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         MongoClient client = MongoClients.create(mongoUri);
         MongoDatabase db = client.getDatabase("sampleDB");
         this.userCollection = db.getCollection("sampleCollection");
+        this.matchesCollection = db.getCollection("matchesCollection");
     }
 
     @Override
@@ -135,6 +140,12 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 .append("swipedRightOn", user.getSwipedRightOn());
         userCollection.insertOne(userDoc);
 
+    }
+
+    public void saveMatch(String usernameA, String usernameB) {
+        Document matchDoc = new Document("usernameA", usernameA)
+                .append("usernameB", usernameB);
+        matchesCollection.insertOne(matchDoc);
     }
 
     @Override

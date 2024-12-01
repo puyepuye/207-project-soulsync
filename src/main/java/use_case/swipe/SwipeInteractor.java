@@ -55,4 +55,12 @@ public class SwipeInteractor implements SwipeInputBoundary {
         final SwipeOutputData swipeOutputData = new SwipeOutputData(liked, profileUsername, "", new ArrayList<>(), false);
         userPresenter.prepareSuccessView(swipeOutputData);
     }
+
+    @Override
+    public void saveMatch(SwipeInputData swipeInputData) {
+
+        final String username = swipeInputData.getUsername();
+        final String profileUsername = swipeInputData.getProfileUsername();
+        userDataAccessObject.saveMatch(username, profileUsername);
+    }
 }

@@ -69,6 +69,22 @@ public class SwipesListDataAccessObject {
         return preferencesMap;
     }
 
+    /**
+     * Generate a swiping list for a specific user, ranked by compatibility
+     * @param username The username of the user
+     * @return A list of users matching the preferred criteria, ranked by compatibility
+     */
+    public List<String> getSwipedRightOn(String username) {
+        Document query = new Document("username", username);
+        Document user = userCollection.find(query).first();
+
+        if (user != null && user.containsKey("swipedRightOn")) {
+            return user.getList("swipedRightOn", String.class); // Assumes swipedRightOn is stored as a list
+        }
+
+        return new ArrayList<>(); // Return an empty list if no data is found
+    }
+
 
     /**
      * Generate a swiping list for a specific user, ranked by compatibility

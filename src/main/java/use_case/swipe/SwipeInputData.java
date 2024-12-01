@@ -34,6 +34,5 @@ public class SwipeInputData {
         return profileUsername;
     }
 
-
 }
 
