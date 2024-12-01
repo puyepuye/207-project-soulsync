@@ -208,20 +208,21 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     @Override
     public void updateLike(User user, User userSwipedOn, boolean like) {
         if (like) {
+            // Add userSwipedOn's username to the swipedRight array of the current user
             Document swipedRightQuery = new Document("username", user.getUsername());
-            Document swipedOnQuery = new Document("username", userSwipedOn.getUsername());
-
-            Document swipedRightUpdate = new Document("$set", new Document("swipedRight", userSwipedOn.getUsername()));
-            Document swipedOnUpdate = new Document("$set", new Document("swipedOn", user.getUsername()));
-
+            Document swipedRightUpdate = new Document("$push", new Document("swipedRight", userSwipedOn.getUsername()));
             userCollection.updateOne(swipedRightQuery, swipedRightUpdate);
-            userCollection.updateOne(swipedOnQuery, swipedOnUpdate);
-        }
-        else {
-            Document swipedLeftQuery = new Document("username", user.getUsername());
-            Document swipedLeftUpdate = new Document("$set", new Document("swipedLeft", userSwipedOn.getUsername()));
 
+            // Add the current user's username to the swipedOn array of the userSwipedOn
+            Document swipedOnQuery = new Document("username", userSwipedOn.getUsername());
+            Document swipedOnUpdate = new Document("$push", new Document("swipedRightOn", user.getUsername()));
+            userCollection.updateOne(swipedOnQuery, swipedOnUpdate);
+        } else {
+            // Add userSwipedOn's username to the swipedLeft array of the current user
+            Document swipedLeftQuery = new Document("username", user.getUsername());
+            Document swipedLeftUpdate = new Document("$push", new Document("swipedLeft", userSwipedOn.getUsername()));
             userCollection.updateOne(swipedLeftQuery, swipedLeftUpdate);
         }
     }
+
 }
