@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import use_case.chat.ChatDataAccessInterface;
 import use_case.listchat.ListChatDataAccessInterface;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -18,27 +19,30 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatDataAccessObject  implements ChatDataAccessInterface,
-                                    ListChatDataAccessInterface {
+public class ChatDataAccessObject implements ChatDataAccessInterface,
+        ListChatDataAccessInterface {
     private final String apiKey;
     private final String appID;
     private final String TOKEN_HEADER = "Api-token";
     private final String API_ENDPOINT;
 
     public ChatDataAccessObject() {
-        Dotenv dotenv = Dotenv.load();
+        final Dotenv dotenv = Dotenv.load();
         apiKey = dotenv.get("SENDBIRD_API_KEY");
         appID = dotenv.get("SENDBIRD_APP_ID");
         API_ENDPOINT = "https://api-" + appID + ".sendbird.com/v3/";
     }
 
-
     /**
-     * Creates a new user in SendBird's database
+     * Creates a new user in SendBird's database.
+     *
+     * @param uniqueId       the unique id assigned when a user signs up.
+     * @param username       the username the user inputs during sign up.
+     * @param profilePicture the URL to their profile uploaded to Cloudinarys' end
      */
-    public void createChatUser(String uniqueID, String username, String profilePicture){
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("user_id", uniqueID);
+    public void createChatUser(String uniqueId, String username, String profilePicture) {
+        final JSONObject requestBody = new JSONObject();
+        requestBody.put("user_id", uniqueId);
         requestBody.put("nickname", username);
         requestBody.put("profile_url", profilePicture);
         HttpRequest postRequest = HttpRequest.newBuilder()
@@ -64,10 +68,10 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
     /**
      * @param userId1 1st user
      * @param userId2 2nd user
-     *
-     * Creates a SendBird with url being "{user_id1}_{user_id2}_chat"
+     *                <p>
+     *                Creates a SendBird with url being "{user_id1}_{user_id2}_chat"
      */
-    public void createChat(String userId1, String userId2){
+    public void createChat(String userId1, String userId2) {
         List<String> chatUsers = new ArrayList<>();
         chatUsers.add(userId1);
         chatUsers.add(userId2);
@@ -90,9 +94,9 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
     }
 
 
-
     /**
      * Returns the URL of all the chats that this user is a part of.
+     *
      * @param username the user_id stored in sendbird of the user we want to get the chat logs of
      * @return a list of URLs of chats that contains that username
      */
@@ -100,42 +104,42 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
     public ArrayList<ChatChannel> getAllChats(String username) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest getRequest = HttpRequest.newBuilder()
-                .uri(URI.create(API_ENDPOINT+ "open_channels?url_contains=" + username))
+                .uri(URI.create(API_ENDPOINT + "open_channels?url_contains=" + username))
                 .header(TOKEN_HEADER, apiKey)
                 .header("Content-Type", "application/json; charset=utf8")
                 .GET()
                 .build();
         HttpResponse<String> response = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
         JSONObject responseJSON = new JSONObject(response.body());
-        return  extractChatURLFromJSON(responseJSON);
+        return extractChatURLFromJSON(responseJSON);
     }
 
 
-
     @Override
-    public void sendMessage(String chatURL, ChatMessage chatMessage){
+    public void sendMessage(String chatURL, ChatMessage chatMessage) {
         JSONObject requestBody = new JSONObject();
         requestBody.put("message_type", "MESG");
         requestBody.put("user_id", chatMessage.getSender());
         requestBody.put("message", chatMessage.getMessage());
         // build request
         HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create( API_ENDPOINT + "open_channels/" + chatURL + "/messages"))
+                .uri(URI.create(API_ENDPOINT + "open_channels/" + chatURL + "/messages"))
                 .header(TOKEN_HEADER, apiKey)
                 .header("Content-Type", "application/json; charset=utf8")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                 .build();
         sendPostReq(postRequest);
     }
+
     @Override
     /**
      * @param chatURL
      * @return a JSON object containing a list of messages, its sender, time stamp, read-status
      */
-    public List<ChatMessage> getAllMessages(String chatURL){
+    public List<ChatMessage> getAllMessages(String chatURL) {
         // build request
         HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create(API_ENDPOINT+ "open_channels/" + chatURL
+                .uri(URI.create(API_ENDPOINT + "open_channels/" + chatURL
                         + "/messages?message_ts=" + System.currentTimeMillis()))
                 .header(TOKEN_HEADER, apiKey)
                 .header("Content-Type", "application/json; charset=utf8")
@@ -148,8 +152,8 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
             JSONObject responseJSON = new JSONObject(response.body());
 
             if (responseJSON.has("error")) {
-                    System.out.println("Couldn't get the chat messages, URL is likely wrong");
-                    return new ArrayList<>();
+                System.out.println("Couldn't get the chat messages, URL is likely wrong");
+                return new ArrayList<>();
             }
 
             // for each message
@@ -196,9 +200,8 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
                 String lastMessage;
                 if (allMessages.isEmpty()) {
                     lastMessage = "Say 'hi!' or something, just don't be weird";
-                }
-                else{
-                    lastMessage = allMessages.get(allMessages.size()-1).getMessage();
+                } else {
+                    lastMessage = allMessages.get(allMessages.size() - 1).getMessage();
                 }
                 result.add(new ChatChannel(url, user1, user2, lastMessage));
 
@@ -224,7 +227,6 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
     }
 
 
-
     public static void main(String[] args) throws IOException, InterruptedException {
 //        ChatDataAccessObject cDAO = new ChatDataAccessObject();
 //        cDAO.createChat("tete", "poppy12");
@@ -238,5 +240,8 @@ public class ChatDataAccessObject  implements ChatDataAccessInterface,
         HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
         System.out.println(response);
 
+    }
+
+    public void method() {
     }
 }

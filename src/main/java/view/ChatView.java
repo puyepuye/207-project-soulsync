@@ -1,7 +1,5 @@
 package view;
 
-import data_access.ChatDataAccessObject;
-import entity.ChatChannel;
 import entity.ChatMessage;
 import interface_adapter.chat.ChatController;
 import interface_adapter.chat.ChatState;
@@ -108,7 +106,7 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
                 chat.repaint();
                 textField.setText("");
                 chatController.sendMessage(
-                        new ChatInputData(chatState.getChatURL(), chatState.getCurrUser(),
+                        new ChatInputData(chatState.getChatUrl(), chatState.getCurrUser(),
                                 new ChatMessage(
                                         chatState.getCurrUser(),
                                         message,
@@ -130,8 +128,8 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         if (evt.getPropertyName().equals("state")) {
             final ChatState state = (ChatState) evt.getNewValue();
             chat.removeAll();
-            System.out.println("chat url " + state.getChatURL());
-            chatURL = state.getChatURL();
+            System.out.println("chat url " + state.getChatUrl());
+            chatURL = state.getChatUrl();
             String currUser = state.getCurrUser();
             System.out.println("currUser " + currUser);
             currentUser = currUser;
