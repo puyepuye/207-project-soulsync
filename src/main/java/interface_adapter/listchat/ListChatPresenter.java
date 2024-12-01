@@ -26,7 +26,7 @@ public class ListChatPresenter implements ListChatOutputBoundary {
         System.out.println("current user" + currUser    );
         final ChatState chatState = chatViewModel.getState();
         System.out.println("chat url " + chatURL);
-        chatState.setChatURL(chatURL);
+        chatState.setChatUrl(chatURL);
         chatState.setCurrUser(currUser);
         this.chatViewModel.setState(chatState);
 
