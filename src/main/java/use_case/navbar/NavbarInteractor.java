@@ -24,5 +24,10 @@ public class NavbarInteractor implements NavbarInputBoundary {
     }
 
     @Override
+    public void switchToEditProfileView() {
+        navbarPresenter.switchToEditProfileView();
+    }
+
+    @Override
     public void switchToListChatView(){navbarPresenter.switchToListChatView();}
 }

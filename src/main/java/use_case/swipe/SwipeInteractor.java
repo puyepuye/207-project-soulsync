@@ -41,16 +41,26 @@ public class SwipeInteractor implements SwipeInputBoundary {
         final String profileUsername = swipeInputData.getProfileUsername();
         final boolean liked = swipeInputData.getLiked();
 
-        Document query = new Document("username", profileUsername);
-        Document userDoc = col.find(query).first();
-        String profilePassword = userDoc.getString("password");
+//        Document query = new Document("username", profileUsername);
+//        Document userDoc = col.find(query).first();
+//        String profilePassword = userDoc.getString("password");
+//
+//        final User user = userFactory.create(username, password);
+//        final User profileUser = userFactory.create(profileUsername, profilePassword);
 
-        final User user = userFactory.create(username, password);
-        final User profileUser = userFactory.create(profileUsername, profilePassword);
-
+        final User user = userDataAccessObject.get(username);
+        final User profileUser = userDataAccessObject.get(profileUsername);
         userDataAccessObject.updateLike(user, profileUser, liked);
 
         final SwipeOutputData swipeOutputData = new SwipeOutputData(liked, profileUsername, "", new ArrayList<>(), false);
         userPresenter.prepareSuccessView(swipeOutputData);
+    }
+
+    @Override
+    public void saveMatch(SwipeInputData swipeInputData) {
+
+        final String username = swipeInputData.getUsername();
+        final String profileUsername = swipeInputData.getProfileUsername();
+        userDataAccessObject.saveMatch(username, profileUsername);
     }
 }

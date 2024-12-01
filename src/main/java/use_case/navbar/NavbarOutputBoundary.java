@@ -27,6 +27,11 @@ public interface NavbarOutputBoundary {
     void switchToCompatibilityView();
 
     /**
+     * Executes the switch to edit profile view use case.
+     */
+    void switchToEditProfileView();
+
+    /**
      * Executes the switch to the user chat page.
      */
     void switchToListChatView();

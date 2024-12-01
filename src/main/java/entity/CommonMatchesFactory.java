@@ -10,7 +10,7 @@ import java.util.Date;
 public class CommonMatchesFactory implements MatchesFactory {
 
     @Override
-    public CommonMatches create(ObjectId userAId, ObjectId userBId, Date matchDate, Boolean isActive) {
-        return new CommonMatches(userAId, userBId, matchDate, isActive);
+    public CommonMatches create(String usernameA, String usernameB) {
+        return new CommonMatches(usernameA, usernameB);
     }
 }

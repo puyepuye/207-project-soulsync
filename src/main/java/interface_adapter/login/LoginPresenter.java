@@ -10,6 +10,9 @@ import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.swipe.SwipeViewModel;
 import interface_adapter.swipe.SwipeState;
+import interface_adapter.edit_profile.EditProfileViewModel;
+import interface_adapter.edit_profile.EditProfileState;
+
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
 
@@ -23,6 +26,7 @@ public class LoginPresenter implements LoginOutputBoundary {
     private final SwipeViewModel swipeViewModel;
     private final ViewManagerModel viewManagerModel;
     private final CompatibilityViewModel compatibilityViewModel;
+    private final EditProfileViewModel editProfileViewModel;
     private final ListChatViewModel listChatViewModel;
 
     public LoginPresenter(ViewManagerModel viewManagerModel,
@@ -30,12 +34,14 @@ public class LoginPresenter implements LoginOutputBoundary {
                           LoginViewModel loginViewModel,
                           SignupViewModel signupViewModel,
                           CompatibilityViewModel compatibilityViewModel,
+                          EditProfileViewModel editProfileViewModel,
                           ListChatViewModel listChatViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.signupViewModel = signupViewModel;
         this.swipeViewModel = swipeViewModel;
         this.loginViewModel = loginViewModel;
         this.compatibilityViewModel = compatibilityViewModel;
+        this.editProfileViewModel = editProfileViewModel;
         this.listChatViewModel = listChatViewModel;
     }
 
@@ -52,15 +58,18 @@ public class LoginPresenter implements LoginOutputBoundary {
         this.compatibilityViewModel.setState(compatibilityState);
         this.compatibilityViewModel.firePropertyChanged();
 
-        this.viewManagerModel.setState(swipeViewModel.getViewName());
-        this.viewManagerModel.firePropertyChanged();
+        final EditProfileState editProfileState = editProfileViewModel.getState();
+        editProfileState.setUsername(response.getUsername());
+        this.editProfileViewModel.setState(editProfileState);
+        this.editProfileViewModel.firePropertyChanged();
 
         final ListChatState listChatState = listChatViewModel.getState();
         listChatState.setUsername(response.getUsername());
         this.listChatViewModel.setState(listChatState);
         this.listChatViewModel.firePropertyChanged();
 
-
+        this.viewManagerModel.setState(swipeViewModel.getViewName());
+        this.viewManagerModel.firePropertyChanged();
 
     }
 

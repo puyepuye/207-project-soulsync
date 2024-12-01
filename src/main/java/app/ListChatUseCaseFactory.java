@@ -1,6 +1,7 @@
 package app;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.edit_profile.EditProfileViewModel;
 import interface_adapter.chat.ChatViewModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
 import interface_adapter.listchat.ListChatController;
@@ -29,11 +30,12 @@ public class ListChatUseCaseFactory {
                                       ListChatDataAccessInterface listChatDataAccessObject,
                                       NavbarViewModel navbarViewModel,
                                       SwipeViewModel swipeViewModel,
-                                      CompatibilityViewModel compatibilityViewModel){
+                                      CompatibilityViewModel compatibilityViewModel,
+                                      EditProfileViewModel editProfileViewModel){
         final ListChatController listChatController = createListChatUseCase(viewManagerModel,
                 listChatViewModel, chatViewModel, listChatDataAccessObject);
         final NavbarController navbarController = createNavbarUseCase(viewManagerModel, swipeViewModel,navbarViewModel,
-                compatibilityViewModel, listChatViewModel);
+                compatibilityViewModel, editProfileViewModel, listChatViewModel);
         return new ListChatView(listChatViewModel, listChatController, navbarController);
 
 

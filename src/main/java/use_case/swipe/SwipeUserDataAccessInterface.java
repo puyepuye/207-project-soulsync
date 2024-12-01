@@ -22,4 +22,5 @@ public interface SwipeUserDataAccessInterface {
      */
     User get(String username);
 
+    void saveMatch(String profileUsername, String currentSwipingUsername);
 }

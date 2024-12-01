@@ -69,6 +69,22 @@ public class SwipesListDataAccessObject {
         return preferencesMap;
     }
 
+    /**
+     * Generate a swiping list for a specific user, ranked by compatibility
+     * @param username The username of the user
+     * @return A list of users matching the preferred criteria, ranked by compatibility
+     */
+    public List<String> getSwipedRightOn(String username) {
+        Document query = new Document("username", username);
+        Document user = userCollection.find(query).first();
+
+        if (user != null && user.containsKey("swipedRightOn")) {
+            return user.getList("swipedRightOn", String.class); // Assumes swipedRightOn is stored as a list
+        }
+
+        return new ArrayList<>(); // Return an empty list if no data is found
+    }
+
 
     /**
      * Generate a swiping list for a specific user, ranked by compatibility
@@ -153,10 +169,14 @@ public class SwipesListDataAccessObject {
     }
 
     public static void main(String[] args) {
-        //Testing the Generate Swipe - Returns List of Swiping Cards
-        SwipesListDataAccessObject dao = new SwipesListDataAccessObject();
         // Example: Generate a swiping list for a user with username "puye"
         String username = "puye";
-        System.out.println(dao.generateSwipes(username));
+        SwipesListDataAccessObject dao = new SwipesListDataAccessObject();
+        List<Document> swipesList = dao.generateSwipes(username);
+
+        // Iterate through the list and print each object on a new line
+        for (Document swipe : swipesList) {
+            System.out.println(swipe.toJson()); // Use toJson() to format the MongoDB Document
+        }
     }
 }

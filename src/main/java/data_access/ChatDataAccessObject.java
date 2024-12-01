@@ -4,6 +4,7 @@ import entity.ChatChannel;
 import entity.ChatMessage;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import use_case.chat.ChatDataAccessInterface;
 import use_case.listchat.ListChatDataAccessInterface;
@@ -63,6 +64,69 @@ public class ChatDataAccessObject implements ChatDataAccessInterface,
         } catch (InterruptedException | IOException e) {
             System.out.println("Something went wrong");
         }
+    }
+
+    public void updateProfilePicture(String uniqueID, String newProfilePicture) {
+//        JSONObject requestBody = new JSONObject();
+//        requestBody.put("profile_url", newProfilePicture);
+//
+//        HttpRequest patchRequest = HttpRequest.newBuilder()
+//                .uri(URI.create(API_ENDPOINT + "users/" + uniqueID))
+//                .header(TOKEN_HEADER, apiKey)
+//                .header("Content-Type", "application/json; charset=utf8")
+//                .method("PATCH", HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+//                .build();
+//
+//        HttpClient client = HttpClient.newHttpClient();
+//        try {
+//            HttpResponse<String> response = client.send(patchRequest, HttpResponse.BodyHandlers.ofString());
+//            System.out.println(response.body());
+//            JSONObject responseJSON = new JSONObject(response.body());
+//            if (responseJSON.has("error")) {
+//                System.out.println("Something went wrong, server threw an error");
+//            } else {
+//                System.out.println("Profile picture updated successfully.");
+//            }
+//        } catch (InterruptedException | IOException e) {
+//            System.out.println("Something went wrong");
+//        }
+    }
+
+
+
+    public void updateFullName(String uniqueID, String newFullName) {
+//        JSONObject requestBody = new JSONObject();
+//        requestBody.put("nickname", newFullName);
+//
+//        HttpRequest patchRequest = HttpRequest.newBuilder()
+//                .uri(URI.create(API_ENDPOINT + "users/" + uniqueID))
+//                .header(TOKEN_HEADER, apiKey)
+//                .header("Content-Type", "application/json; charset=utf8")
+//                .method("PATCH", HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+//                .build();
+//
+//        HttpClient client = HttpClient.newHttpClient();
+//        try {
+//            HttpResponse<String> response = client.send(patchRequest, HttpResponse.BodyHandlers.ofString());
+//            System.out.println("Response: " + response.body());
+//
+//            // Check if the response is valid JSON
+//            try {
+//                JSONObject responseJSON = new JSONObject(response.body());
+//                if (responseJSON.has("error")) {
+//                    System.out.println("Something went wrong, server threw an error: " + responseJSON.getString("message"));
+//                } else {
+//                    System.out.println("Full name updated successfully.");
+//                }
+//            } catch (JSONException e) {
+//                // Response is not JSON
+//                System.out.println("Response is not JSON. Raw response: " + response.body());
+//            }
+//
+//        } catch (InterruptedException | IOException e) {
+//            System.out.println("Something went wrong");
+//            e.printStackTrace();
+//        }
     }
 
     /**

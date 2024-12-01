@@ -7,25 +7,17 @@ import java.util.Date;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("matchesCollection")
-public class CommonMatches {
+public class CommonMatches implements Matches{
 
-    private final ObjectId userAId;
-    private final ObjectId userBId;
-    private final Date matchDate;
-    private final Boolean isActive;
+    private final String usernameA;
+    private final String usernameB;
 
-    public CommonMatches(ObjectId userAId, ObjectId userBId, Date matchDate, Boolean isActive) {
-        this.userAId = userAId;
-        this.userBId = userBId;
-        this.matchDate = matchDate;
-        this.isActive = isActive;
+    public CommonMatches(String usernameA, String usernameB) {
+        this.usernameA = usernameA;
+        this.usernameB = usernameB;
     }
 
-    public ObjectId getUserAId() { return userAId; }
+    public String getUsernameA() { return usernameA; }
 
-    public ObjectId getUserBId() { return userBId; }
-
-    public Date getMatchDate() { return matchDate; }
-
-    public Boolean getIsActive() {return isActive;}
+    public String getUsernameB() { return usernameB; }
 }
