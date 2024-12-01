@@ -145,6 +145,9 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     public void saveMatch(String usernameA, String usernameB) {
         Document matchDoc = new Document("usernameA", usernameA)
                 .append("usernameB", usernameB);
+        Document swipedRightQuery = new Document("username", usernameA);
+        Document swipedRightUpdate = new Document("$push", new Document("matched", usernameB));
+        userCollection.updateOne(swipedRightQuery, swipedRightUpdate);
         matchesCollection.insertOne(matchDoc);
     }
 
