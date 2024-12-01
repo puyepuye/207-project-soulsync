@@ -48,6 +48,7 @@ public class NavbarPresenter implements NavbarOutputBoundary {
     public void switchToSwipeView() {
         viewManagerModel.setState(swipeViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
+        this.swipeViewModel.firePropertyChanged();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package view;
 
+import data_access.SwipesListDataAccessObject;
 import interface_adapter.navbar.NavbarController;
 
 import javax.swing.*;

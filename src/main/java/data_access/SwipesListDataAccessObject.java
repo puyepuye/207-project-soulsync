@@ -153,10 +153,14 @@ public class SwipesListDataAccessObject {
     }
 
     public static void main(String[] args) {
-        //Testing the Generate Swipe - Returns List of Swiping Cards
-        SwipesListDataAccessObject dao = new SwipesListDataAccessObject();
         // Example: Generate a swiping list for a user with username "puye"
         String username = "puye";
-        System.out.println(dao.generateSwipes(username));
+        SwipesListDataAccessObject dao = new SwipesListDataAccessObject();
+        List<Document> swipesList = dao.generateSwipes(username);
+
+        // Iterate through the list and print each object on a new line
+        for (Document swipe : swipesList) {
+            System.out.println(swipe.toJson()); // Use toJson() to format the MongoDB Document
+        }
     }
 }
