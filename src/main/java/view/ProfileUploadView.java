@@ -76,7 +76,7 @@ public class ProfileUploadView extends JFrame {
             if (uploadedImageUrl != null) {
                 System.out.println("Uploaded Image URL: " + uploadedImageUrl);
                 JOptionPane.showMessageDialog(this, "Image uploaded successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                // Pass the image URL to SignUpView or other components here
+                dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Image upload failed", "Error", JOptionPane.ERROR_MESSAGE);
             }
