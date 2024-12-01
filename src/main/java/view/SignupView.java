@@ -49,6 +49,10 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final JPanel preferredGenderPanel;
     private final JComboBox<String> preferredAgeComboBox;
 
+    // Gradient Colors
+    private final Color topColor = Color.decode("#FFEFF1"); // Light pink
+    private final Color bottomColor = Color.decode("#FFC2C9");
+
     public SignupView(SignupController controller, SignupViewModel signupViewModel) {
 
         this.signupController = controller;
@@ -60,12 +64,16 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
         final LabelTextPanel fullNameInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.FULLNAME_LABEL), fullnameInputField);
+        fullNameInfo.setOpaque(false);
         final LabelTextPanel usernameInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.USERNAME_LABEL), usernameInputField);
+        usernameInfo.setOpaque(false);
         final LabelTextPanel passwordInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.PASSWORD_LABEL), passwordInputField);
+        passwordInfo.setOpaque(false);
         final LabelTextPanel repeatPasswordInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.REPEAT_PASSWORD_LABEL), repeatPasswordInputField);
+        repeatPasswordInfo.setOpaque(false);
 
         // Initialize JDatePicker
         UtilDateModel model = new UtilDateModel();
@@ -75,21 +83,37 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         p.put("text.year", "Year");
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
         dobDatePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        dobDatePicker.setPreferredSize(new Dimension(200, 30));
+        dobDatePicker.setOpaque(false);
 
-        dobDatePicker.setPreferredSize(new java.awt.Dimension(140, 30));
+        JPanel dateOfBirthPanel = new JPanel();
+        dateOfBirthPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        dateOfBirthPanel.add(new JLabel("Date of Birth:"));
+        dateOfBirthPanel.add(dobDatePicker);
+        dateOfBirthPanel.setOpaque(false);
 
         final LabelDropdownPanel genderDropdown = new LabelDropdownPanel(
                 new JLabel(SignupViewModel.GENDER_LABEL), genderComboBox);
-
+        genderDropdown.setOpaque(false);
         final LabelDropdownPanel countryDropdown = new LabelDropdownPanel(
                 new JLabel(SignupViewModel.COUNTRY_LABEL), countryComboBox);
-
+        countryDropdown.setOpaque(false);
         final LabelDropdownPanel cityDropDown = new LabelDropdownPanel(
                 new JLabel(SignupViewModel.CITY_LABEL), cityComboBox);
+        cityDropDown.setOpaque(false);
 
-        // Create a JPanel for holding the checkboxes
-        preferredGenderPanel = new JPanel();
-        preferredGenderPanel.setLayout(new GridLayout(0, 1)); // One checkbox per row
+        JPanel preferredGenderContainer = new JPanel();
+        preferredGenderContainer.setPreferredSize(new Dimension(300, 90));
+        preferredGenderContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        final JLabel preferredGenderLabel = new JLabel("Preferred Gender:");
+        preferredGenderLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the label
+        preferredGenderLabel.setOpaque(false);
+        preferredGenderContainer.add(preferredGenderLabel);
+        preferredGenderContainer.add(Box.createRigidArea(new Dimension(0, 10)));
+        preferredGenderContainer.setOpaque(false);
+
+        preferredGenderPanel = new JPanel(new GridBagLayout());
 
         // Create checkboxes
         JCheckBox option1 = new JCheckBox("Female");
@@ -97,15 +121,31 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         JCheckBox option3 = new JCheckBox("Non-Binary");
         JCheckBox option4 = new JCheckBox("Other");
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0; // Single column
+        gbc.anchor = GridBagConstraints.CENTER; // Align content to the center
+        gbc.insets = new Insets(0, 10, 0, 10);
+
         // Add checkboxes to the panel
         preferredGenderPanel.add(option1);
         preferredGenderPanel.add(option2);
         preferredGenderPanel.add(option3);
         preferredGenderPanel.add(option4);
+        preferredGenderPanel.setOpaque(false);
+
+        preferredGenderContainer.add(preferredGenderPanel);
 
         // Create a JComboBox with the age ranges
         preferredAgeComboBox = new JComboBox<>(SignupViewModel.preferredAgeRanges);
         preferredAgeComboBox.setSelectedIndex(0); // Default selection
+
+        // Create a new LabelDropdownPanel for Preferred Age
+        final LabelDropdownPanel preferredAgeDropdown = new LabelDropdownPanel(
+                new JLabel("Preferred Age:"), preferredAgeComboBox);
+        preferredAgeDropdown.setOpaque(false);
+
+        preferredGenderContainer.add(preferredAgeDropdown);
+        preferredGenderContainer.setOpaque(false);
 
         final JPanel buttons = new JPanel();
         toLogin = new JButton(SignupViewModel.TO_LOGIN_BUTTON_LABEL);
@@ -114,6 +154,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         buttons.add(signUp);
         cancel = new JButton(SignupViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
+        buttons.setOpaque(false);
 
         // Profile Upload Button
         uploadProfileButton = new JButton("Upload Profile Photo");
@@ -183,14 +224,13 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.add(passwordInfo);
         this.add(repeatPasswordInfo);
         this.add(fullNameInfo);
-        this.add(dobDatePicker);
+        this.add(dateOfBirthPanel);
         this.add(genderDropdown);
         this.add(countryDropdown);
-        this.add(preferredGenderPanel);
-        this.add(preferredAgeComboBox);
         this.add(cityDropDown);
-        this.add(Box.createRigidArea(new Dimension(0, 10))); // Spacer
+        this.add(preferredGenderContainer);
         this.add(uploadProfileButton);
+        this.add(Box.createRigidArea(new Dimension(0, 8)));
         this.add(buttons);
     }
 
@@ -227,6 +267,19 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 documentListenerHelper();
             }
         });
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+
+        // Create a gradient background
+        int width = getWidth();
+        int height = getHeight();
+        GradientPaint gradient = new GradientPaint(0, 0, topColor, 0, height, bottomColor);
+        g2d.setPaint(gradient);
+        g2d.fillRect(0, 0, width, height);
     }
 
     private void addPasswordListener() {
