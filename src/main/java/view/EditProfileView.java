@@ -15,9 +15,9 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import interface_adapter.signup.SignupController;
-import interface_adapter.signup.SignupState;
-import interface_adapter.signup.SignupViewModel;
+import interface_adapter.edit_profile.EditProfileController;
+import interface_adapter.edit_profile.EditProfileState;
+import interface_adapter.edit_profile.EditProfileViewModel;
 
 import java.util.*;
 import java.util.List;
@@ -25,47 +25,42 @@ import java.util.List;
 /**
  * The View for the Signup Use Case.
  */
-public class SignupView extends JPanel implements ActionListener, PropertyChangeListener {
-    private final String viewName = "sign up";
+public class EditProfileView extends JPanel implements ActionListener, PropertyChangeListener {
+    private final String viewName = "edit profile";
 
-    private final SignupViewModel signupViewModel;
-    private final JTextField usernameInputField = new JTextField(15);
+    private final EditProfileViewModel editProfileViewModel;
     private final JPasswordField passwordInputField = new JPasswordField(15);
     private final JPasswordField repeatPasswordInputField = new JPasswordField(15);
     private final JTextField fullnameInputField = new JTextField(15);
-    private final SignupController signupController;
-    private final JComboBox<String> genderComboBox = new JComboBox<>(SignupViewModel.GENDERS);
-    private final JComboBox<String> countryComboBox = new JComboBox<>(SignupViewModel.COUNTRIES);
-    private final JComboBox<String> cityComboBox = new JComboBox<>(SignupViewModel.CITIES);
+    private final EditProfileController editProfileController;
+    private final JComboBox<String> genderComboBox = new JComboBox<>(EditProfileViewModel.GENDERS);
+    private final JComboBox<String> countryComboBox = new JComboBox<>(EditProfileViewModel.COUNTRIES);
+    private final JComboBox<String> cityComboBox = new JComboBox<>(EditProfileViewModel.CITIES);
 
     private String profileImageUrl = null; // Variable to store the uploaded image URL
 
     // Replacing JTextField with JDatePickerImpl
     private final JDatePickerImpl dobDatePicker;
-    private final JButton signUp;
+    private final JButton updateProfile;
     private final JButton cancel;
-    private final JButton toLogin;
     private final JButton uploadProfileButton;
     private final JPanel preferredGenderPanel;
     private final JComboBox<String> preferredAgeComboBox;
 
-    public SignupView(SignupController controller, SignupViewModel signupViewModel) {
+    public EditProfileView(EditProfileController controller, EditProfileViewModel editProfileViewModel) {
+        this.editProfileController = controller;
+        this.editProfileViewModel = editProfileViewModel;
+        editProfileViewModel.addPropertyChangeListener(this);
 
-        this.signupController = controller;
-        this.signupViewModel = signupViewModel;
-        signupViewModel.addPropertyChangeListener(this);
-
-        final JLabel title = new JLabel(SignupViewModel.TITLE_LABEL);
+        final JLabel title = new JLabel(EditProfileViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         final LabelTextPanel fullNameInfo = new LabelTextPanel(
-                new JLabel(SignupViewModel.FULLNAME_LABEL), fullnameInputField);
-        final LabelTextPanel usernameInfo = new LabelTextPanel(
-                new JLabel(SignupViewModel.USERNAME_LABEL), usernameInputField);
+                new JLabel(EditProfileViewModel.FULLNAME_LABEL), fullnameInputField);
         final LabelTextPanel passwordInfo = new LabelTextPanel(
-                new JLabel(SignupViewModel.PASSWORD_LABEL), passwordInputField);
+                new JLabel(EditProfileViewModel.PASSWORD_LABEL), passwordInputField);
         final LabelTextPanel repeatPasswordInfo = new LabelTextPanel(
-                new JLabel(SignupViewModel.REPEAT_PASSWORD_LABEL), repeatPasswordInputField);
+                new JLabel(EditProfileViewModel.REPEAT_PASSWORD_LABEL), repeatPasswordInputField);
 
         // Initialize JDatePicker
         UtilDateModel model = new UtilDateModel();
@@ -79,13 +74,13 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         dobDatePicker.setPreferredSize(new java.awt.Dimension(140, 30));
 
         final LabelDropdownPanel genderDropdown = new LabelDropdownPanel(
-                new JLabel(SignupViewModel.GENDER_LABEL), genderComboBox);
+                new JLabel(EditProfileViewModel.GENDER_LABEL), genderComboBox);
 
         final LabelDropdownPanel countryDropdown = new LabelDropdownPanel(
-                new JLabel(SignupViewModel.COUNTRY_LABEL), countryComboBox);
+                new JLabel(EditProfileViewModel.COUNTRY_LABEL), countryComboBox);
 
         final LabelDropdownPanel cityDropDown = new LabelDropdownPanel(
-                new JLabel(SignupViewModel.CITY_LABEL), cityComboBox);
+                new JLabel(EditProfileViewModel.CITY_LABEL), cityComboBox);
 
         // Create a JPanel for holding the checkboxes
         preferredGenderPanel = new JPanel();
@@ -104,15 +99,13 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         preferredGenderPanel.add(option4);
 
         // Create a JComboBox with the age ranges
-        preferredAgeComboBox = new JComboBox<>(SignupViewModel.preferredAgeRanges);
+        preferredAgeComboBox = new JComboBox<>(EditProfileViewModel.preferredAgeRanges);
         preferredAgeComboBox.setSelectedIndex(0); // Default selection
 
         final JPanel buttons = new JPanel();
-        toLogin = new JButton(SignupViewModel.TO_LOGIN_BUTTON_LABEL);
-        buttons.add(toLogin);
-        signUp = new JButton(SignupViewModel.SIGNUP_BUTTON_LABEL);
-        buttons.add(signUp);
-        cancel = new JButton(SignupViewModel.CANCEL_BUTTON_LABEL);
+        updateProfile = new JButton("Update Profile");
+        buttons.add(updateProfile);
+        cancel = new JButton(EditProfileViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
 
         // Profile Upload Button
@@ -120,23 +113,19 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         uploadProfileButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         uploadProfileButton.addActionListener(e -> openProfileUploadView());
 
-        signUp.addActionListener(
+        updateProfile.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(signUp)) {
-                            if (profileImageUrl == null || profileImageUrl.isEmpty()) {
-                                JOptionPane.showMessageDialog(null, "Please upload a profile photo before signing up.",
-                                        "Missing Photo", JOptionPane.WARNING_MESSAGE);
-                                return;
+                        if (evt.getSource().equals(updateProfile)) {
+
+                            final EditProfileState currentState = editProfileViewModel.getState();
+                            if (profileImageUrl != null) {
+                                currentState.setImage(profileImageUrl);
                             }
+                            editProfileViewModel.setState(currentState);
 
-                            final SignupState currentState = signupViewModel.getState();
-
-                            currentState.setImage(profileImageUrl);
-                            signupViewModel.setState(currentState);
-
-                            signupController.execute(
-                                    currentState.getFullname(),
+                            editProfileController.execute(
+                                    currentState.getFullName(),
                                     currentState.getUsername(),
                                     currentState.getPassword(),
                                     currentState.getRepeatPassword(),
@@ -147,24 +136,22 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                                     currentState.getPreferredGender(),
                                     currentState.getPreferredAge()
                             );
+
                         }
                     }
                 }
         );
 
-        toLogin.addActionListener(
+        cancel.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        signupController.switchToLoginView();
+                        editProfileController.switchToSwipeView();
 
                     }
                 }
 
         );
 
-//        cancel.addActionListener(this);
-
-        addUsernameListener();
         addPasswordListener();
         addRepeatPasswordListener();
         addDOBListener();
@@ -177,7 +164,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         this.add(title);
-        this.add(usernameInfo);
         this.add(passwordInfo);
         this.add(repeatPasswordInfo);
         this.add(fullNameInfo);
@@ -194,36 +180,10 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
     private void addDOBListener() {
         dobDatePicker.addActionListener(e -> {
-            final SignupState currentState = signupViewModel.getState();
+            final EditProfileState currentState = editProfileViewModel.getState();
             Date selectedDate = (Date) dobDatePicker.getModel().getValue();
             currentState.setDateOfBirth(selectedDate);
-            signupViewModel.setState(currentState);
-        });
-    }
-
-    private void addUsernameListener() {
-        usernameInputField.getDocument().addDocumentListener(new DocumentListener() {
-
-            private void documentListenerHelper() {
-                final SignupState currentState = signupViewModel.getState();
-                currentState.setUsername(usernameInputField.getText());
-                signupViewModel.setState(currentState);
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                documentListenerHelper();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                documentListenerHelper();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                documentListenerHelper();
-            }
+            editProfileViewModel.setState(currentState);
         });
     }
 
@@ -231,9 +191,9 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         passwordInputField.getDocument().addDocumentListener(new DocumentListener() {
 
             private void documentListenerHelper() {
-                final SignupState currentState = signupViewModel.getState();
+                final EditProfileState currentState = editProfileViewModel.getState();
                 currentState.setPassword(new String(passwordInputField.getPassword()));
-                signupViewModel.setState(currentState);
+                editProfileViewModel.setState(currentState);
             }
 
             @Override
@@ -257,9 +217,9 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         repeatPasswordInputField.getDocument().addDocumentListener(new DocumentListener() {
 
             private void documentListenerHelper() {
-                final SignupState currentState = signupViewModel.getState();
+                final EditProfileState currentState = editProfileViewModel.getState();
                 currentState.setRepeatPassword(new String(repeatPasswordInputField.getPassword()));
-                signupViewModel.setState(currentState);
+                editProfileViewModel.setState(currentState);
             }
 
             @Override
@@ -283,9 +243,9 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         fullnameInputField.getDocument().addDocumentListener(new DocumentListener() {
 
             private void documentListenerHelper() {
-                final SignupState currentState = signupViewModel.getState();
-                currentState.setFullname(fullnameInputField.getText());
-                signupViewModel.setState(currentState);
+                final EditProfileState currentState = editProfileViewModel.getState();
+                currentState.setFullName(fullnameInputField.getText());
+                editProfileViewModel.setState(currentState);
             }
 
             @Override
@@ -309,9 +269,9 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private void addGenderListener() {
         genderComboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                final SignupState currentState = signupViewModel.getState();
+                final EditProfileState currentState = editProfileViewModel.getState();
                 currentState.setGender((String) genderComboBox.getSelectedItem());
-                signupViewModel.setState(currentState);
+                editProfileViewModel.setState(currentState);
             }
         });
     }
@@ -319,7 +279,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private void addLocationListener() {
         countryComboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                final SignupState currentState = signupViewModel.getState();
+                final EditProfileState currentState = editProfileViewModel.getState();
 
                 String location = (String) countryComboBox.getSelectedItem();
                 String city = (String) cityComboBox.getSelectedItem();
@@ -329,14 +289,14 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 }
 
                 currentState.setLocation(location);
-                signupViewModel.setState(currentState);
+                editProfileViewModel.setState(currentState);
             }
         });
 
         cityComboBox.addItemListener(e -> {
 
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                final SignupState currentState = signupViewModel.getState();
+                final EditProfileState currentState = editProfileViewModel.getState();
 
                 String location = (String) countryComboBox.getSelectedItem();
                 String city = (String) cityComboBox.getSelectedItem();
@@ -346,7 +306,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 }
 
                 currentState.setLocation(location);
-                signupViewModel.setState(currentState);
+                editProfileViewModel.setState(currentState);
             }
         });
     }
@@ -364,10 +324,10 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                         System.out.println("Selected checkboxes: " + selectedCheckBoxes);
 
                         // Optionally update the state with the selected checkboxes
-                        final SignupState currentState = signupViewModel.getState();
+                        final EditProfileState currentState = editProfileViewModel.getState();
                         currentState.setPreferredGender(selectedCheckBoxes);
                         System.out.println(currentState.getPreferredGender());
-                        signupViewModel.setState(currentState);
+                        editProfileViewModel.setState(currentState);
                     }
                 });
             }
@@ -401,10 +361,10 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
             HashMap<String, Integer> preferredAgeRange = parseAgeRange(selectedRange);
             if (preferredAgeRange != null) {
                 System.out.println("Parsed Range: " + preferredAgeRange);
-                final SignupState currentState = signupViewModel.getState();
+                final EditProfileState currentState = editProfileViewModel.getState();
                 currentState.setPreferredAge(preferredAgeRange);
                 System.out.println(currentState.getPreferredAge());
-                signupViewModel.setState(currentState);
+                editProfileViewModel.setState(currentState);
             }
         });
         // Update state with selected values (removing trailing comma and space)
@@ -457,7 +417,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        final SignupState state = (SignupState) evt.getNewValue();
+        final EditProfileState state = (EditProfileState) evt.getNewValue();
         if (state.getUsernameError() != null) {
             JOptionPane.showMessageDialog(this, state.getUsernameError());
         }

@@ -4,6 +4,7 @@ import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.edit_profile.EditProfileViewModel;
 import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.navbar.NavbarController;
 import interface_adapter.navbar.NavbarPresenter;
@@ -20,6 +21,8 @@ import use_case.swipe.SwipeOutputBoundary;
 import use_case.swipe.SwipeUserDataAccessInterface;
 import view.SwipeView;
 import view.NavBarView;
+
+import java.util.List;
 
 import static app.NavbarUseCaseFactory.createNavbarUseCase;
 
@@ -46,6 +49,7 @@ public final class SwipeUseCaseFactory {
             SwipeViewModel swipeViewModel,
             NavbarViewModel navBarViewModel,
             CompatibilityViewModel compatibilityViewModel,
+            EditProfileViewModel editProfileViewModel,
             SwipeUserDataAccessInterface userDataAccessObject,
             ListChatViewModel listChatViewModel) {
 
@@ -53,8 +57,7 @@ public final class SwipeUseCaseFactory {
                 createSwipeUseCase(viewManagerModel, swipeViewModel, userDataAccessObject);
 
         final NavbarController navBarController =
-                createNavbarUseCase(viewManagerModel, swipeViewModel, navBarViewModel,
-                        compatibilityViewModel, listChatViewModel);
+                createNavbarUseCase(viewManagerModel, swipeViewModel, navBarViewModel, compatibilityViewModel, editProfileViewModel, listChatViewModel);
 
         return new SwipeView(swipeController, swipeViewModel, navBarController);
 

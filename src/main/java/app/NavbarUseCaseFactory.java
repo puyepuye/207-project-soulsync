@@ -4,6 +4,8 @@ import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
+import interface_adapter.edit_profile.EditProfileViewModel;
+import interface_adapter.edit_profile.EditProfileViewModel;
 import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
@@ -23,6 +25,8 @@ import use_case.navbar.NavbarOutputBoundary;
 import use_case.navbar.NavbarUserDataAccessInterface;
 import view.LoginView;
 import view.NavBarView;
+
+import java.util.List;
 
 /**
  * This class contains the static factory function for creating the LoggedInView.
@@ -46,11 +50,11 @@ public final class NavbarUseCaseFactory {
             SwipeViewModel swipeViewModel,
             NavbarViewModel navBarViewModel,
             CompatibilityViewModel compatibilityViewModel,
+            EditProfileViewModel editProfileViewModel,
             ListChatViewModel listChatViewModel) {
 
         final NavbarController navBarController =
-                createNavbarUseCase(viewManagerModel, swipeViewModel, navBarViewModel,
-                        compatibilityViewModel, listChatViewModel);
+                createNavbarUseCase(viewManagerModel, swipeViewModel, navBarViewModel, compatibilityViewModel, editProfileViewModel, listChatViewModel);
 
         return new NavBarView(navBarController);
 
@@ -61,11 +65,12 @@ public final class NavbarUseCaseFactory {
             SwipeViewModel swipeViewModel,
             NavbarViewModel navBarViewModel,
             CompatibilityViewModel compatibilityViewModel,
+            EditProfileViewModel editProfileViewModel,
             ListChatViewModel listChatViewModel) {
 
         // Notice how we pass this method's parameters to the Presenter.
         final NavbarOutputBoundary navBarOutputBoundary = new NavbarPresenter(navBarViewModel,
-                viewManagerModel, swipeViewModel, compatibilityViewModel, listChatViewModel);
+                viewManagerModel, swipeViewModel, compatibilityViewModel, editProfileViewModel, listChatViewModel);
         final NavbarInputBoundary navBarInteractor = new NavbarInteractor(navBarOutputBoundary);
 
         return new NavbarController(navBarInteractor);

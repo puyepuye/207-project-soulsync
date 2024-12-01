@@ -79,6 +79,7 @@ public class NavBarView extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Profile button clicked");
                 // Add logic to handle logout
+                navbarController.switchToEditProfileView();
             }
         });
     }
