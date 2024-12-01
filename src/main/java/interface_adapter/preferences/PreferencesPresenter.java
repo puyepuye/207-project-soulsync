@@ -3,6 +3,7 @@ package interface_adapter.preferences;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.swipe.SwipeState;
 import interface_adapter.swipe.SwipeViewModel;
 import use_case.preferences.PreferenceOutputBoundary;
 import use_case.preferences.PreferenceOutputData;
@@ -36,6 +37,10 @@ public class PreferencesPresenter implements PreferenceOutputBoundary {
         preferencesState.setTags(response.getTags());
         this.preferencesViewModel.setState(preferencesState);
         this.preferencesViewModel.firePropertyChanged();
+
+        final SwipeState swipeState = swipeViewModel.getState();
+        this.swipeViewModel.setState(swipeState);
+        this.swipeViewModel.firePropertyChanged();
 
         this.viewManagerModel.setState(swipeViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
