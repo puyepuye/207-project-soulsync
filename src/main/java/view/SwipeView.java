@@ -148,7 +148,7 @@ public class SwipeView extends JPanel implements PropertyChangeListener {
             if (!swipesList.isEmpty()) {
                 updateProfileView(swipesList.get(currentProfileIndex));
             } else {
-                JOptionPane.showMessageDialog(this, "No profiles available to display.");
+//                JOptionPane.showMessageDialog(this, "No profiles available to display.");
             }
         }
     }
