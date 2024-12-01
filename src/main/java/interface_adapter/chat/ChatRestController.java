@@ -49,7 +49,7 @@ class ChatRestController {
 
     private void relayMessage(String requestBody) throws IOException, InterruptedException {
         final HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create("https://70a4-138-51-79-15.ngrok-free.app/"))    //TODO: add endpoint
+                .uri(URI.create("https://70a4-138-51-79-15.ngrok-free.app/"))    // TODO: add endpoint
                 .header("Content-Type", "application/json; charset=utf8")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();

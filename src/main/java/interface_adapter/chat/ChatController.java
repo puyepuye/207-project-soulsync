@@ -1,24 +1,14 @@
 package interface_adapter.chat;
 
+import java.util.List;
+
 import entity.ChatMessage;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import use_case.chat.ChatInputBoundary;
 import use_case.chat.ChatInputData;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+/**
+ * The controller class for the chat use case.
+ */
 public class ChatController {
 
     private final ChatInputBoundary chatUseCaseInteractor;
@@ -27,23 +17,29 @@ public class ChatController {
         this.chatUseCaseInteractor = chatUseCaseInteractor;
     }
 
-    // helper method to convert dates from the post request
-
+    /**
+     * Sends a message using the chat interactor.
+     * @param chatInputData what the user typed into the chat.
+      */
     public void sendMessage(ChatInputData chatInputData) {
         chatUseCaseInteractor.sendMessage(chatInputData);
     }
 
-
-
+    /**
+     * Method to switch back to the chat list screen.
+     */
     public void switchToChatList() {
         chatUseCaseInteractor.switchToChatList();
     }
 
-    public List<ChatMessage> getAllMessages(String chatURL) {
-        return chatUseCaseInteractor.getAllMessages(chatURL);
+    /**
+     * Method that returns all the messages in a channel, used on initial load.
+     * @param chatUrl the url to the chat you want messages to.
+     * @return a list of ChatMessage objects
+     */
+    public List<ChatMessage> getAllMessages(String chatUrl) {
+        return chatUseCaseInteractor.getAllMessages(chatUrl);
     }
-
-
 
 }
 

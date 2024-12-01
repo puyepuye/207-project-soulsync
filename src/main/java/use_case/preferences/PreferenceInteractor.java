@@ -20,6 +20,7 @@ public class PreferenceInteractor implements PreferenceInputBoundary {
         this.userPresenter = userPresenter;
         this.userFactory = userFactory;
     }
+
     @Override
     public void execute(PreferenceInputData preferenceInputData) {
         System.out.println("Executing with tags: " + preferenceInputData.getTags());
