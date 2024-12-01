@@ -19,4 +19,15 @@ public class SwipeController {
 
         userSwipeUseCaseInteractor.execute(swipeInputData);
     }
+
+    /**
+     * Executes the Change Password Use Case.
+     * @param like whether the person like the profile on the screen or not
+     */
+    public void saveMatch(boolean like, String username, String profileUsername) {
+        final SwipeInputData swipeInputData = new SwipeInputData(like, username, "", profileUsername);
+        System.out.println("usernameA" + username);
+        System.out.println("usernameB" + profileUsername);
+        userSwipeUseCaseInteractor.saveMatch(swipeInputData);
+    }
 }

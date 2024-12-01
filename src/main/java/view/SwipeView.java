@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import data_access.DBUserDataAccessObject;
 import data_access.SwipesListDataAccessObject;
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.navbar.NavbarController;
@@ -75,9 +76,25 @@ public class SwipeView extends JPanel implements PropertyChangeListener {
             return;
         }
 
-        // Get the current profile and process the swipe action
+        // Get the current profile
         Document currentProfile = swipesList.get(currentProfileIndex);
-        swipeController.execute(isLike, swipeViewModel.getState().getUsername(), currentProfile.getString("username"));
+        String swipedOnUsername = currentProfile.getString("username");
+        System.out.println(swipedOnUsername);
+
+        // Perform the swipe action
+        swipeController.execute(isLike, swipeViewModel.getState().getUsername(), swipedOnUsername);
+
+        if (isLike) {
+            // Check if the current user's swipedRightOn list contains the swiped-on user's username
+            SwipesListDataAccessObject dao = new SwipesListDataAccessObject();
+            List<String> swipedRightOnList = dao.getSwipedRightOn(swipeViewModel.getState().getUsername());
+
+            if (swipedRightOnList.contains(swipedOnUsername)) {
+                swipeController.saveMatch(isLike, swipeViewModel.getState().getUsername(), swipedOnUsername);
+                // Show a popup message for a match
+                JOptionPane.showMessageDialog(this, "It's a Match!", "Match Found", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
 
         // Move to the next profile
         currentProfileIndex++;
@@ -140,128 +157,3 @@ public class SwipeView extends JPanel implements PropertyChangeListener {
         return viewName;
     }
 }
-
-//
-///**
-// * The View for the Swipe Use Case.
-// */
-//public class SwipeView extends JPanel implements PropertyChangeListener {
-//    private final String viewName = "swipe";
-//
-//    private final SwipeViewModel swipeViewModel;
-//    private final SwipeController swipeController;
-//
-//    private final JLabel profileName;
-//    private final JLabel profileBio;
-//    private final JLabel profileTag;
-//
-//    private final JButton like;
-//    private final JButton dislike;
-//
-//    public SwipeView(SwipeController controller, SwipeViewModel swipeViewModel, NavbarController navbarController) {
-//        this.swipeController = controller;
-//        this.swipeViewModel = swipeViewModel;
-//        swipeViewModel.addPropertyChangeListener(this);
-//
-//        profileName = new JLabel();
-//        profileBio = new JLabel();
-//        profileTag = new JLabel();
-//
-//        final JPanel buttons = new JPanel();
-//        dislike = new JButton(SwipeViewModel.DISLIKE_BUTTON_LABEL);
-//        buttons.add(dislike);
-//        like = new JButton(SwipeViewModel.LIKE_BUTTON_LABEL);
-//        buttons.add(like);
-//
-//        //show profilepopup
-//        // Sample data
-//        String image = "http://res.cloudinary.com/dvf7ebgzz/image/upload/v1731963858/azdspzv2ttkqqj7y2yka.jpg";
-//        // Replace with actual image path
-//        String fullName = "John Doe";
-//        String location = "New York, USA";
-//        String gender = "Male";
-//        Date dateOfBirth = new Date(90, 5, 15); // June 15, 1990
-//        String bio = "I am a software developer who loves coding, traveling, and gaming.";
-//        List<String> tags = List.of("Tech Enthusiast", "Gamer", "Travel");
-//
-//        // Show the profile dialog with sample data
-//        //JPanel popupView = new ProfilePopup.createProfilePanel(image, fullName, location, gender, dateOfBirth, bio, tags);
-//
-//        JPanel profilePopupPanel = createProfilePanel(image, fullName, location, gender, dateOfBirth, bio, tags);
-//        NavBarView navBarView = new NavBarView(navbarController);
-//
-//        dislike.addActionListener(
-//                new ActionListener() {
-//                    public void actionPerformed(ActionEvent evt) {
-//                        if (evt.getSource().equals(dislike)) {
-//                            SwipeState currentState = swipeViewModel.getState();
-//                            currentState.setLiked(false);  // Set liked to false for dislike action
-//                            swipeController.execute(currentState.getLiked(),
-//                                    currentState.getUsername(),
-//                                    currentState.getProfileName());
-//                        }
-//                    }
-//                }
-//        );
-//
-//        like.addActionListener(
-//                new ActionListener() {
-//                    public void actionPerformed(ActionEvent evt) {
-//                        if (evt.getSource().equals(like)) {
-//                            SwipeState currentState = swipeViewModel.getState();
-//                            currentState.setLiked(true);  // Set liked to true for like action
-//                            swipeController.execute(currentState.getLiked(),
-//                                    currentState.getUsername(),
-//                                    currentState.getProfileName());
-//                        }
-//                    }
-//                }
-//        );
-//
-//        // Use BorderLayout for layout management
-//        this.setLayout(new BorderLayout());
-//
-//        // Add the profile info and buttons to the center of the screen
-//        JPanel profilePanel = new JPanel();
-//        profilePanel.setLayout(new BoxLayout(profilePanel, BoxLayout.Y_AXIS));
-//        profilePanel.add(profileName);
-//        profilePanel.add(profileBio);
-//        profilePanel.add(profileTag);  // Added tag label
-//        profilePanel.add(buttons);
-//
-//        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//        profilePopupPanel.setPreferredSize(new Dimension(310, 385));
-//        this.add(profilePopupPanel);
-//        this.add(profilePanel);
-//        this.add(navBarView, BorderLayout.SOUTH);
-//    }
-//
-//    @Override
-//    public void propertyChange(PropertyChangeEvent evt) {
-//        final SwipeState state = (SwipeState) evt.getNewValue();
-//
-//        if (evt.getPropertyName().equals("state")) {
-//            // Fetch profile data and update the UI
-//            profileName.setText(state.getProfileName());
-//            profileBio.setText(state.getProfileBio());
-//            profileTag.setText(state.getProfileTags());
-//
-//            SwipesListDataAccessObject dao = new SwipesListDataAccessObject();
-//            List<Document> swipesList = dao.generateSwipes(state.getUsername());
-//
-//            // Iterate through the list and print each object on a new line
-//            for (Document swipe : swipesList) {
-//                System.out.println(swipe.toJson()); // Use toJson() to format the MongoDB Document
-//            }
-//
-//        }
-//
-//        if (state.getLikedError() != null) {
-//            JOptionPane.showMessageDialog(this, state.getLikedError());
-//        }
-//    }
-//
-//    public String getViewName() {
-//        return viewName;
-//    }
-//}
