@@ -7,6 +7,8 @@ import entity.UserFactory;
 import interface_adapter.swipe.SwipePresenter;
 import org.junit.Before;
 import org.junit.Test;
+import use_case.chat.ChatDataAccessInterface;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -29,8 +31,9 @@ public class SwipeInteractorTest {
         this.userFactory = new CommonUserFactory();
         this.dao = mock(SwipeUserDataAccessInterface.class);
         this.presenter = mock(SwipePresenter.class);
-        this.interactor = new SwipeInteractor(dao, presenter, userFactory);
-        }
+        ChatDataAccessInterface chatDataAccessObject = mock(ChatDataAccessInterface.class); // Mock ChatDataAccessInterface
+        this.interactor = new SwipeInteractor(dao, presenter, userFactory, chatDataAccessObject);
+    }
 
     @Test   // Checks that execute method calls the correct methods
     public void executeTest() {
