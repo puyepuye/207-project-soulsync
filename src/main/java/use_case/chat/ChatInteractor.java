@@ -20,7 +20,7 @@ public class ChatInteractor implements ChatInputBoundary{
 
     @Override
     public void sendMessage(ChatInputData chatInputData) {
-        chatDataAccessObject.sendMessage(chatInputData.getChatURL(), chatInputData.getChatMessage());
+        chatDataAccessObject.sendMessage(chatInputData.getChatUrl(), chatInputData.getChatMessage());
     }
 
     @Override

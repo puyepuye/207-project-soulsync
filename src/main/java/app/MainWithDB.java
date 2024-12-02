@@ -107,7 +107,8 @@ public class MainWithDB implements CommandLineRunner {
         views.add(navBarView, navBarView.getViewName());
 
         final SwipeView swipeView = SwipeUseCaseFactory.create(viewManagerModel,
-                swipeViewModel, navbarViewModel, compatibilityViewModel, editProfileViewModel, userDataAccessObject, listChatViewModel);
+                swipeViewModel, navbarViewModel, compatibilityViewModel, editProfileViewModel,
+                userDataAccessObject, listChatViewModel, chatDataAccessObject);
 
         views.add(swipeView, swipeView.getViewName());
 

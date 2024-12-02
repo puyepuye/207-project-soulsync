@@ -18,6 +18,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
+
+/**
+ * The view model for the chat view use case.
+ */
 public class ChatView extends JPanel implements ActionListener, PropertyChangeListener {
     private JPanel chat;
     private JTextField textField;
@@ -28,6 +33,9 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
     private String currentUser;
     private String chatURL;
     private JScrollPane scrollPane;
+    private final JLabel usernameLabel = new JLabel();
+
+    @SuppressWarnings({"checkstyle:ExecutableStatementCount", "checkstyle:SuppressWarnings"})
     public ChatView(ChatController chatController, ChatViewModel chatViewModel) {
         this.chatController = chatController;
         this.chatViewModel = chatViewModel;
@@ -35,12 +43,13 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         this.setBackground(new Color(255, 162, 176));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         // Profile part
-        JPanel profile = new JPanel();
-        JButton backButton = createNavButton("⬅");
+        final JPanel profile = new JPanel();
+        final JButton backButton = createNavButton("⬅");
+
         backButton.setActionCommand("back");
         backButton.addActionListener(this);
         profile.add(backButton);
-        profile.add(new JLabel("Name:"));
+        profile.add(usernameLabel);
         profile.setMaximumSize(new Dimension(400, 100));
 
         // Middle chat part
@@ -51,17 +60,16 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
 
         scrollPane = new JScrollPane(chat);
         scrollPane.setPreferredSize(new Dimension(400, 300));
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
+        scrollPane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Text field + send button
-        JPanel bottom = new JPanel();
+        final JPanel bottom = new JPanel();
         bottom.setLayout(new FlowLayout());
         bottom.setBackground(Color.WHITE);
         textField = new JTextField(24);
         textField.setBackground(new Color(255, 220, 227));
         textField.addActionListener(this);
-        JButton sendButton = new JButton("send");
+        final JButton sendButton = new JButton("send");
         sendButton.setMaximumSize(new Dimension(400, 40));
         sendButton.setActionCommand("send");
         sendButton.addActionListener(this);
@@ -71,21 +79,18 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
 
         // Add components to frame
         this.add(profile);
-        this.add(scrollPane);  // Add scroll pane containing chat area
+        this.add(scrollPane);
         this.add(bottom);
-
-//         Add a message listener
+        // Add message listener
         MessageEventManager.getInstance().addPropertyChangeListener(evt -> {
             if ("message".equals(evt.getPropertyName())) {
                 SwingUtilities.invokeLater(() -> {
                     ChatMessage newMessage = (ChatMessage) evt.getNewValue();
-                    if (newMessage.getChatURL().equals(chatURL)){
+                    if (newMessage.getChatUrl().equals(chatURL)) {
                         if (!newMessage.getSender().equals(currentUser)) {
                             newMessage(newMessage.getMessage(), "receive");
                         }
                     }
-
-
                     chat.revalidate();
                     chat.repaint();
                 });
@@ -98,9 +103,9 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("send")) {
-        String message = textField.getText();
+            final String message = textField.getText();
             if (!message.trim().isEmpty()) {
-                ChatState chatState = chatViewModel.getState();
+                final ChatState chatState = chatViewModel.getState();
                 newMessage(message, "send");
                 chat.revalidate();
                 chat.repaint();
@@ -130,31 +135,37 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
             chat.removeAll();
             System.out.println("chat url " + state.getChatUrl());
             chatURL = state.getChatUrl();
-            String currUser = state.getCurrUser();
+            final String currUser = state.getCurrUser();
             System.out.println("currUser " + currUser);
             currentUser = currUser;
-
-            ArrayList<ChatMessage> chatMessages = (ArrayList<ChatMessage>) chatController.getAllMessages(chatURL);
-
+            for (String username: chatURL.split("_")) {
+                if (!username.equals(currUser) && !"chat".equals(username)) {
+                    usernameLabel.setText(username);
+                }
+            }
+            final ArrayList<ChatMessage> chatMessages = (ArrayList<ChatMessage>) chatController.getAllMessages(chatURL);
             for (ChatMessage chatMessage : chatMessages) {
-                System.out.println(chatMessage.getSender());
                 if (chatMessage.getSender().equals(currUser)) {
                     newMessage(chatMessage.getMessage(), "send");
                 }
-                else{
+                else {
                     newMessage(chatMessage.getMessage(), "receive");
                 }
             }
-
-
         }
     }
 
+    /**
+     * Adds a new message to the screen.
+     * @param message the message to be added.
+     * @param state used to get the current user's name.
+     */
     public void newMessage(String message, String state) {
-        JPanel panel = new JPanel();
+        final JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         panel.setBackground(new Color(255, 220, 227));
+        panel.setMaximumSize(new Dimension(400, 80));
 
         // Add horizontal glue to push the message to the right
         if (!state.equals("receive")) {
@@ -162,25 +173,24 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         }
 
         // Message box
-        JPanel messageBox = new JPanel();
+        final JPanel messageBox = new JPanel();
         messageBox.setLayout(new FlowLayout(FlowLayout.LEFT));
         messageBox.setBackground(new Color(255, 162, 176));
 
-        // Text area for the message (word wrapping enabled)
-        JTextArea text = new JTextArea(message);
-        text.setLineWrap(true);  // Enable word wrap
-        text.setWrapStyleWord(true);  // Wrap at word boundaries
-        text.setEditable(false);  // Non-editable
-        text.setOpaque(false);  // Transparent background to match the panel
+        final JTextArea text = new JTextArea(message);
+        text.setLineWrap(true);
+        text.setWrapStyleWord(true);
+        text.setEditable(false);
+        text.setOpaque(false);
         text.setBorder(BorderFactory.createEmptyBorder());
 
         // Calculate dimensions based on message length
-        int maxWidth = (int) (this.getWidth() * 0.3); // 30% of width
-        text.setSize(new Dimension(maxWidth, Short.MAX_VALUE)); // Temporary size to compute preferred size
-        text.setFont(new Font("Arial", Font.PLAIN, 14)); // Set font for consistent sizing
-        text.setMaximumSize(new Dimension(maxWidth, 100));
+        final int maxWidth = (int) (this.getWidth() * 0.3);
+        text.setSize(new Dimension(maxWidth, Short.MAX_VALUE));
+        text.setFont(new Font("Arial", Font.PLAIN, 14));
+        text.setMaximumSize(new Dimension(maxWidth, 60));
         // Use preferred size for dynamic height
-        Dimension preferredSize = text.getPreferredSize();
+        final Dimension preferredSize = text.getPreferredSize();
         text.setPreferredSize(new Dimension(Math.min(maxWidth, preferredSize.width), preferredSize.height));
 
         messageBox.add(text);
@@ -190,16 +200,15 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
             panel.add(Box.createHorizontalGlue());
         }
 
-        JScrollBar sb = scrollPane.getVerticalScrollBar();
-        sb.setValue( sb.getMaximum() );
+        final JScrollBar scrollBar = scrollPane.getVerticalScrollBar();
+        scrollBar.setValue(scrollBar.getMaximum());
         chat.add(panel);
         chat.revalidate();
         chat.repaint();
     }
 
-
     private JButton createNavButton(String text) {
-        JButton button = new JButton(text);
+        final JButton button = new JButton(text);
         button.setFocusPainted(false);
         button.setForeground(Color.decode("#393939"));
         button.setBackground(Color.decode("#FFFBFB"));
@@ -209,10 +218,7 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
     }
 
     @Override
-    public String getName(){
+    public String getName() {
         return name;
-    }
-    public static void main(String[] args) {
-
     }
 }

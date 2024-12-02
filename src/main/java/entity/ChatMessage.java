@@ -1,10 +1,13 @@
 package entity;
 
+/**
+ * Entity used to represent a chat message.
+ */
 public class ChatMessage {
     private final String sender;
     private final String message;
     private final String dateTime;
-    private String chatURL;
+    private String chatUrl;
 
     public ChatMessage(String sender, String message, String dateTime) {
         this.sender = sender;
@@ -12,12 +15,13 @@ public class ChatMessage {
         this.dateTime = dateTime;
     }
 
-    public ChatMessage(String sender, String message, String dateTime, String chatURL) {
+    public ChatMessage(String sender, String message, String dateTime, String chatUrl) {
         this.sender = sender;
         this.message = message;
         this.dateTime = dateTime;
-        this.chatURL = chatURL;
+        this.chatUrl = chatUrl;
     }
+
     public String getSender() {
         return sender;
     }
@@ -30,12 +34,12 @@ public class ChatMessage {
         return dateTime;
     }
 
-    public String getChatURL() {
-        return chatURL;
+    public String getChatUrl() {
+        return chatUrl;
     }
 
-    public void setChatURL(String chatURL) {
-        this.chatURL = chatURL;
+    public void setChatUrl(String chatUrl) {
+        this.chatUrl = chatUrl;
     }
 
 }

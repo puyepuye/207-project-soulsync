@@ -28,7 +28,7 @@ public final class MessageEventManager {
     }
 
     /**
-     * method that adds an object to the list of observers.
+     * A method that adds an object to the list of observers.
      * @param listener the object you want to listen to changes.
      */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -36,9 +36,9 @@ public final class MessageEventManager {
     }
 
     /**
-     * A method to
-     * @param oldMessage
-     * @param newMessage
+     * A method to update the UI once a new message has been received.
+     * @param oldMessage the old message
+     * @param newMessage the new message
      */
     public void setNewMessage(ChatMessage oldMessage, ChatMessage newMessage) {
         support.firePropertyChange("message", oldMessage, newMessage);

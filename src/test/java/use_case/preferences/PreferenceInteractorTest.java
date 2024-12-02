@@ -121,4 +121,5 @@ public class PreferenceInteractorTest {
         // Verify that the presenter switches to the swipe view
         verify(mockOutputBoundary).switchToSwipeView();
     }
+
 }

@@ -5,8 +5,11 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +27,7 @@ class ChatRestController {
     private ChatMessage previousMessage = new ChatMessage(null, null, null);
 
     @PostMapping("/")
-    public void receiveMessages(@RequestBody String body) throws IOException, InterruptedException {
+    public void receiveMessages(@RequestBody String body) throws InterruptedException {
         final JSONObject json = new JSONObject(body);
 
         // Access the "payload" object
@@ -47,16 +50,24 @@ class ChatRestController {
         relayMessage(body);
     }
 
-    private void relayMessage(String requestBody) throws IOException, InterruptedException {
-        final HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create("https://70a4-138-51-79-15.ngrok-free.app/"))    // TODO: add endpoint
-                .header("Content-Type", "application/json; charset=utf8")
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
-        System.out.println("sent message");
-        final HttpClient client = HttpClient.newHttpClient();
-        final HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response);
+    private void relayMessage(String requestBody) throws InterruptedException {
+        try {
+            final List<String> allLines = Files.readAllLines(Paths.get("src/main/resources/clientURLs.txt"));
+            for (String url : allLines) {
+                final HttpRequest postRequest = HttpRequest.newBuilder()
+                        .uri(URI.create(url))
+                        .header("Content-Type", "application/json; charset=utf8")
+                        .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                        .build();
+                System.out.println("sent message");
+                final HttpClient client = HttpClient.newHttpClient();
+                final HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
+                System.out.println(response);
+            }
+        }
+        catch (IOException error) {
+            System.out.println("Could not find list of clients to relay message to.");
+        }
     }
 
     private String convertMillisToDate(long millis) {

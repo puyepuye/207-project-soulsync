@@ -16,7 +16,14 @@ public interface ChatInputBoundary {
      */
     List<ChatMessage> getAllMessages(String chatUrl);
 
+    /**
+     * Sends a message.
+     * @param chatInputData the message we want to send, in the form of the input data object.
+     */
     void sendMessage(ChatInputData chatInputData);
 
+    /**
+     * Switch to the chat list page.
+     */
     void switchToChatList();
 }
