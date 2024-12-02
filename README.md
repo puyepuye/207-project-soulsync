@@ -36,7 +36,7 @@ CLOUD_NAME= {CLOUDINARY CLOUD NAME}
 CLOUDINARY_API_KEY= {CLOUDINARY API KEY}
 CLOUDINARY_API_SECRET= {CLOUDINARY API SECRET}
 ```
-6. In the resources folder create a file called `app.properties` and add the following:
+6. In the resources folder create a file called `application.properties` and add the following:
 ```
 spring.data.mongodb.uri={YOUR MONGODB CLUSTER URI}
 spring.data.mongodb.database={NAME OF YOUR DATABASE}
