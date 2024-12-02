@@ -16,7 +16,17 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.swipe.SwipeViewModel;
-import view.*;
+import view.ChatView;
+import view.CompatibilityView;
+import view.EditProfileView;
+import view.ListChatView;
+import view.LoggedInView;
+import view.LoginView;
+import view.NavBarView;
+import view.PreferenceView;
+import view.SignupView;
+import view.SwipeView;
+import view.ViewManager;
 
 /**
  * The version of Main with an external database used to persist user data.

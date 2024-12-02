@@ -1,32 +1,17 @@
 package app;
 
-import entity.CommonUserFactory;
-import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
 import interface_adapter.edit_profile.EditProfileViewModel;
-import interface_adapter.edit_profile.EditProfileViewModel;
 import interface_adapter.listchat.ListChatViewModel;
-import interface_adapter.login.LoginController;
-import interface_adapter.login.LoginPresenter;
-import interface_adapter.login.LoginViewModel;
 import interface_adapter.navbar.NavbarController;
 import interface_adapter.navbar.NavbarPresenter;
 import interface_adapter.navbar.NavbarViewModel;
-import interface_adapter.signup.SignupViewModel;
 import interface_adapter.swipe.SwipeViewModel;
-import use_case.login.LoginInputBoundary;
-import use_case.login.LoginInteractor;
-import use_case.login.LoginOutputBoundary;
-import use_case.login.LoginUserDataAccessInterface;
 import use_case.navbar.NavbarInputBoundary;
 import use_case.navbar.NavbarInteractor;
 import use_case.navbar.NavbarOutputBoundary;
-import use_case.navbar.NavbarUserDataAccessInterface;
-import view.LoginView;
 import view.NavBarView;
-
-import java.util.List;
 
 /**
  * This class contains the static factory function for creating the LoggedInView.
@@ -39,11 +24,15 @@ public final class NavbarUseCaseFactory {
     }
 
     /**
-     * Factory function for creating the LoggedInView.
-     * @param viewManagerModel the ViewManagerModel to inject into the NavbarView
-     * @param swipeViewModel the swipeViewModel to inject into the NavbarView
-     * @param navBarViewModel the navBarViewModel to inject into the NavbarView
-     * @return the LoggedInView created for the provided input classes
+     * Creates and initializes a NavBarView with the provided dependencies.
+     *
+     * @param viewManagerModel for managing the application's views
+     * @param swipeViewModel for providing data related to swipe functionality
+     * @param navBarViewModel for storing data for the navigation bar
+     * @param compatibilityViewModel for providing compatibility-related data
+     * @param editProfileViewModel for providing data related to profile editing
+     * @param listChatViewModel for handling data for chat lists
+     * @return an instance of NavBarView configured with the required dependencies
      */
     public static NavBarView create(
             ViewManagerModel viewManagerModel,
@@ -54,12 +43,24 @@ public final class NavbarUseCaseFactory {
             ListChatViewModel listChatViewModel) {
 
         final NavbarController navBarController =
-                createNavbarUseCase(viewManagerModel, swipeViewModel, navBarViewModel, compatibilityViewModel, editProfileViewModel, listChatViewModel);
+                createNavbarUseCase(viewManagerModel, swipeViewModel, navBarViewModel, compatibilityViewModel,
+                        editProfileViewModel, listChatViewModel);
 
         return new NavBarView(navBarController);
 
     }
 
+    /**
+     * Creates and configures a {@link NavbarController} with its dependencies.
+     *
+     * @param viewManagerModel for managing the application's views
+     * @param swipeViewModel for providing data related to swipe functionality
+     * @param navBarViewModel for storing data for the navigation bar
+     * @param compatibilityViewModel for providing compatibility-related data
+     * @param editProfileViewModel for providing data related to profile editing
+     * @param listChatViewModel for handling data for chat lists
+     * @return an instance of NavBarController configured with the required dependencies
+     */
     public static NavbarController createNavbarUseCase(
             ViewManagerModel viewManagerModel,
             SwipeViewModel swipeViewModel,
