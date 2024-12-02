@@ -146,9 +146,9 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
                     else {
                         channelUser = channel.getUser2Id();
                     }
-                    System.out.println(channel.getChannelUrl());
+                    System.out.println(channel.getChannelURL());
                     System.out.println(channel.getLastMessage());
-                    addChatToList(channel.getChannelUrl(),
+                    addChatToList(channel.getChannelURL(),
                             "https://static.sendbird.com/sample/cover/cover_11.jpg",
                             channelUser, channel.getLastMessage());
                 }
