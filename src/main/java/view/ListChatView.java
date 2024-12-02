@@ -1,7 +1,6 @@
 package view;
 
 import entity.ChatChannel;
-import interface_adapter.compatibility.CompatibilityState;
 import interface_adapter.listchat.ListChatController;
 import interface_adapter.listchat.ListChatState;
 import interface_adapter.listchat.ListChatViewModel;
@@ -62,52 +61,41 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
     }
 
 
-    public void addChatToList(String chatURL, String pfpURL, String username, String lastMessage) {
+    public void addChatToList(String chatURL, String pfpURL, String username, String lastMessage) throws IOException {
         // Create the panel for the chat
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS)); // Horizontal layout
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 0));
         panel.setPreferredSize(new Dimension(400, 70));
-        panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 70)); // Stretch to fit parent width
-        panel.setBackground(new Color(255, 240, 245)); // Dark red for visibility
+        panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 70));
+        panel.setBackground(new Color(255, 240, 245));
         panel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 
         // Add profile picture (image from URL)
-        JLabel profilePicture = new JLabel();
-        profilePicture.setPreferredSize(new Dimension(60, 60)); // Set size for the profile picture
+        final JLabel profilePicture = new JLabel();
+        profilePicture.setPreferredSize(new Dimension(60, 60));
         profilePicture.setMaximumSize(new Dimension(60, 60));
-        profilePicture.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // Add padding around the image
+        profilePicture.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         // Navbar at the bottom
-        NavBarView navBarView = new NavBarView(navbarController);
+        final NavBarView navBarView = new NavBarView(navbarController);
         this.add(navBarView, BorderLayout.PAGE_END);
-        try {
-            // Load image from URL
-            if (pfpURL.equals("")){
-                pfpURL = "https://static.wikia.nocookie.net/vgost/images/5/56/Rick_Astley.jpg/revision/latest?cb=20220705002743";
-            }
-            URL imgUrl = new URL(pfpURL);
-            Image image = ImageIO.read(imgUrl).getScaledInstance(60, 60, Image.SCALE_SMOOTH); // Scale image
-            profilePicture.setIcon(new ImageIcon(image));
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Use a placeholder if the image fails to load
-            profilePicture.setText("No Image");
-            profilePicture.setHorizontalAlignment(SwingConstants.CENTER);
-            profilePicture.setBackground(Color.GRAY);
-            profilePicture.setOpaque(true); // Show the gray background
+        // Load image from URL
+        if (pfpURL.isEmpty()) {
+            pfpURL = "https://static.wikia.nocookie.net/vgost/images/5/56/Rick_Astley.jpg/revision/latest?cb=20220705002743";
         }
-
+        final URL imgUrl = new URL(pfpURL);
+        final Image image = ImageIO.read(imgUrl).getScaledInstance(60, 60, Image.SCALE_SMOOTH); // Scale image
+        profilePicture.setIcon(new ImageIcon(image));
         // Add the profile picture to the panel
         panel.add(profilePicture);
-
         // Message box inside the chat panel
-        JLabel lastMsgSection = new JLabel(lastMessage);
-        JLabel userNameSection = new JLabel(username);
-        lastMsgSection.setFont(new Font("Arial", Font.BOLD, 14)); // Set font for username
-        userNameSection.setFont(new Font("Arial", Font.PLAIN, 12)); // Set font for last message
+        final JLabel lastMsgSection = new JLabel(lastMessage);
+        final JLabel userNameSection = new JLabel(username);
+        userNameSection.setFont(new Font("Arial", Font.BOLD, 14));
+        lastMsgSection.setFont(new Font("Arial", Font.PLAIN, 12));
 
-        JPanel messageBox = new JPanel();
+        final JPanel messageBox = new JPanel();
         messageBox.setLayout(new BoxLayout(messageBox, BoxLayout.Y_AXIS));
         messageBox.setBorder(new EmptyBorder(10, 10, 10, 10));
         messageBox.setPreferredSize(new Dimension(350, 60));
@@ -119,22 +107,24 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Retrieve the channel URL from the panel
-                String channelUrl = (String) messageBox.getClientProperty("URL");
+                final String channelUrl = (String) messageBox.getClientProperty("URL");
                 System.out.println("Navigating to channel: " + channelUrl);
                 listChatController.enterChat(channelUrl);
 
             }
         });
-        messageBox.add(lastMsgSection);
-        messageBox.add(Box.createRigidArea(new Dimension(0, 5))); // Add a 5-pixel vertical gap
         messageBox.add(userNameSection);
+        // Add a 5-pixel vertical gap
+        messageBox.add(Box.createRigidArea(new Dimension(0, 5)));
+        messageBox.add(lastMsgSection);
 
         // Add the message box to the panel
         panel.add(messageBox);
 
         // Add the panel to the chatLists container
         chatLists.add(panel);
-        chatLists.add(Box.createRigidArea(new Dimension(0, 0))); // Prevent gaps between components
+        // Prevent gaps between components
+        chatLists.add(Box.createRigidArea(new Dimension(0, 0)));
         chatLists.revalidate();
         chatLists.repaint();
     }
@@ -146,21 +136,28 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
             final ListChatState state = (ListChatState) evt.getNewValue();
             System.out.println("current user " + state.getUsername());
             try {
-                ArrayList<ChatChannel> channels =  listChatController.getAllChats(state.getUsername());
+                final ArrayList<ChatChannel> channels =  listChatController.getAllChats(state.getUsername());
                 chatLists.removeAll();
-                for (ChatChannel channel: channels){
+                for (ChatChannel channel: channels) {
                     String channelUser = "";
-                    if (channel.getUser1Id().equals(state.getUsername())){channelUser = channel.getUser1Id();}
-                    else{channelUser = channel.getUser2Id();}
-                    System.out.println(channel.getChannelURL());
-                    addChatToList(channel.getChannelURL(), "", channelUser, channel.getLastMessage());
+                    if (channel.getUser1Id().equals(state.getUsername())) {
+                        channelUser = channel.getUser1Id();
+                    }
+                    else {
+                        channelUser = channel.getUser2Id();
+                    }
+                    System.out.println(channel.getChannelUrl());
+                    System.out.println(channel.getLastMessage());
+                    addChatToList(channel.getChannelUrl(),
+                            "https://static.sendbird.com/sample/cover/cover_11.jpg",
+                            channelUser, channel.getLastMessage());
                 }
-            } catch (IOException | InterruptedException e) {
+            }
+            catch (IOException | InterruptedException e) {
                 System.out.println("Could not get messages");
             }
-
             }
-        }
+    }
 
     public String getViewName() {
         return "listchat";

@@ -73,12 +73,12 @@ public class SignupInteractor implements SignupInputBoundary {
             );
             System.out.println(user.getPreferredAge());
             System.out.println(user.getPreferredGender());
-//            userDataAccessObject.saveUser(user);
-            chatDataAccessObject.createChatUser(signupInputData.getUsername(), signupInputData.getFullname(), signupInputData.getImage());
-            final SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), user.getFullname(), user.getPassword(), user.getImage(),
-                    user.getLocation(), user.getGender(), user.getDateOfBirth(), user.getPreferredGender(), user.getPreferredAge(), false);
-
-//            final SignupOutputData signupOutputData = new SignupOutputData(user.getFullName(), false);
+            chatDataAccessObject.createChatUser(signupInputData.getUsername(),
+                    signupInputData.getFullname(), signupInputData.getImage());
+            final SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(),
+                    user.getFullname(), user.getPassword(), user.getImage(),
+                    user.getLocation(), user.getGender(), user.getDateOfBirth(),
+                    user.getPreferredGender(), user.getPreferredAge(), false);
 
             userPresenter.prepareSuccessView(signupOutputData);
         }

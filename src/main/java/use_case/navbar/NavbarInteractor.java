@@ -1,7 +1,5 @@
 package use_case.navbar;
 
-import entity.User;
-import use_case.login.LoginOutputData;
 
 /**
  * The Login Interactor.
@@ -29,5 +27,6 @@ public class NavbarInteractor implements NavbarInputBoundary {
     }
 
     @Override
-    public void switchToListChatView(){navbarPresenter.switchToListChatView();}
+    public void switchToListChatView() {
+        navbarPresenter.switchToListChatView(); }
 }

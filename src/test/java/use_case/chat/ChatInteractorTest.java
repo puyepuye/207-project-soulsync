@@ -27,9 +27,9 @@ public class ChatInteractorTest {
 
     @Test   // Checks that this will call the appropriate methods from the interface
     public void sendMessageTest() {
-        ChatInputData inputData = new ChatInputData(message.getChatURL(), message.getSender(), message);
+        ChatInputData inputData = new ChatInputData(message.getChatUrl(), message.getSender(), message);
         interactor.sendMessage(inputData);
-        verify(dao, times(1)).sendMessage(inputData.getChatURL(), inputData.getChatMessage());
+        verify(dao, times(1)).sendMessage(inputData.getChatUrl(), inputData.getChatMessage());
     }
 
 

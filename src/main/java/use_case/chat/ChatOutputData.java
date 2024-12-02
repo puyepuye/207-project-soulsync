@@ -5,29 +5,29 @@ import entity.ChatMessage;
 import java.util.List;
 
 public class ChatOutputData {
-    private final String chatURL;
+    private final String chatUrl;
     private final String currentUser;
-    private final String pfpURL;
+    private final String pfpUrl;
 
     private final List<ChatMessage> chatMessages;
 
-    public ChatOutputData(String chatURL, String currentUser, String pfpURL, List<ChatMessage> chatMessages) {
-        this.chatURL = chatURL;
+    public ChatOutputData(String chatUrl, String currentUser, String pfpUrl, List<ChatMessage> chatMessages) {
+        this.chatUrl = chatUrl;
         this.currentUser = currentUser;
-        this.pfpURL = pfpURL;
+        this.pfpUrl = pfpUrl;
         this.chatMessages = chatMessages;
     }
 
-    public String getPfpURL() {
-        return pfpURL;
+    public String getPfpUrl() {
+        return pfpUrl;
     }
 
     public String getCurrentUser() {
         return currentUser;
     }
 
-    public String getChatURL() {
-        return chatURL;
+    public String getChatUrl() {
+        return chatUrl;
     }
 
     public List<ChatMessage> getChatMessages() {

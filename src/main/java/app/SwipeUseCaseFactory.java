@@ -12,6 +12,7 @@ import interface_adapter.navbar.NavbarViewModel;
 import interface_adapter.swipe.SwipeController;
 import interface_adapter.swipe.SwipePresenter;
 import interface_adapter.swipe.SwipeViewModel;
+import use_case.chat.ChatDataAccessInterface;
 import use_case.navbar.NavbarInputBoundary;
 import use_case.navbar.NavbarInteractor;
 import use_case.navbar.NavbarOutputBoundary;
@@ -42,6 +43,7 @@ public final class SwipeUseCaseFactory {
      * @param swipeViewModel the SwipeViewModel to inject into the SwipeView
      * @param navBarViewModel the NavbarViewModel to inject into the SwipeView
      * @param userDataAccessObject the ChangePasswordUserDataAccessInterface to inject into the LoggedInView
+     * @param chatDataAccessObject the ChatDataAccessInterface used to create a new chat when a user matched.
      * @return the LoggedInView created for the provided input classes
      */
     public static SwipeView create(
@@ -51,10 +53,11 @@ public final class SwipeUseCaseFactory {
             CompatibilityViewModel compatibilityViewModel,
             EditProfileViewModel editProfileViewModel,
             SwipeUserDataAccessInterface userDataAccessObject,
-            ListChatViewModel listChatViewModel) {
+            ListChatViewModel listChatViewModel,
+            ChatDataAccessInterface chatDataAccessObject) {
 
         final SwipeController swipeController =
-                createSwipeUseCase(viewManagerModel, swipeViewModel, userDataAccessObject);
+                createSwipeUseCase(viewManagerModel, swipeViewModel, userDataAccessObject, chatDataAccessObject);
 
         final NavbarController navBarController =
                 createNavbarUseCase(viewManagerModel, swipeViewModel, navBarViewModel, compatibilityViewModel, editProfileViewModel, listChatViewModel);
@@ -66,7 +69,7 @@ public final class SwipeUseCaseFactory {
     private static SwipeController createSwipeUseCase(
             ViewManagerModel viewManagerModel,
             SwipeViewModel swipeViewModel,
-            SwipeUserDataAccessInterface userDataAccessObject) {
+            SwipeUserDataAccessInterface userDataAccessObject, ChatDataAccessInterface chatDataAccessObject) {
 
         // Notice how we pass this method's parameters through to the Presenter.
         final SwipeOutputBoundary swipeOutputBoundary = new SwipePresenter(viewManagerModel,
@@ -75,7 +78,7 @@ public final class SwipeUseCaseFactory {
         final UserFactory userFactory = new CommonUserFactory();
 
         final SwipeInputBoundary swipeInteractor =
-                new SwipeInteractor(userDataAccessObject, swipeOutputBoundary, userFactory);
+                new SwipeInteractor(userDataAccessObject, swipeOutputBoundary, userFactory, chatDataAccessObject);
 
         return new SwipeController(swipeInteractor);
     }

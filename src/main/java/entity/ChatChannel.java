@@ -1,23 +1,24 @@
 package entity;
 
+/**
+ * Entity for a chat channel.
+ */
 public class ChatChannel {
 
-
-
-    private String channelURL;
+    private String channelUrl;
     private String user1Id;
     private String user2Id;
     private String lastMessage;
 
-    public ChatChannel(String channelURL, String lastMessage, String user1Id, String user2Id) {
-        this.channelURL = channelURL;
+    public ChatChannel(String channelUrl, String lastMessage, String user1Id, String user2Id) {
+        this.channelUrl = channelUrl;
         this.lastMessage = lastMessage;
         this.user1Id = user1Id;
         this.user2Id = user2Id;
     }
 
-    public String getChannelURL() {
-        return channelURL;
+    public String getChannelUrl() {
+        return channelUrl;
     }
 
     public String getLastMessage() {
