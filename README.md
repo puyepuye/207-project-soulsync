@@ -10,6 +10,7 @@ A dating app created in Java as the final project for the course, CSC207 Softwar
 - [Contributing Conventions](#contributing-conventions)
 - [Feedback](#feedback)
 - [License](#license)
+
 ## Features
 - Users can create an account with their personal information and start matching with other users
 - Users can select other users to match with Tinder swipe style
@@ -20,14 +21,18 @@ A dating app created in Java as the final project for the course, CSC207 Softwar
 As a forewarning, this app is still in the prototyping phase, so the user would be required to manually set up a database on MongdoDB, their own chat app in SendBird's API service, as well as setting up an account for cloudinary. #TODO add cloudinary steps
 1. Clone using `git clone https://github.com/puyepuye/207-project-soulsync.git`
 2. Install ngrok from [here](https://ngrok.com)
-3. Create a .env include the following:
-4. Create a new sendbird account and project here [here](https://sendbird.com)
+3. Create a new sendbird account and project here [here](https://sendbird.com)
+4. Create a .env include the following:
 ```
 SENDBIRD_API_KEY={YOUR API KEY HERE}
 SENDBIRD_APP_ID={YOUR APP ID HERE}
 MONGODB_URI={URI TO MONGODB CLUSTER}
 USERNAME={YOUR MONGODB USERNAME}
 PASSWORD={YOUR MONGODB PASSWORD}
+CLOUDINARY_URL= {YOUR CLOUDINARY URL}
+CLOUD_NAME= {CLOUDINARY CLOUD NAME}
+CLOUDINARY_API_KEY= {CLOUDINARY API KEY}
+CLOUDINARY_API_SECRET= {CLOUDINARY API SECRET}
 ```
 5. In IntelliJ, click on pom.xml -> maven -> reload project
 6. You will need to setup one machine as a main server of the app, then tunnel your IP address by running `ngrok http 8080` in your terminal
@@ -58,7 +63,8 @@ When making contributions, please follow the commit message conventions below to
 - `chore:` - Use for maintenance tasks (e.g., updating dependencies, configuration changes).
 
 ## Feedback 
-#TODO
+If you have any ideas and want to make our app better please let us know [here](https://forms.gle/7X6y8R2i8789JkLY9) in this Google Forms.
+Note: Please keep your criticisms constructive and remember that we're all humans :) Mac will reach back to you within one or two days and let you know what we can do from your feedback!
 
 ## Notes for connecting pages
 1. After implementing view must add to MainWithDB set up with UseCaseFactory which follows flow:      
@@ -73,3 +79,4 @@ When making contributions, please follow the commit message conventions below to
                    );
    ```
 ## License
+This repository has a Creative Commons CC0-1.0 license
