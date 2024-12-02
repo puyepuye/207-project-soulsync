@@ -141,10 +141,10 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
                 for (ChatChannel channel: channels) {
                     String channelUser = "";
                     if (channel.getUser1Id().equals(state.getUsername())) {
-                        channelUser = channel.getUser1Id();
+                        channelUser = channel.getUser2Id();
                     }
                     else {
-                        channelUser = channel.getUser2Id();
+                        channelUser = channel.getUser1Id();
                     }
                     System.out.println(channel.getChannelURL());
                     System.out.println(channel.getLastMessage());

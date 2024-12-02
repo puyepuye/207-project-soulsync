@@ -85,9 +85,8 @@ public class SwipesListDataAccessObject {
         return new ArrayList<>(); // Return an empty list if no data is found
     }
 
-
     /**
-     * Generate a swiping list for a specific user, ranked by compatibility
+     * Generate a swiping list for a specific user, ranked by compatibility.
      * @param username The username of the user
      * @return A list of users matching the preferred criteria, ranked by compatibility
      */
