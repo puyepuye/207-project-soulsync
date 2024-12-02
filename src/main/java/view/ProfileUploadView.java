@@ -1,6 +1,6 @@
 package view;
 
-import data_access.Cloudinary.CloudinaryUploader;
+import data_access.cloudinary.CloudinaryUploader;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;

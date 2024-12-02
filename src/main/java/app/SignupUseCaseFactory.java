@@ -29,18 +29,23 @@ public final class SignupUseCaseFactory {
     }
 
     /**
-     * Factory function for creating the SignupView.
-     * @param viewManagerModel the ViewManagerModel to inject into the SignupView
-     * @param loginViewModel the LoginViewModel to inject into the SignupView
-     * @param signupViewModel the SignupViewModel to inject into the SignupView
-     * @param userDataAccessObject the SignupUserDataAccessInterface to inject into the SignupView
-     * @return the LoginView created for the provided input classes
+     * Creates and initializes a SignupView with the provided dependencies.
+     *
+     * @param viewManagerModel the model managing the application's views
+     * @param loginViewModel the model storing data related to the login process
+     * @param signupViewModel the model storing data related to the signup process
+     * @param preferencesViewModel the model storing data related to user preferences
+     * @param swipeViewModel the model providing data for swipe functionality
+     * @param compatibilityViewModel the model providing compatibility-related data
+     * @param editProfileViewModel the model for managing edit profile functionality
+     * @param userDataAccessObject the data access object for managing user data during signup
+     * @return an instance of SignupView configured with the required dependencies
      */
     public static SignupView create(
             ViewManagerModel viewManagerModel, LoginViewModel loginViewModel,
-            SignupViewModel signupViewModel,  PreferencesViewModel preferencesViewModel,
-            SwipeViewModel swipeViewModel, CompatibilityViewModel compatibilityViewModel, EditProfileViewModel editProfileViewModel
-            , SignupUserDataAccessInterface userDataAccessObject) {
+            SignupViewModel signupViewModel, PreferencesViewModel preferencesViewModel,
+            SwipeViewModel swipeViewModel, CompatibilityViewModel compatibilityViewModel,
+            EditProfileViewModel editProfileViewModel, SignupUserDataAccessInterface userDataAccessObject) {
 
         final SignupController signupController = createUserSignupUseCase(viewManagerModel, signupViewModel,
                 loginViewModel, preferencesViewModel, swipeViewModel, compatibilityViewModel, editProfileViewModel,
@@ -49,6 +54,19 @@ public final class SignupUseCaseFactory {
 
     }
 
+    /**
+     * Creates and configures a SignupController with its dependencies.
+     *
+     * @param viewManagerModel the model managing the application's views
+     * @param signupViewModel the model storing data related to the signup process
+     * @param loginViewModel the model storing data related to the login process
+     * @param preferencesViewModel the model storing data related to user preferences
+     * @param swipeViewModel the model providing data for swipe functionality
+     * @param compatibilityViewModel the model providing compatibility-related data
+     * @param editProfileViewModel the model for managing edit profile functionality
+     * @param userDataAccessObject the data access object for managing user data during signup
+     * @return an instance of SignupController configured with the required dependencies
+     */
     private static SignupController createUserSignupUseCase(ViewManagerModel viewManagerModel,
                                                             SignupViewModel signupViewModel,
                                                             LoginViewModel loginViewModel,
