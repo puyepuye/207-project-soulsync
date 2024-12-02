@@ -21,11 +21,6 @@ public interface LoginUserDataAccessInterface {
      */
     void saveUser(User user);
 
-
-    default void changePassword(User user) {
-
-    }
-
     /**
      * Returns the user with the given username.
      * @param username the username to look up

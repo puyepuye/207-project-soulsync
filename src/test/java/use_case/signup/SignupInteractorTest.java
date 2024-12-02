@@ -7,11 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import use_case.chat.ChatDataAccessInterface;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class SignupInteractorTest {
@@ -71,17 +70,6 @@ public class SignupInteractorTest {
     }
 
     @Test
-    public void failurePasswordMismatchTest() throws ParseException {
-        SignupInputData inputData = new SignupInputData("YolandaThant", "yoli07",
-                "password111", "image", "password21", "Toronto",
-                "Female", new Date(), Arrays.asList("Male"), new HashMap<>());
-
-        when(mockSignupUseDAI.existsByName(inputData.getUsername())).thenReturn(false);
-        signupInteractor.execute(inputData);
-        verify(mockSigninOutputBoundary).prepareFailView("Passwords don't match.");
-    }
-
-    @Test
     public void failureInvalidFullName() throws ParseException {
 
         SignupInputData inputData = new SignupInputData("", "yoli07",
@@ -91,6 +79,17 @@ public class SignupInteractorTest {
         when(mockSignupUseDAI.existsByName(inputData.getUsername())).thenReturn(false);
         signupInteractor.execute(inputData);
         verify(mockSigninOutputBoundary).prepareFailView("Please Enter your full name.");
+    }
+
+    @Test
+    public void failurePasswordMismatchTest() throws ParseException {
+        SignupInputData inputData = new SignupInputData("YolandaThant", "yoli07",
+                "password111", "image", "password21", "Toronto",
+                "Female", new Date(), Arrays.asList("Male"), new HashMap<>());
+
+        when(mockSignupUseDAI.existsByName(inputData.getUsername())).thenReturn(false);
+        signupInteractor.execute(inputData);
+        verify(mockSigninOutputBoundary).prepareFailView("Passwords don't match.");
     }
 
     @Test
@@ -116,17 +115,6 @@ public class SignupInteractorTest {
     }
 
     @Test
-    public void failureEmptyPreferredGenderTest() throws ParseException {
-        SignupInputData inputData = new SignupInputData("YolandaThant", "yoli07",
-                "password111", "image", "password111", "Taiwan",
-                "Female", new Date(), null, new HashMap<>());
-
-        when(mockSignupUseDAI.existsByName(inputData.getUsername())).thenReturn(false);
-        signupInteractor.execute(inputData);
-        verify(mockSigninOutputBoundary).prepareFailView("Please choose your preferred match's gender.");
-    }
-
-    @Test
     public void failureEmptyDateOfBirthTest() throws ParseException {
         SignupInputData inputData = new SignupInputData("YolandaThant", "yoli07",
                 "password111", "image", "password111", "Toronto",
@@ -138,6 +126,17 @@ public class SignupInteractorTest {
     }
 
     @Test
+    public void failureEmptyPreferredGenderTest() throws ParseException {
+        SignupInputData inputData = new SignupInputData("YolandaThant", "yoli07",
+                "password111", "image", "password111", "Taiwan",
+                "Female", new Date(), null, new HashMap<>());
+
+        when(mockSignupUseDAI.existsByName(inputData.getUsername())).thenReturn(false);
+        signupInteractor.execute(inputData);
+        verify(mockSigninOutputBoundary).prepareFailView("Please choose your preferred match's gender.");
+    }
+
+    @Test
     public void failureEmptyPreferredAgeTest() throws ParseException {
         SignupInputData inputData = new SignupInputData("YolandaThant", "yoli07",
                 "password111", "image", "password111", "Toronto",
@@ -146,5 +145,63 @@ public class SignupInteractorTest {
         when(mockSignupUseDAI.existsByName(inputData.getUsername())).thenReturn(false);
         signupInteractor.execute(inputData);
         verify(mockSigninOutputBoundary).prepareFailView("Please choose your preferred match's age range.");
+    }
+
+    @Test
+    void signupOutputDataConstructorAndGettersTest() {
+        // Sample data
+        String username = "YolandaThant";
+        String fullName = "Yolanda Thant";
+        String password = "password123";
+        String image = "image_url";
+        String location = "Toronto";
+        String gender = "Female";
+        Date dateOfBirth = new Date();
+        List<String> preferredGender = Arrays.asList("Male");
+        HashMap<String, Integer> preferredAge = new HashMap<>();
+        preferredAge.put("min", 25);
+        preferredAge.put("max", 35);
+        boolean useCaseFailed = false;
+
+        // Create an instance of SignupOutputData
+        SignupOutputData outputData = new SignupOutputData(username, fullName, password, image, location, gender, dateOfBirth, preferredGender, preferredAge, useCaseFailed);
+
+        // Verify getters
+        assertEquals(username, outputData.getUsername());
+        assertEquals(fullName, outputData.getFullName());
+        assertEquals(password, outputData.getPassword());
+        assertEquals(image, outputData.getImage());
+        assertEquals(location, outputData.getLocation());
+        assertEquals(gender, outputData.getGender());
+        assertEquals(dateOfBirth, outputData.getDateOfBirth());
+        assertEquals(preferredGender, outputData.getPreferredGender());
+        assertEquals(preferredAge, outputData.getPreferredAge());
+        assertEquals(useCaseFailed, outputData.isUseCaseFailed());
+    }
+
+    @Test
+    void failureSignupOutputDataUseCaseTest() {
+        // Data for failure case
+        SignupOutputData outputData = new SignupOutputData(
+                "TestUser", "Test FullName", "testPassword", "testImage", "Test Location",
+                "Test Gender", new Date(), Arrays.asList("Test Preferred Gender"), new HashMap<>(), true);
+
+        // Verify the use case failure flag
+        assertTrue(outputData.isUseCaseFailed());
+    }
+
+    @Test
+    void switchToLoginViewTest() {
+        // Mock dependencies
+        SignupOutputBoundary mockPresenter = mock(SignupOutputBoundary.class);
+
+        // Create an instance of SignupInteractor with mock presenter
+        SignupInteractor interactor = new SignupInteractor(null, mockPresenter, null, null);
+
+        // Call method
+        interactor.switchToLoginView();
+
+        // Verify presenter method was called
+        verify(mockPresenter).switchToLoginView();
     }
 }

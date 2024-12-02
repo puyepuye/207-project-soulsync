@@ -38,6 +38,7 @@ public class SignupInputData {
     public String getImage() {
         return image;
     }
+
     public String getFullname() {
         return fullname;
     }
