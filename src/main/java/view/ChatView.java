@@ -165,6 +165,7 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         panel.setBackground(new Color(255, 220, 227));
+        panel.setMaximumSize(new Dimension(400, 80));
 
         // Add horizontal glue to push the message to the right
         if (!state.equals("receive")) {
