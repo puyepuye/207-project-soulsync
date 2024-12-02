@@ -4,7 +4,6 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
 import interface_adapter.edit_profile.EditProfileViewModel;
 import interface_adapter.listchat.ListChatViewModel;
-import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -14,8 +13,6 @@ import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginUserDataAccessInterface;
-import view.CompatibilityView;
-import view.EditProfileView;
 import view.LoginView;
 
 /**
@@ -30,11 +27,15 @@ public final class LoginUseCaseFactory {
 
     /**
      * Factory function for creating the LoginView.
-     * @param viewManagerModel the ViewManagerModel to inject into the LoginView
-     * @param loginViewModel the LoginViewModel to inject into the LoginView
-     * @param swipeViewModel the LoggedInViewModel to inject into the LoginView
-     * @param userDataAccessObject the LoginUserDataAccessInterface to inject into the LoginView
-     * @param signupViewModel the SignupViewModel to inject to the LoginView
+     *
+     * @param viewManagerModel responsible for managing transitions and coordinating views in the application
+     * @param loginViewModel holds the state and data required for the login feature
+     * @param swipeViewModel used for managing data and interactions related to the swipe feature
+     * @param signupViewModel used to hold data and state for the signup functionality
+     * @param compatibilityViewModel manages compatibility-related data and interactions
+     * @param editProfileViewModel used for handling the data and state related to profile editing
+     * @param userDataAccessObject provides data access for the login feature
+     * @param listChatViewModel responsible for managing the data and state of the list chat feature
      * @return the LoginView created for the provided input classes
      */
     public static LoginView create(

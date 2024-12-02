@@ -25,21 +25,5 @@ public class SwipeOutputData {
         this.useCaseFailed = useCaseFailed;
     }
 
-    public String getProfileName() {
-        return profileName;
-    }
-    public String getProfileBio() {
-        return profileBio;
-    }
-    public List<String> getProfileTags() {
-        return profileTags;
-    }
-    public boolean getLiked() {
-        return like;
-    }
-    public boolean isUseCaseFailed() {
-        return useCaseFailed;
-    }
-
 }
 
