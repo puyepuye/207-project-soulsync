@@ -16,6 +16,11 @@ A dating app created in Java as the final project for the course, CSC207 Softwar
 - Users can select other users to match with Tinder swipe style
 - Users can be matched based on preferences or through our in house Fengshui compatability calculator!
 - After a user has been matched, users can chat with the other matched user in real time.
+<img src="https://github.com/user-attachments/assets/25e86062-7de8-4c02-a5b6-778d7345ee1c" alt="Alt Text" width="400" height="275">
+<img src="https://github.com/user-attachments/assets/a19061d8-b4ad-4392-a326-9c8fea49ed06" alt="Alt Text" width="200" height="300">
+<img src="https://github.com/user-attachments/assets/829a7e6d-0758-4e11-acaf-b269375f6451" alt="Alt Text" width="400" height="300">
+
+
 
 ## Installation
 As a forewarning, this app is still in the prototyping phase, so the user would be required to manually set up a database on MongdoDB, their own chat app in SendBird's API service, as well as setting up an account for cloudinary. #TODO add cloudinary steps
