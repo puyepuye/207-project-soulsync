@@ -5,12 +5,12 @@ import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.preferences.PreferencesController;
 import interface_adapter.preferences.PreferencesPresenter;
-import interface_adapter.preferences.PreferencesViewModel;
 import interface_adapter.swipe.SwipeViewModel;
 import use_case.preferences.PreferenceInputBoundary;
 import use_case.preferences.PreferenceInteractor;
 import use_case.preferences.PreferenceOutputBoundary;
 import use_case.preferences.PreferenceUserDataAccessInterface;
+import use_case.preferences.PreferenceInteractor;
 import view.PreferenceView;
 
 /**

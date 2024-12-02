@@ -1,8 +1,6 @@
 package interface_adapter.preferences;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.signup.SignupState;
-import interface_adapter.signup.SignupViewModel;
 import interface_adapter.swipe.SwipeState;
 import interface_adapter.swipe.SwipeViewModel;
 import use_case.preferences.PreferenceOutputBoundary;

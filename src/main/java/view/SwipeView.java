@@ -48,22 +48,29 @@ public class SwipeView extends JPanel implements PropertyChangeListener {
         like = new JButton(SwipeViewModel.LIKE_BUTTON_LABEL);
         dislike = new JButton(SwipeViewModel.DISLIKE_BUTTON_LABEL);
 
-        // Initialize layout and navbar
+        // Initialize layout
         this.setLayout(new BorderLayout());
+
+        // Navbar Panel
         NavBarView navBarView = new NavBarView(navbarController);
 
         // Buttons Panel
         JPanel buttons = new JPanel();
+        buttons.setLayout(new FlowLayout(FlowLayout.CENTER)); // Center align the buttons
         buttons.add(dislike);
         buttons.add(like);
+
+        // Container Panel for Buttons and Navbar
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.add(buttons, BorderLayout.CENTER); // Buttons above the navbar
+        bottomPanel.add(navBarView, BorderLayout.SOUTH); // Navbar at the bottom
 
         // Add button listeners
         dislike.addActionListener(evt -> handleSwipe(false));
         like.addActionListener(evt -> handleSwipe(true));
 
         // Add components to the main layout
-        this.add(buttons, BorderLayout.SOUTH);
-        this.add(navBarView, BorderLayout.NORTH);
+        this.add(bottomPanel, BorderLayout.SOUTH); // BottomPanel contains buttons and navbar
     }
 
     /**
