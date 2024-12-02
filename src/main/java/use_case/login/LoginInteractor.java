@@ -1,7 +1,6 @@
 package use_case.login;
 
 import entity.User;
-import use_case.signup.SignupOutputBoundary;
 
 /**
  * The Login Interactor.
