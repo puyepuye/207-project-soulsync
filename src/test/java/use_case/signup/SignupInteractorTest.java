@@ -70,6 +70,17 @@ public class SignupInteractorTest {
     }
 
     @Test
+    public void failurePasswordMismatchTest() throws ParseException {
+        SignupInputData inputData = new SignupInputData("YolandaThant", "yoli07",
+                "password111", "image", "password21", "Toronto",
+                "Female", new Date(), Arrays.asList("Male"), new HashMap<>());
+
+        when(mockSignupUseDAI.existsByName(inputData.getUsername())).thenReturn(false);
+        signupInteractor.execute(inputData);
+        verify(mockSigninOutputBoundary).prepareFailView("Passwords don't match.");
+    }
+
+    @Test
     public void failureInvalidFullName() throws ParseException {
 
         SignupInputData inputData = new SignupInputData("", "yoli07",
@@ -79,17 +90,6 @@ public class SignupInteractorTest {
         when(mockSignupUseDAI.existsByName(inputData.getUsername())).thenReturn(false);
         signupInteractor.execute(inputData);
         verify(mockSigninOutputBoundary).prepareFailView("Please Enter your full name.");
-    }
-
-    @Test
-    public void failurePasswordMismatchTest() throws ParseException {
-        SignupInputData inputData = new SignupInputData("YolandaThant", "yoli07",
-                "password111", "image", "password21", "Toronto",
-                "Female", new Date(), Arrays.asList("Male"), new HashMap<>());
-
-        when(mockSignupUseDAI.existsByName(inputData.getUsername())).thenReturn(false);
-        signupInteractor.execute(inputData);
-        verify(mockSigninOutputBoundary).prepareFailView("Passwords don't match.");
     }
 
     @Test
@@ -115,17 +115,6 @@ public class SignupInteractorTest {
     }
 
     @Test
-    public void failureEmptyDateOfBirthTest() throws ParseException {
-        SignupInputData inputData = new SignupInputData("YolandaThant", "yoli07",
-                "password111", "image", "password111", "Toronto",
-                "Female", null, Arrays.asList("Male"), new HashMap<>());
-
-        when(mockSignupUseDAI.existsByName(inputData.getUsername())).thenReturn(false);
-        signupInteractor.execute(inputData);
-        verify(mockSigninOutputBoundary).prepareFailView("Date of birth is required.");
-    }
-
-    @Test
     public void failureEmptyPreferredGenderTest() throws ParseException {
         SignupInputData inputData = new SignupInputData("YolandaThant", "yoli07",
                 "password111", "image", "password111", "Taiwan",
@@ -134,6 +123,17 @@ public class SignupInteractorTest {
         when(mockSignupUseDAI.existsByName(inputData.getUsername())).thenReturn(false);
         signupInteractor.execute(inputData);
         verify(mockSigninOutputBoundary).prepareFailView("Please choose your preferred match's gender.");
+    }
+
+    @Test
+    public void failureEmptyDateOfBirthTest() throws ParseException {
+        SignupInputData inputData = new SignupInputData("YolandaThant", "yoli07",
+                "password111", "image", "password111", "Toronto",
+                "Female", null, Arrays.asList("Male"), new HashMap<>());
+
+        when(mockSignupUseDAI.existsByName(inputData.getUsername())).thenReturn(false);
+        signupInteractor.execute(inputData);
+        verify(mockSigninOutputBoundary).prepareFailView("Date of birth is required.");
     }
 
     @Test
