@@ -47,7 +47,24 @@ CLOUDINARY_API_SECRET= {CLOUDINARY API SECRET}
 10. Run the app from `MainwithDB.java` and enjoy!
 
 ## Usage guide:
-#TODO
+1. Users can create an account from the sign up page
+2. The user can then answer our questionare and build out their profile
+3. After the use has built their profile then the user can start matching!
+4. Once a user has matched they can start chatting with one another
+5. Users can also calculate their compability with those they've matched with on the Compatibility page
+
+7. Users can also edit their profile
+<center>
+<img width="300" alt="image" src="https://github.com/user-attachments/assets/fd7fc67f-6d71-41e9-855a-0d6729ed642a">
+<img width="300" alt="image" src="https://github.com/user-attachments/assets/03028313-73c8-49b8-b4cc-0f07434ad780">
+<img width="266" alt="image" src="https://github.com/user-attachments/assets/785b9880-fd8b-410d-8f99-48ca448f60a7">
+<img width="732" alt="image" src="https://github.com/user-attachments/assets/7fe17823-82ee-48b2-83d6-fac8a47f3e86">
+<img width="300" alt="image" src="https://github.com/user-attachments/assets/ae8b78ba-0e19-448b-ad4b-9ee7fc42e1c9">
+<img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/4227efb9-f669-4c61-9132-36dcafa1a497">
+
+
+*The UI pages in the same order mentioned*
+</center>
     
 ## Contributors
 1. **Yi-An Chu** (Kimi)
