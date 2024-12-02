@@ -3,6 +3,8 @@ import entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class LoginInteractorTest {
@@ -82,4 +84,18 @@ public class LoginInteractorTest {
         verify(mockLoginOutputBoundary).switchToSignupView();
     }
 
+    @Test
+    public void getUsernameTest() {
+
+        // Setup mock data for successful login
+        String username = "The username should match the expected value.";
+        boolean useCaseFailed = false;
+        LoginOutputData loginOutputData = new LoginOutputData(username, useCaseFailed);
+
+        // Call getUsername() method
+        String result = loginOutputData.getUsername();
+
+        // Verify that returned username matches expected username
+        assertEquals(username, result, "The username should match the expected value.");
+    }
 }
