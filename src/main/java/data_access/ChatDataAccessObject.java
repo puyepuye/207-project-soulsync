@@ -68,74 +68,36 @@ public class ChatDataAccessObject implements ChatDataAccessInterface,
         }
     }
 
+    /**
+     * Method to update a user's profile picture on sendbird's end.
+     * @param uniqueID the user we want to update.
+     * @param newProfilePicture the link to the new profile picture.
+     */
     public void updateProfilePicture(String uniqueID, String newProfilePicture) {
-//        JSONObject requestBody = new JSONObject();
-//        requestBody.put("profile_url", newProfilePicture);
-//
-//        HttpRequest patchRequest = HttpRequest.newBuilder()
-//                .uri(URI.create(API_ENDPOINT + "users/" + uniqueID))
-//                .header(TOKEN_HEADER, apiKey)
-//                .header("Content-Type", "application/json; charset=utf8")
-//                .method("PATCH", HttpRequest.BodyPublishers.ofString(requestBody.toString()))
-//                .build();
-//
-//        HttpClient client = HttpClient.newHttpClient();
-//        try {
-//            HttpResponse<String> response = client.send(patchRequest, HttpResponse.BodyHandlers.ofString());
-//            System.out.println(response.body());
-//            JSONObject responseJSON = new JSONObject(response.body());
-//            if (responseJSON.has("error")) {
-//                System.out.println("Something went wrong, server threw an error");
-//            } else {
-//                System.out.println("Profile picture updated successfully.");
-//            }
-//        } catch (InterruptedException | IOException e) {
-//            System.out.println("Something went wrong");
-//        }
-    }
+        final JSONObject requestBody = new JSONObject();
+        requestBody.put("profile_url", newProfilePicture);
+        putRequest(uniqueID, requestBody);
 
-
-
-    public void updateFullName(String uniqueID, String newFullName) {
-//        JSONObject requestBody = new JSONObject();
-//        requestBody.put("nickname", newFullName);
-//
-//        HttpRequest patchRequest = HttpRequest.newBuilder()
-//                .uri(URI.create(API_ENDPOINT + "users/" + uniqueID))
-//                .header(TOKEN_HEADER, apiKey)
-//                .header("Content-Type", "application/json; charset=utf8")
-//                .method("PATCH", HttpRequest.BodyPublishers.ofString(requestBody.toString()))
-//                .build();
-//
-//        HttpClient client = HttpClient.newHttpClient();
-//        try {
-//            HttpResponse<String> response = client.send(patchRequest, HttpResponse.BodyHandlers.ofString());
-//            System.out.println("Response: " + response.body());
-//
-//            // Check if the response is valid JSON
-//            try {
-//                JSONObject responseJSON = new JSONObject(response.body());
-//                if (responseJSON.has("error")) {
-//                    System.out.println("Something went wrong, server threw an error: " + responseJSON.getString("message"));
-//                } else {
-//                    System.out.println("Full name updated successfully.");
-//                }
-//            } catch (JSONException e) {
-//                // Response is not JSON
-//                System.out.println("Response is not JSON. Raw response: " + response.body());
-//            }
-//
-//        } catch (InterruptedException | IOException e) {
-//            System.out.println("Something went wrong");
-//            e.printStackTrace();
-//        }
     }
 
     /**
+     * Method to update the full name of a user on sendbird's end.
+     * @param uniqueID the user we want to update
+     * @param newFullName the new username
+     */
+    public void updateFullName(String uniqueID, String newFullName) {
+        final JSONObject requestBody = new JSONObject();
+        requestBody.put("nickname", newFullName);
+        putRequest(uniqueID, requestBody);
+
+    }
+
+    /**
+     * Creates a SendBird with url being "{user_id1}_{user_id2}_chat".
      * @param userId1 1st user
      * @param userId2 2nd user
-     * Creates a SendBird with url being "{user_id1}_{user_id2}_chat"
      */
+    @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:SuppressWarnings"})
     @Override
     public void createChat(String userId1, String userId2) {
         final List<String> chatUsers = new ArrayList<>();
@@ -143,9 +105,9 @@ public class ChatDataAccessObject implements ChatDataAccessInterface,
         chatUsers.add(userId2);
         final JSONObject requestBody = new JSONObject();
         System.out.println("creating new chat");
-        requestBody.put("name", userId1 + "_" + userId2 + "_chat"); // name of chat
-        requestBody.put("channel_url", userId1 + "_" + userId2 + "_chat"); // url of chat
-        requestBody.put("operator_ids", chatUsers); // the 2 users involved in a chat
+        requestBody.put("name", userId1 + "_" + userId2 + "_chat");
+        requestBody.put("channel_url", userId1 + "_" + userId2 + "_chat");
+        requestBody.put("operator_ids", chatUsers);
 
         // build request
         final HttpRequest postRequest = HttpRequest.newBuilder()
@@ -203,7 +165,7 @@ public class ChatDataAccessObject implements ChatDataAccessInterface,
      * @param chatUrl the url of the chat you want all the messages to.
      * @return a list of ChatMessage objects of all the messages in the channel.
      */
-    @SuppressWarnings("checkstyle:ReturnCount")
+    @SuppressWarnings({"checkstyle:ReturnCount", "checkstyle:SuppressWarnings"})
     @Override
     public List<ChatMessage> getAllMessages(String chatUrl) {
         // build request
@@ -293,6 +255,29 @@ public class ChatDataAccessObject implements ChatDataAccessInterface,
         }
         catch (InterruptedException | IOException e) {
             System.out.println("Something went wrong, couldn't get a ");
+        }
+    }
+
+    // helper method
+    private void putRequest(String uniqueID, JSONObject requestBody) {
+        final HttpRequest putRequest = HttpRequest.newBuilder()
+                .uri(URI.create(API_ENDPOINT + "users/" + uniqueID))
+                .header(TOKEN_HEADER, apiKey)
+                .header("Content-Type", "application/json; charset=utf8")
+                .PUT(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+                .build();
+        final HttpClient client = HttpClient.newHttpClient();
+        try {
+            final HttpResponse<String> response = client.send(putRequest, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+            final JSONObject responseJSON = new JSONObject(response.body());
+            if (responseJSON.has("error")) {
+                System.out.println("Something went wrong, server threw an error");
+            }
+
+        }
+        catch (InterruptedException | IOException exception) {
+            System.out.println("Something went wrong");
         }
     }
 }
