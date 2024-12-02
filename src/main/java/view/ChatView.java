@@ -86,7 +86,7 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
             if ("message".equals(evt.getPropertyName())) {
                 SwingUtilities.invokeLater(() -> {
                     ChatMessage newMessage = (ChatMessage) evt.getNewValue();
-                    if (newMessage.getChatUrl().equals(chatURL)) {
+                    if (newMessage.getChatURL().equals(chatURL)) {
                         if (!newMessage.getSender().equals(currentUser)) {
                             newMessage(newMessage.getMessage(), "receive");
                         }

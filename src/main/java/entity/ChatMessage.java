@@ -34,11 +34,11 @@ public class ChatMessage {
         return dateTime;
     }
 
-    public String getChatUrl() {
+    public String getChatURL() {
         return chatUrl;
     }
 
-    public void setChatUrl(String chatUrl) {
+    public void setChatURL(String chatUrl) {
         this.chatUrl = chatUrl;
     }
 

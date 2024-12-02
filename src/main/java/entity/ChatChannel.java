@@ -17,7 +17,7 @@ public class ChatChannel {
         this.user2Id = user2Id;
     }
 
-    public String getChannelUrl() {
+    public String getChannelURL() {
         return channelUrl;
     }
 
