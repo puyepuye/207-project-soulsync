@@ -23,7 +23,8 @@ As a forewarning, this app is still in the prototyping phase, so the user would 
 1. Clone using `git clone https://github.com/puyepuye/207-project-soulsync.git`
 2. Install ngrok from [here](https://ngrok.com)
 3. Create a new sendbird account and project here [here](https://sendbird.com)
-4. Create a .env include the following:
+4. Create a cloudinary account and project here [here](https://cloudinary.com)
+5. Create a .env include the following information from the services above:
 ```
 SENDBIRD_API_KEY={YOUR API KEY HERE}
 SENDBIRD_APP_ID={YOUR APP ID HERE}
@@ -35,12 +36,19 @@ CLOUD_NAME= {CLOUDINARY CLOUD NAME}
 CLOUDINARY_API_KEY= {CLOUDINARY API KEY}
 CLOUDINARY_API_SECRET= {CLOUDINARY API SECRET}
 ```
-5. In IntelliJ, click on pom.xml -> maven -> reload project
-6. You will need to setup one machine as a main server of the app, then tunnel your IP address by running `ngrok http 8080` in your terminal
-7. In your sendbird dashboard, go to app -> chat -> settings -> features -> webhook and set the URl to be the machine you choose to be your server
-8. Run that same line on all the connected clients
-9. Copy the client URLs and paste it line by line into `clientUrls.txt`
-10. Run the app from `MainwithDB.java` and enjoy!
+6. In the resources folder create a file called `app.properties` and add the following:
+```
+spring.data.mongodb.uri={YOUR MONGODB CLUSTER URI}
+spring.data.mongodb.database={NAME OF YOUR DATABASE}
+server.port={DESIRED PORT}
+server.address={DESIRED RUN ADDRESS}
+```
+7. In IntelliJ, click on pom.xml -> maven -> reload project
+8. You will need to setup one machine as a main server of the app, then tunnel your IP address by running `ngrok http 8080` in your terminal
+9. In your sendbird dashboard, go to app -> chat -> settings -> features -> webhook and set the URl to be the machine you choose to be your server
+10. Run that same line on all the connected clients
+11. Copy the client URLs and paste it line by line into `clientUrls.txt`
+12. Run the app from `MainwithDB.java` and enjoy!
 
 ## Usage guide:
 1. Users can create an account from the sign up page
@@ -48,8 +56,7 @@ CLOUDINARY_API_SECRET= {CLOUDINARY API SECRET}
 3. After the use has built their profile then the user can start matching!
 4. Once a user has matched they can start chatting with one another
 5. Users can also calculate their compability with those they've matched with on the Compatibility page
-
-7. Users can also edit their profile
+7. Users can also edit their profiles to update their photos or other information.
 <center>
 <img width="300" alt="image" src="https://github.com/user-attachments/assets/fd7fc67f-6d71-41e9-855a-0d6729ed642a">
 <img width="300" alt="image" src="https://github.com/user-attachments/assets/03028313-73c8-49b8-b4cc-0f07434ad780">
