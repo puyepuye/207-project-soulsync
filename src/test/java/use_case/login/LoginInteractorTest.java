@@ -78,14 +78,6 @@ public class LoginInteractorTest {
     }
 
     @Test
-    public void switchToSignupViewTest() {
-
-        loginInteractor.switchToSignupView();
-
-        verify(mockLoginOutputBoundary).switchToSignupView();
-    }
-
-    @Test
     public void getUsernameTest() {
 
         // Setup mock data for successful login
@@ -98,5 +90,13 @@ public class LoginInteractorTest {
 
         // Verify that returned username matches expected username
         assertEquals(username, result, "The username should match the expected value.");
+    }
+
+    @Test
+    public void switchToSignupViewTest() {
+
+        loginInteractor.switchToSignupView();
+
+        verify(mockLoginOutputBoundary).switchToSignupView();
     }
 }
