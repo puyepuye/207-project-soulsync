@@ -18,6 +18,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
+
+/**
+ * The view model for the chat view use case.
+ */
 public class ChatView extends JPanel implements ActionListener, PropertyChangeListener {
     private JPanel chat;
     private JTextField textField;
@@ -30,6 +35,7 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
     private JScrollPane scrollPane;
     private final JLabel usernameLabel = new JLabel();
 
+    @SuppressWarnings({"checkstyle:ExecutableStatementCount", "checkstyle:SuppressWarnings"})
     public ChatView(ChatController chatController, ChatViewModel chatViewModel) {
         this.chatController = chatController;
         this.chatViewModel = chatViewModel;
@@ -54,7 +60,7 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
 
         scrollPane = new JScrollPane(chat);
         scrollPane.setPreferredSize(new Dimension(400, 300));
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
 
         // Text field + send button
         final JPanel bottom = new JPanel();
@@ -80,7 +86,7 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
             if ("message".equals(evt.getPropertyName())) {
                 SwingUtilities.invokeLater(() -> {
                     ChatMessage newMessage = (ChatMessage) evt.getNewValue();
-                    if (newMessage.getChatURL().equals(chatURL)) {
+                    if (newMessage.getChatUrl().equals(chatURL)) {
                         if (!newMessage.getSender().equals(currentUser)) {
                             newMessage(newMessage.getMessage(), "receive");
                         }
@@ -97,9 +103,9 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("send")) {
-        final String message = textField.getText();
+            final String message = textField.getText();
             if (!message.trim().isEmpty()) {
-                ChatState chatState = chatViewModel.getState();
+                final ChatState chatState = chatViewModel.getState();
                 newMessage(message, "send");
                 chat.revalidate();
                 chat.repaint();
@@ -149,6 +155,11 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         }
     }
 
+    /**
+     * Adds a new message to the screen.
+     * @param message the message to be added.
+     * @param state used to get the current user's name.
+     */
     public void newMessage(String message, String state) {
         final JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
@@ -161,25 +172,24 @@ public class ChatView extends JPanel implements ActionListener, PropertyChangeLi
         }
 
         // Message box
-        JPanel messageBox = new JPanel();
+        final JPanel messageBox = new JPanel();
         messageBox.setLayout(new FlowLayout(FlowLayout.LEFT));
         messageBox.setBackground(new Color(255, 162, 176));
 
-        // Text area for the message (word wrapping enabled)
-        JTextArea text = new JTextArea(message);
-        text.setLineWrap(true);  // Enable word wrap
-        text.setWrapStyleWord(true);  // Wrap at word boundaries
-        text.setEditable(false);  // Non-editable
-        text.setOpaque(false);  // Transparent background to match the panel
+        final JTextArea text = new JTextArea(message);
+        text.setLineWrap(true);
+        text.setWrapStyleWord(true);
+        text.setEditable(false);
+        text.setOpaque(false);
         text.setBorder(BorderFactory.createEmptyBorder());
 
         // Calculate dimensions based on message length
-        int maxWidth = (int) (this.getWidth() * 0.3);
+        final int maxWidth = (int) (this.getWidth() * 0.3);
         text.setSize(new Dimension(maxWidth, Short.MAX_VALUE));
         text.setFont(new Font("Arial", Font.PLAIN, 14));
         text.setMaximumSize(new Dimension(maxWidth, 60));
         // Use preferred size for dynamic height
-        Dimension preferredSize = text.getPreferredSize();
+        final Dimension preferredSize = text.getPreferredSize();
         text.setPreferredSize(new Dimension(Math.min(maxWidth, preferredSize.width), preferredSize.height));
 
         messageBox.add(text);

@@ -1,7 +1,6 @@
 package view;
 
 import entity.ChatChannel;
-import interface_adapter.compatibility.CompatibilityState;
 import interface_adapter.listchat.ListChatController;
 import interface_adapter.listchat.ListChatState;
 import interface_adapter.listchat.ListChatViewModel;
@@ -147,9 +146,9 @@ public class ListChatView extends JPanel implements ActionListener, PropertyChan
                     else {
                         channelUser = channel.getUser2Id();
                     }
-                    System.out.println(channel.getChannelURL());
+                    System.out.println(channel.getChannelUrl());
                     System.out.println(channel.getLastMessage());
-                    addChatToList(channel.getChannelURL(),
+                    addChatToList(channel.getChannelUrl(),
                             "https://static.sendbird.com/sample/cover/cover_11.jpg",
                             channelUser, channel.getLastMessage());
                 }

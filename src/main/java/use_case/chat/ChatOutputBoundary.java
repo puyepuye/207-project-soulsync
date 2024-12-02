@@ -1,10 +1,11 @@
 package use_case.chat;
 
-import entity.ChatMessage;
-
-import java.util.List;
-
+/**
+ * The output boundary for the chat use case.
+ */
 public interface ChatOutputBoundary {
-
+    /**
+     * Switches to the chat list page.
+     */
     void switchToChatList();
 }
