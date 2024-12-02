@@ -1,10 +1,7 @@
 package interface_adapter.preferences;
 
-import use_case.login.LoginInputData;
 import use_case.preferences.PreferenceInputBoundary;
 import use_case.preferences.PreferenceInputData;
-import use_case.signup.SignupInputData;
-import use_case.signup.SignupInteractor;
 
 import java.util.Date;
 import java.util.HashMap;
