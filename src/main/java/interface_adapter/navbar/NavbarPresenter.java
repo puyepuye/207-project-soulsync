@@ -3,6 +3,7 @@ package interface_adapter.navbar;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.compatibility.CompatibilityViewModel;
 import interface_adapter.edit_profile.EditProfileViewModel;
+import interface_adapter.listchat.ListChatState;
 import interface_adapter.listchat.ListChatViewModel;
 import interface_adapter.signup.SignupState;
 import interface_adapter.swipe.SwipeViewModel;
@@ -70,6 +71,9 @@ public class NavbarPresenter implements NavbarOutputBoundary {
 
     @Override
     public void switchToListChatView(){
+        final ListChatState listChatState = listChatViewModel.getState();
+        this.listChatViewModel.setState(listChatState);
+        this.listChatViewModel.firePropertyChanged();
         viewManagerModel.setState(listChatViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }

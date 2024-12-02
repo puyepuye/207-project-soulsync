@@ -10,6 +10,8 @@ public interface ChatDataAccessInterface {
 
     void createChatUser(String uniqueID, String username, String pfpURL);
 
+    void createChat(String userId1, String userId2);
+
     List<ChatMessage> getAllMessages(String chatURL);
 
     void updateProfilePicture(String username, String image);

@@ -4,7 +4,6 @@ import entity.ChatChannel;
 import entity.ChatMessage;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import use_case.chat.ChatDataAccessInterface;
 import use_case.listchat.ListChatDataAccessInterface;
@@ -135,12 +134,13 @@ public class ChatDataAccessObject implements ChatDataAccessInterface,
      *                <p>
      *                Creates a SendBird with url being "{user_id1}_{user_id2}_chat"
      */
+    @Override
     public void createChat(String userId1, String userId2) {
         List<String> chatUsers = new ArrayList<>();
         chatUsers.add(userId1);
         chatUsers.add(userId2);
         JSONObject requestBody = new JSONObject();
-
+        System.out.println("creating new chat");
         requestBody.put("name", userId1 + "_" + userId2 + "_chat"); // name of chat
         requestBody.put("channel_url", userId1 + "_" + userId2 + "_chat"); // url of chat
         requestBody.put("operator_ids", chatUsers); // the 2 users involved in a chat
@@ -153,8 +153,6 @@ public class ChatDataAccessObject implements ChatDataAccessInterface,
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                 .build();
         sendPostReq(postRequest);
-
-
     }
 
 
@@ -175,7 +173,7 @@ public class ChatDataAccessObject implements ChatDataAccessInterface,
                 .build();
         HttpResponse<String> response = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
         JSONObject responseJSON = new JSONObject(response.body());
-        return extractChatURLFromJSON(responseJSON);
+        return extractChatInfo(responseJSON);
     }
 
 
@@ -231,44 +229,44 @@ public class ChatDataAccessObject implements ChatDataAccessInterface,
 
     // helper method to parse all messages in a chat
     private List<ChatMessage> extractMessagesFromJSON(JSONObject inputJSON) {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT.withZone(ZoneOffset.UTC);
-        JSONArray messages = inputJSON.getJSONArray("messages");
+        final DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT.withZone(ZoneOffset.UTC);
+        final JSONArray messages = inputJSON.getJSONArray("messages");
         List<ChatMessage> result = new ArrayList<>();
 
         // loop through all messages
         for (int i = 0; i < messages.length(); i++) {
-            JSONObject messageObj = messages.getJSONObject(i);
-            String message = messageObj.getString("message");
-            String timestamp = formatter.format(Instant.ofEpochMilli(messageObj.getLong("created_at")));
-            String sender = messageObj.getJSONObject("user").getString("user_id");
+            final JSONObject messageObj = messages.getJSONObject(i);
+            final String message = messageObj.getString("message");
+            final String timestamp = formatter.format(Instant.ofEpochMilli(messageObj.getLong("created_at")));
+            final String sender = messageObj.getJSONObject("user").getString("user_id");
             result.add(new ChatMessage(sender, message, timestamp));
 
         }
         return result;
     }
 
-    private ArrayList<ChatChannel> extractChatURLFromJSON(JSONObject inputJSON) {
+    private ArrayList<ChatChannel> extractChatInfo(JSONObject inputJSON) {
         ArrayList<ChatChannel> result = new ArrayList<>();
         // Check if the "channels" key exists
         if (inputJSON.has("channels")) {
-            JSONArray channels = inputJSON.getJSONArray("channels");
+            final JSONArray channels = inputJSON.getJSONArray("channels");
 
             // Iterate over the array of channels
             for (int i = 0; i < channels.length(); i++) {
-                JSONObject channel = channels.getJSONObject(i);
+                final JSONObject channel = channels.getJSONObject(i);
                 // Add the channel_url to the list
-                String url = channel.getString("channel_url");
-                String user1 = url.split("_")[0];
-                String user2 = url.split("_")[0];
-                List<ChatMessage> allMessages = getAllMessages(url);
+                final String url = channel.getString("channel_url");
+                final String user1 = url.split("_")[0];
+                final String user2 = url.split("_")[1];
+                final List<ChatMessage> allMessages = getAllMessages(url);
                 String lastMessage;
                 if (allMessages.isEmpty()) {
                     lastMessage = "Say 'hi!' or something, just don't be weird";
-                } else {
+                }
+                else {
                     lastMessage = allMessages.get(allMessages.size() - 1).getMessage();
                 }
-                result.add(new ChatChannel(url, user1, user2, lastMessage));
-
+                result.add(new ChatChannel(url, lastMessage, user1, user2));
             }
         }
         return result;
@@ -276,20 +274,20 @@ public class ChatDataAccessObject implements ChatDataAccessInterface,
 
     // helper method to send post requests
     private void sendPostReq(HttpRequest postRequest) {
-        HttpClient client = HttpClient.newHttpClient();
+        final HttpClient client = HttpClient.newHttpClient();
         try {
-            HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
+            final HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
             System.out.println(response.body());
-            JSONObject responseJSON = new JSONObject(response.body());
+            final JSONObject responseJSON = new JSONObject(response.body());
             if (responseJSON.has("error")) {
                 System.out.println("Something went wrong, likely, the user doesn't exist");
             }
 
-        } catch (InterruptedException | IOException e) {
+        }
+        catch (InterruptedException | IOException e) {
             System.out.println("Something went wrong, couldn't get a ");
         }
     }
-
 
     public static void main(String[] args) throws IOException, InterruptedException {
 //        ChatDataAccessObject cDAO = new ChatDataAccessObject();
@@ -304,8 +302,5 @@ public class ChatDataAccessObject implements ChatDataAccessInterface,
         HttpResponse<String> response = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
         System.out.println(response);
 
-    }
-
-    public void method() {
     }
 }
