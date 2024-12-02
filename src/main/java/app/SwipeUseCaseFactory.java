@@ -77,10 +77,8 @@ public final class SwipeUseCaseFactory {
         final SwipeOutputBoundary swipeOutputBoundary = new SwipePresenter(viewManagerModel,
                 swipeViewModel);
 
-        final UserFactory userFactory = new CommonUserFactory();
-
         final SwipeInputBoundary swipeInteractor =
-                new SwipeInteractor(userDataAccessObject, swipeOutputBoundary, userFactory, chatDataAccessObject);
+                new SwipeInteractor(userDataAccessObject, swipeOutputBoundary, chatDataAccessObject);
 
         return new SwipeController(swipeInteractor);
     }

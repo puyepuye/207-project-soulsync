@@ -18,7 +18,6 @@ import java.util.Map;
 
 public class SwipeInteractorTest {
 
-    private UserFactory userFactory;
     private SwipeUserDataAccessInterface dao;
     private SwipeInteractor interactor;
     private SwipeOutputBoundary presenter;
@@ -28,16 +27,15 @@ public class SwipeInteractorTest {
 
     @Before
     public void setUp() {
-        this.userFactory = new CommonUserFactory();
         this.dao = mock(SwipeUserDataAccessInterface.class);
         this.presenter = mock(SwipePresenter.class);
         ChatDataAccessInterface chatDataAccessObject = mock(ChatDataAccessInterface.class); // Mock ChatDataAccessInterface
-        this.interactor = new SwipeInteractor(dao, presenter, userFactory, chatDataAccessObject);
+        this.interactor = new SwipeInteractor(dao, presenter, chatDataAccessObject);
     }
 
     @Test   // Checks that execute method calls the correct methods
     public void executeTest() {
-        SwipeInputData inputData = new SwipeInputData(true, "bob", "password", "alice");
+        SwipeInputData inputData = new SwipeInputData(true, "bob", "alice");
         interactor.execute(inputData);
 
         // Verify methods are called on the mock DAO and presenter
@@ -49,7 +47,7 @@ public class SwipeInteractorTest {
 
     @Test   // Checks that saveMatch method calls the correct methods
     public void saveMatchTest() {
-        SwipeInputData inputData = new SwipeInputData(true, "alice", "password", "bob");
+        SwipeInputData inputData = new SwipeInputData(true, "alice", "bob");
         interactor.saveMatch(inputData);
 
         // Verify that saveMatch is called with the correct order of arguments
@@ -63,7 +61,7 @@ public class SwipeInteractorTest {
         when(dao.get("bob")).thenReturn(user);
         when(dao.get("alice")).thenReturn(profileUser);
 
-        SwipeInputData inputData = new SwipeInputData(true, "alice", "password", "bob");
+        SwipeInputData inputData = new SwipeInputData(true, "alice", "bob");
         interactor.execute(inputData);
 
         // Assuming that the list of profiles becomes empty after the swipe
